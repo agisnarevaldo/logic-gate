@@ -101,7 +101,7 @@ export function SplashScreen({ onComplete }: SplashScreenProps) {
           }}
         >
           <div className="w-full h-[451px]">
-            <Image src="/images/illustration.svg" width={393} height={451} alt="illustration" />
+            <Image src="/images/decoration.svg" width={393} height={451} alt="illustration" priority />
           </div>
         </motion.div>
     </motion.div>

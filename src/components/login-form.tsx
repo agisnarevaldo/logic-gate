@@ -3,7 +3,7 @@
 import type React from "react"
 
 import { useState } from "react"
-// import { signIn } from "next-auth/react"
+import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { Eye, EyeOff } from "lucide-react"
 
@@ -34,7 +34,7 @@ export function LoginForm() {
       }
 
       router.push("/dashboard")
-    } catch (error) {
+    } catch {
       setError("Something went wrong. Please try again.")
       setIsLoading(false)
     }
@@ -122,8 +122,8 @@ export function LoginForm() {
 
       <div className="mt-8 text-center">
         <p className="text-muted-foreground">
-          Don't have an anccouint?{" "}
-          <a href="/signup" className="text-green-700 font-medium">
+          Don&apos;t have an anccouint?{" "}
+          <a href="/signup" className="text-tertiary hover:text-tertiary/90 font-medium">
             Sign UP
           </a>
         </p>
