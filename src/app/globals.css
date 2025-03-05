@@ -154,3 +154,32 @@
     background-position: 0% 0%;
   }
 }
+
+/* Custom colors for the dashboard */
+.bg-blue-gradient {
+  background: linear-gradient(to bottom, oklch(75.37% 0.1366 220.46), oklch(31.6% 0.0828 246.83));
+}
+
+.bg-yellow-card {
+  background-color: oklch(91.61% 0.2018 111.92);
+}
+
+.bg-orange-card {
+  background-color: oklch(65.52% 0.2184 37.08);
+}
+
+.bg-magenta-card {
+  background-color: oklch(69.03% 0.2244 356.93);
+}
+
+.bg-lightblue-card {
+  background-color: oklch(74.92% 0.1366 220.46);
+}
+
+.bg-darkblue-button {
+  background-color: oklch(31.6% 0.0828 246.83);
+}
+
+.bg-red-button {
+  background-color: oklch(62.45% 0.2554 28.75);
+}
