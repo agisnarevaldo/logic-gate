@@ -29,14 +29,14 @@ const handler = NextAuth({
         // This is where you would typically verify against your database
         // For demo purposes, we'll accept any email with password "password"
         if (credentials?.email && credentials?.password === "password") {
-          return { id: "1", name: "User", email: credentials.email }
+          return { id: "1", name: "Muhamad Agisna Revaldo", email: credentials.email }
         }
         return null
       },
     }),
   ],
   pages: {
-    signIn: "/login",
+    signIn: "/",
   },
   callbacks: {
     async jwt({ token, user }) {
