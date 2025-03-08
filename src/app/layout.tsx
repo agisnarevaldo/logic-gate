@@ -34,7 +34,7 @@ export default async function RootLayout({
           </ClientLayout>
         ) : (
           <LayoutProvider>
-              {/* <p>Or handle the null case as needed</p>   */}
+               <p>Or handle the null case as needed</p>
               {children}
           </LayoutProvider>
         )}
