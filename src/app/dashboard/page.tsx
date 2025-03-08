@@ -9,6 +9,7 @@ import { FeatureCard } from "@/components/featured-card"
 import { DashboardButton } from "@/components/dashboard-button"
 import { LogoutButton } from "@/components/logout-button"
 import { BookOpenText, Brain, ClipboardList, Gamepad2 } from "lucide-react"
+import {SimulatorIcon} from "@/components/simulator/simulator-icon";
 
 export default function Dashboard() {
   // const { data: session, status } = useSession()
@@ -46,7 +47,7 @@ export default function Dashboard() {
 
         {/* Feature Cards - First Row */}
         <div className="grid grid-cols-2 gap-2">
-          <FeatureCard href="/checklist" bgColor="bg-yellow-card" icon={<ClipboardList size={60} />} />
+          <FeatureCard href="/tujuan-belajar" bgColor="bg-yellow-card" icon={<ClipboardList size={60} />} />
           <FeatureCard href="/book" bgColor="bg-orange-card" icon={<BookOpenText size={60} />} />
         </div>
 
@@ -54,6 +55,16 @@ export default function Dashboard() {
         <div className="grid grid-cols-2 gap-2">
           <FeatureCard href="/game" bgColor="bg-magenta-card" icon={<Gamepad2 size={60} />} />
           <FeatureCard href="/brain" bgColor="bg-lightblue-card" icon={<Brain size={60} />} />
+        </div>
+
+        {/* Add Simulator Card */}
+        <div className="mt-4">
+          <FeatureCard
+              href="/simulator"
+              bgColor="bg-blue-gradient"
+              icon={<SimulatorIcon />}
+              label="Logic Gate Simulator"
+          />
         </div>
 
         {/* Navigation Buttons */}
