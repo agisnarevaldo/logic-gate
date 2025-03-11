@@ -48,13 +48,13 @@ export default function Dashboard() {
         {/* Feature Cards - First Row */}
         <div className="grid grid-cols-2 gap-2">
           <FeatureCard href="/tujuan-belajar" bgColor="bg-yellow-card" icon={<ClipboardList size={60} />} />
-          <FeatureCard href="/book" bgColor="bg-orange-card" icon={<BookOpenText size={60} />} />
+          <FeatureCard href="/materi" bgColor="bg-orange-card" icon={<BookOpenText size={60} />} />
         </div>
 
         {/* Feature Cards - Second Row */}
         <div className="grid grid-cols-2 gap-2">
           <FeatureCard href="/game" bgColor="bg-magenta-card" icon={<Gamepad2 size={60} />} />
-          <FeatureCard href="/brain" bgColor="bg-lightblue-card" icon={<Brain size={60} />} />
+          <FeatureCard href="/kuis" bgColor="bg-lightblue-card" icon={<Brain size={60} />} />
         </div>
 
         {/* Add Simulator Card */}
