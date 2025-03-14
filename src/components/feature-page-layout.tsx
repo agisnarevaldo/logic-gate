@@ -2,8 +2,10 @@
 
 import type React from "react"
 
+import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { ChevronLeft, Menu } from "lucide-react"
+import { SidebarMenu } from "./sidebar-menu"
 
 interface FeaturePageLayoutProps {
     title: string
@@ -14,16 +16,17 @@ interface FeaturePageLayoutProps {
 
 export function FeaturePageLayout({ title, icon, bgColor, children }: FeaturePageLayoutProps) {
     const router = useRouter()
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
     return (
-        <div className="min-h-screen max-w-md mx-auto flex flex-col">
+        <div className="min-h-screen flex flex-col">
             {/* Header */}
             <div className={`${bgColor} p-4 rounded-b-3xl`}>
                 <div className="flex justify-between items-center mb-8">
                     <button onClick={() => router.push("/dashboard")} className="text-white p-2">
                         <ChevronLeft size={28} />
                     </button>
-                    <button className="text-white p-2">
+                    <button onClick={() => setIsSidebarOpen(true)} className="text-white p-2">
                         <Menu size={28} />
                     </button>
                 </div>
@@ -44,6 +47,9 @@ export function FeaturePageLayout({ title, icon, bgColor, children }: FeaturePag
 
             {/* Footer */}
             <div className="text-center py-6 text-gray-500">LogiFun</div>
+
+            {/* Sidebar Menu */}
+            <SidebarMenu isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
         </div>
     )
 }

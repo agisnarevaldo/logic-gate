@@ -32,20 +32,38 @@ export default function MateriPage() {
 
             <div className={showLoading ? "hidden" : ""}>
                 <FeaturePageLayout title="Materi" icon={<BookIcon />} bgColor="bg-orange-card">
-                    <div className="grid grid-cols-2 gap-4">
-                        {materials.map((material) => (
-                            <Link
-                                key={material.id}
-                                href={material.href}
-                                className="bg-orange-card rounded-2xl p-6 flex items-center justify-center text-center"
-                            >
-                                <h3 className="text-xl font-bold text-white">{material.title}</h3>
+                    <div className="mb-8">
+                        <h3 className="text-3xl font-bold mb-4 text-center">Pilih Materi</h3>
+                        <div className="h-px bg-gray-300 w-full mb-4" />
+
+                        <div className="space-y-4">
+                            {materials.map((material, index) => (
+                                <Link key={material.id} href={material.href} className="block">
+                                    <div className="bg-orange-card text-white p-4 rounded-lg">
+                                        <h4 className="text-xl font-bold">Materi {index + 1}</h4>
+                                        <p>{material.title}</p>
+                                    </div>
+                                </Link>
+                            ))}
+
+                            {/* Additional materials to match the design */}
+                            <Link href="#" className="block">
+                                <div className="bg-orange-card text-white p-4 rounded-lg">
+                                    <h4 className="text-xl font-bold">Materi 5</h4>
+                                    <p>Additional Material</p>
+                                </div>
                             </Link>
-                        ))}
+
+                            <Link href="#" className="block">
+                                <div className="bg-orange-card text-white p-4 rounded-lg">
+                                    <h4 className="text-xl font-bold">Materi 6</h4>
+                                    <p>Additional Material</p>
+                                </div>
+                            </Link>
+                        </div>
                     </div>
                 </FeaturePageLayout>
             </div>
         </>
     )
 }
-

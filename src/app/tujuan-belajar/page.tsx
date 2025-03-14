@@ -38,7 +38,7 @@ export default function TujuanBelajarPage() {
             <div className={showLoading ? "hidden" : ""}>
                 <FeaturePageLayout title="T. Belajar" icon={<ChecklistIcon />} bgColor="bg-yellow-card">
                     {objectives.map((objective) => (
-                        <div key={objective.id} className="bg-yellow-card rounded-2xl p-6 mb-6">
+                        <div key={objective.id} className="bg-yellow-card rounded-2xl p-6 mb-6 text-white">
                             <h3 className="text-xl font-bold mb-2">{objective.title}</h3>
                             <p>{objective.description}</p>
                         </div>
