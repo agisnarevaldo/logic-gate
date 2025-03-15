@@ -28,7 +28,10 @@ export function SimulatorToolbar({ onAddComponent }: SimulatorToolbarProps) {
     ]
 
     return (
-        <div className="flex flex-wrap gap-2 p-2 bg-secondary rounded-lg">
+        <div className="flex flex-wrap gap-2">
+            <div className="w-full mb-2">
+                <h3 className="text-lg font-medium">Drag components to the canvas</h3>
+            </div>
             {components.map((component) => (
                 <div
                     key={component.type}
@@ -36,7 +39,10 @@ export function SimulatorToolbar({ onAddComponent }: SimulatorToolbarProps) {
                     onDragStart={(e) => handleDragStart(e, component.type)}
                     className="cursor-grab"
                 >
-                    <Button variant="outline" className="flex flex-col items-center justify-center h-20 w-20 p-2 gap-1">
+                    <Button
+                        variant="outline"
+                        className="flex flex-col items-center justify-center h-20 w-20 p-2 gap-1 bg-white hover:bg-gray-50"
+                    >
                         {component.icon}
                         <span className="text-xs">{component.label}</span>
                     </Button>
@@ -45,4 +51,3 @@ export function SimulatorToolbar({ onAddComponent }: SimulatorToolbarProps) {
         </div>
     )
 }
-

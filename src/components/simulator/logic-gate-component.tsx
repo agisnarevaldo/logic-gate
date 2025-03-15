@@ -13,6 +13,7 @@ interface LogicGateComponentProps {
     onCompleteConnection: (portId: string) => void
     onRemove: () => void
     onToggleInput: () => void
+    zoom?: number
 }
 
 export function LogicGateComponent({
@@ -22,6 +23,7 @@ export function LogicGateComponent({
                                        onCompleteConnection,
                                        onRemove,
                                        onToggleInput,
+                                       zoom = 1,
                                    }: LogicGateComponentProps) {
     const [isDragging, setIsDragging] = useState(false)
     const [dragOffset, setDragOffset] = useState<Position>({ x: 0, y: 0 })
@@ -29,6 +31,7 @@ export function LogicGateComponent({
 
     // Start dragging the component
     const handleMouseDown = (e: React.MouseEvent) => {
+        e.stopPropagation()
         if (componentRef.current) {
             const rect = componentRef.current.getBoundingClientRect()
             setDragOffset({
@@ -44,8 +47,9 @@ export function LogicGateComponent({
         if (isDragging && componentRef.current) {
             const parentRect = componentRef.current.parentElement?.getBoundingClientRect()
             if (parentRect) {
-                const x = e.clientX - parentRect.left - dragOffset.x
-                const y = e.clientY - parentRect.top - dragOffset.y
+                // Adjust for zoom
+                const x = (e.clientX - parentRect.left - dragOffset.x) / zoom
+                const y = (e.clientY - parentRect.top - dragOffset.y) / zoom
                 onUpdatePosition({ x, y })
             }
         }
