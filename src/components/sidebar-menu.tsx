@@ -40,6 +40,7 @@ export function SidebarMenu({ isOpen, onClose }: SidebarMenuProps) {
         { name: "Materi", path: "/materi" },
         { name: "Game", path: "/game" },
         { name: "Kuis", path: "/kuis" },
+        { name: "simulator", path: "/simulator" },
         { name: "About", path: "/about" },
         { name: "Penilaian", path: "/penilaian" },
         { name: "About", path: "/about" },
