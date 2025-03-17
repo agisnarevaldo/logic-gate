@@ -5,9 +5,8 @@ import type React from "react"
 import { useState, useRef, useEffect, useCallback } from "react"
 import type { Component, Connection, Position, DraggingWire, ComponentType } from "@/types/simulator"
 import { LogicGateComponent } from "./logic-gate-component"
-
+import { WireConnection } from "./wire-connection"
 import { ZoomControls } from "./zoom-controls"
-import {WireConnection} from "@/components/simulator/wire-connection";
 
 interface SimulatorCanvasProps {
     components: Component[]
@@ -37,6 +36,7 @@ export function SimulatorCanvas({
     const [panOffset, setPanOffset] = useState<Position>({ x: 0, y: 0 })
     const [isDraggingCanvas, setIsDraggingCanvas] = useState(false)
     const [dragStart, setDragStart] = useState<Position>({ x: 0, y: 0 })
+    const [lastPinchDistance, setLastPinchDistance] = useState<number | null>(null)
 
     // Throttle reference to limit mouse position updates
     const throttleRef = useRef<number | null>(null)
@@ -96,6 +96,67 @@ export function SimulatorCanvas({
         [draggingWire, isDraggingCanvas, dragStart, zoom, panOffset],
     )
 
+    // Handle touch events for mobile
+    const handleTouchStart = (e: React.TouchEvent) => {
+        if (e.touches.length === 2) {
+            // Two finger touch - for pinch zoom
+            const dist = getDistanceBetweenTouches(e.touches)
+            setLastPinchDistance(dist)
+        } else if (e.touches.length === 1) {
+            // Single finger touch - for panning
+            setIsDraggingCanvas(true)
+            setDragStart({
+                x: e.touches[0].clientX,
+                y: e.touches[0].clientY,
+            })
+        }
+    }
+
+    const handleTouchMove = (e: React.TouchEvent) => {
+        if (!canvasRef.current) return
+
+        if (e.touches.length === 2 && lastPinchDistance !== null) {
+            // Handle pinch zoom
+            const currentDist = getDistanceBetweenTouches(e.touches)
+            const scaleFactor = currentDist / lastPinchDistance
+
+            // Apply zoom with limits
+            setZoom((prev) => {
+                const newZoom = prev * scaleFactor
+                return Math.min(Math.max(newZoom, 0.5), 2)
+            })
+
+            setLastPinchDistance(currentDist)
+            e.preventDefault() // Prevent default to avoid page scrolling
+        } else if (e.touches.length === 1 && isDraggingCanvas) {
+            // Handle panning
+            const dx = e.touches[0].clientX - dragStart.x
+            const dy = e.touches[0].clientY - dragStart.y
+
+            setPanOffset((prev) => ({ x: prev.x + dx, y: prev.y + dy }))
+            setDragStart({
+                x: e.touches[0].clientX,
+                y: e.touches[0].clientY,
+            })
+
+            e.preventDefault() // Prevent default to avoid page scrolling
+        }
+    }
+
+    const handleTouchEnd = () => {
+        setIsDraggingCanvas(false)
+        setLastPinchDistance(null)
+    }
+
+    // Helper function to calculate distance between two touch points
+    const getDistanceBetweenTouches = (touches: React.TouchList) => {
+        if (touches.length < 2) return 0
+
+        const dx = touches[0].clientX - touches[1].clientX
+        const dy = touches[0].clientY - touches[1].clientY
+        return Math.sqrt(dx * dx + dy * dy)
+    }
+
     // Clean up throttle timer on unmount
     useEffect(() => {
         return () => {
@@ -123,7 +184,8 @@ export function SimulatorCanvas({
     }
 
     // Cancel wire drawing
-    const handleCanvasClick = (e: React.MouseEvent) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const handleCanvasClick = (_e: React.MouseEvent) => {
         // Only handle click if not dragging canvas
         if (!isDraggingCanvas) {
             if (draggingWire) {
@@ -165,7 +227,8 @@ export function SimulatorCanvas({
         <div className="relative w-full h-full">
             <div
                 ref={canvasRef}
-                className="w-full h-full bg-white relative overflow-auto"
+                data-simulator-canvas="true"
+                className="w-full h-full bg-white relative overflow-auto touch-manipulation"
                 style={{
                     cursor: isDraggingCanvas ? "grabbing" : draggingWire ? "crosshair" : "default",
                 }}
@@ -176,6 +239,9 @@ export function SimulatorCanvas({
                 onMouseUp={handleCanvasMouseUp}
                 onMouseLeave={handleCanvasMouseUp}
                 onClick={handleCanvasClick}
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
             >
                 {/* Zoom controls */}
                 <ZoomControls zoom={zoom} onZoomIn={handleZoomIn} onZoomOut={handleZoomOut} onFitView={handleFitView} />
@@ -255,4 +321,3 @@ function DraggingWireComponent({
         </svg>
     )
 }
-

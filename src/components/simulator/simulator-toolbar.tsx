@@ -1,18 +1,14 @@
 "use client"
 
 import type React from "react"
-
 import type { ComponentType } from "@/types/simulator"
 import { Button } from "@/components/ui/button"
 import { ToggleLeft, Circle, AmpersandIcon as And, OrbitIcon as Or, X, AlertTriangle, XCircle } from "lucide-react"
 
-interface SimulatorToolbarProps {
-    onAddComponent: (type: ComponentType, position: { x: number; y: number }) => string
-}
-
-export function SimulatorToolbar({ onAddComponent }: SimulatorToolbarProps) {
-    const handleDragStart = (e: React.DragEvent, type: ComponentType) => {
-        e.dataTransfer.setData("componentType", type)
+export function SimulatorToolbar() {
+    const onDragStart = (event: React.DragEvent<HTMLDivElement>, nodeType: ComponentType) => {
+        event.dataTransfer.setData("application/reactflow", nodeType)
+        event.dataTransfer.effectAllowed = "move"
     }
 
     const components: { type: ComponentType; icon: React.ReactNode; label: string }[] = [
@@ -28,26 +24,28 @@ export function SimulatorToolbar({ onAddComponent }: SimulatorToolbarProps) {
     ]
 
     return (
-        <div className="flex flex-wrap gap-2">
-            <div className="w-full mb-2">
-                <h3 className="text-lg font-medium">Drag components to the canvas</h3>
+        <div className="flex flex-col gap-2">
+            <div className="w-full mb-1 md:mb-2">
+                <h3 className="text-base md:text-lg font-medium">Drag components to the canvas</h3>
             </div>
-            {components.map((component) => (
-                <div
-                    key={component.type}
-                    draggable
-                    onDragStart={(e) => handleDragStart(e, component.type)}
-                    className="cursor-grab"
-                >
-                    <Button
-                        variant="outline"
-                        className="flex flex-col items-center justify-center h-20 w-20 p-2 gap-1 bg-white hover:bg-gray-50"
+            <div className="grid grid-cols-3 md:flex md:flex-wrap gap-2 overflow-x-auto pb-1">
+                {components.map((component) => (
+                    <div
+                        key={component.type}
+                        draggable
+                        onDragStart={(event) => onDragStart(event, component.type)}
+                        className="cursor-grab touch-manipulation"
                     >
-                        {component.icon}
-                        <span className="text-xs">{component.label}</span>
-                    </Button>
-                </div>
-            ))}
+                        <Button
+                            variant="outline"
+                            className="flex flex-col items-center justify-center h-16 w-full md:h-20 md:w-20 p-1 md:p-2 gap-1 bg-white hover:bg-gray-50"
+                        >
+                            {component.icon}
+                            <span className="text-xs truncate w-full">{component.label}</span>
+                        </Button>
+                    </div>
+                ))}
+            </div>
         </div>
     )
 }

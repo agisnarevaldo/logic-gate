@@ -5,7 +5,7 @@ import type React from "react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { ChevronLeft, Menu } from "lucide-react"
-import {SidebarMenu} from "@/components/sidebar-menu";
+import { SidebarMenu } from "../sidebar-menu"
 
 interface SimulatorLayoutProps {
     title: string
@@ -22,25 +22,25 @@ export function SimulatorLayout({ title, icon, bgColor, children }: SimulatorLay
         <div className="min-h-screen flex flex-col">
             {/* Header */}
             <div className={`${bgColor} p-4 rounded-b-3xl`}>
-                <div className="flex justify-between items-center mb-8">
+                <div className="flex justify-between items-center mb-4 md:mb-8">
                     <button onClick={() => router.push("/dashboard")} className="text-white p-2">
-                        <ChevronLeft size={28} />
+                        <ChevronLeft size={24} />
                     </button>
                     <button onClick={() => setIsSidebarOpen(true)} className="text-white p-2">
-                        <Menu size={28} />
+                        <Menu size={24} />
                     </button>
                 </div>
-                <div className="flex items-center justify-center gap-4 mb-4">
-                    <div className="w-16 h-16 text-white">{icon}</div>
-                    <h1 className="text-white text-5xl font-bold">{title}</h1>
+                <div className="flex items-center justify-center gap-3 md:gap-4 mb-4">
+                    <div className="w-12 h-12 md:w-16 md:h-16 text-white">{icon}</div>
+                    <h1 className="text-3xl md:text-5xl font-bold text-white">{title}</h1>
                 </div>
             </div>
 
             {/* Content */}
-            <div className="flex-1 p-4">{children}</div>
+            <div className="flex-1 p-2 md:p-4">{children}</div>
 
             {/* Footer */}
-            <div className="text-center py-6 text-gray-500">LogiFun</div>
+            <div className="text-center py-4 md:py-6 text-gray-500">LogiFun</div>
 
             {/* Sidebar Menu */}
             <SidebarMenu isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
