@@ -83,7 +83,7 @@ export function SidebarMenu({ isOpen, onClose }: SidebarMenuProps) {
                         </button>
 
                         {/* Logo and illustration */}
-                        <div className="pt-12 pb-6 flex flex-col items-center">
+                        <div className="pt-10 pb-6 flex flex-col items-center">
                             <h1 className="text-4xl font-bold mb-4">LogiFun</h1>
                             <div className="rounded-xl w-40 h-full flex items-center justify-center">
                                 <Image
@@ -97,10 +97,10 @@ export function SidebarMenu({ isOpen, onClose }: SidebarMenuProps) {
                         </div>
 
                         {/* Divider */}
-                        <div className="w-full h-px bg-white/20 my-4 mx-auto max-w-[90%]" />
+                        <div className="w-full h-px bg-white/20 my-2 mx-auto max-w-[90%]" />
 
                         {/* Navigation links */}
-                        <div className="flex-1 flex flex-col items-center gap-3 px-4">
+                        <div className="flex-1 flex flex-col items-center gap-2 px-4">
                             {menuItems.map((item, index) => (
                                 <button
                                     key={`${item.name}-${index}`}
