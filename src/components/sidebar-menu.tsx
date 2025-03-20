@@ -41,9 +41,9 @@ export function SidebarMenu({ isOpen, onClose }: SidebarMenuProps) {
         { name: "Game", path: "/game" },
         { name: "Kuis", path: "/kuis" },
         { name: "simulator", path: "/simulator" },
+        { name: "Home", path: "/dashboard" },
         { name: "About", path: "/about" },
         { name: "Penilaian", path: "/penilaian" },
-        { name: "About", path: "/about" },
     ]
 
     const handleNavigation = (path: string) => {
