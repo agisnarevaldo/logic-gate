@@ -36,7 +36,7 @@ export function PageLoadingScreen({ bgColor, icon, text, onComplete }: PageLoadi
             transition={{ duration: 0.5 }}
         >
             <div className="flex flex-col items-center justify-center gap-6 text-white">
-                <div className="flex gap-3.5 items-center">
+                <div className="flex gap-3.5 items-center justify-center">
                     {/* Icon animation */}
                     <motion.div
                         className="text-white w-16 h-16"

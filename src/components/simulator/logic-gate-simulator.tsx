@@ -15,7 +15,6 @@ import ReactFlow, {
     type Node,
     type NodeTypes,
     type EdgeTypes,
-    Panel,
 } from "reactflow"
 import "reactflow/dist/style.css"
 
@@ -239,12 +238,6 @@ export function LogicGateSimulator() {
                             >
                                 <Background />
                                 <Controls />
-                                <Panel position="top-right">
-                                    <div className="bg-white p-2 rounded shadow-md text-sm">
-                                        <p>Drag components from toolbar to canvas</p>
-                                        <p>Connect nodes by dragging between handles</p>
-                                    </div>
-                                </Panel>
                             </ReactFlow>
                         </ReactFlowProvider>
                     </div>
