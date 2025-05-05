@@ -34,7 +34,7 @@ export default function KuisPage() {
                     {quizzes.map((quiz) => (
                         <Link key={quiz.id} href={quiz.href} className="block bg-lightblue-card rounded-2xl p-6 mb-6">
                             <h3 className="text-xl font-bold text-white">{quiz.title}</h3>
-                            <p className="text-white/80">Test your knowledge</p>
+                            <p className="text-white">Test your knowledge</p>
                         </Link>
                     ))}
                 </FeaturePageLayout>
