@@ -36,7 +36,7 @@ export default function MateriPage() {
                                     <div className="bg-orange-card text-white p-4 rounded-lg">
                                         <h4 className="text-xl font-bold">Materi {index + 1}</h4>
                                         <p>{category.title}</p>
-                                        <p className="text-sm text-white/80 mt-1">{category.description}</p>
+                                        <p className="text-sm text-white mt-1">{category.description}</p>
                                     </div>
                                 </Link>
                             ))}
