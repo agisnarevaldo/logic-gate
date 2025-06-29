@@ -50,6 +50,11 @@ Klik "Deploy" - Vercel akan:
 - ✅ Unused parameters di berbagai components
 - ✅ Parameter types di callback functions
 
+### Next.js App Router Compatibility:
+- ✅ **NextAuth Config Separation**: Moved `authOptions` dari route handler ke `/lib/auth.ts`
+- ✅ **Route Handler Compliance**: Hanya export GET/POST dari auth route
+- ✅ **Dashboard Layout Fix**: Removed unused session parameter
+
 ### Production Optimizations:
 - ✅ Added `vercel-build` script
 - ✅ Added `type-check` script
