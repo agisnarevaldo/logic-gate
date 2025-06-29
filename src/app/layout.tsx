@@ -4,6 +4,8 @@ import "./globals.css";
 import { LayoutProvider } from "@/providers/layout-provider";
 import { getServerSession } from "next-auth";
 import ClientLayout from "./client-layout";
+import { authOptions } from "./api/auth/[...nextauth]/route";
+import { ClearCorruptedSession } from "@/components/clear-corrupted-session";
 
 const poppins = Poppins({
   weight: ["300", "400", "500", "600", "700"],
@@ -21,23 +23,26 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await getServerSession()
+  let session = null;
+  
+  try {
+    session = await getServerSession(authOptions);
+  } catch {
+    // If there's a JWT error, we'll just continue with null session
+    // This allows the app to work while clearing corrupted sessions
+    console.log("Session error handled, continuing with null session");
+    session = null;
+  }
   
   return (
     <html lang="en">
       <body className={`${poppins.className} antialiased`}>
-        {session ? (
-          <ClientLayout session={session}>
-            <LayoutProvider>
-              {children}
-            </LayoutProvider>
-          </ClientLayout>
-        ) : (
+        <ClearCorruptedSession />
+        <ClientLayout session={session}>
           <LayoutProvider>
-               <p>Or handle the null case as needed</p>
-              {children}
+            {children}
           </LayoutProvider>
-        )}
+        </ClientLayout>
       </body>
     </html>
   );

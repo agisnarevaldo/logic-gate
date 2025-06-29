@@ -1,4 +1,4 @@
-import NextAuth from "next-auth"
+import NextAuth, { NextAuthOptions } from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
 import CredentialsProvider from "next-auth/providers/credentials"
 
@@ -13,7 +13,7 @@ declare module "next-auth" {
   }
 }
 
-const handler = NextAuth({
+const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -38,6 +38,21 @@ const handler = NextAuth({
   pages: {
     signIn: "/",
   },
+  session: {
+    strategy: "jwt" as const,
+  },
+  secret: process.env.NEXTAUTH_SECRET,
+  cookies: {
+    sessionToken: {
+      name: `next-auth.session-token`,
+      options: {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        secure: false // Set to true in production with HTTPS
+      }
+    }
+  },
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
@@ -52,7 +67,9 @@ const handler = NextAuth({
       return session
     },
   },
-})
+}
 
-export { handler as GET, handler as POST }
+const handler = NextAuth(authOptions)
+
+export { handler as GET, handler as POST, authOptions }
 

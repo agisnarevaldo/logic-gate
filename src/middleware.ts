@@ -1,12 +1,24 @@
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function middleware(request:NextRequest) {
-    const token = await getToken({ req: request })
+export async function middleware(request: NextRequest) {
+    let token = null;
+    
+    try {
+        token = await getToken({ 
+            req: request,
+            secret: process.env.NEXTAUTH_SECRET 
+        });
+    } catch {
+        // If JWT token is corrupted, treat as unauthenticated
+        console.log("JWT error in middleware, treating as unauthenticated");
+        token = null;
+    }
+    
     const isAuthenticated = !!token
 
-    // Paths's that don't require authentication
-    const publicPaths = ["/", "login", "/signup"]
+    // Paths that don't require authentication
+    const publicPaths = ["/", "/login", "/signup"]
     const isPublicPath = publicPaths.includes(request.nextUrl.pathname)
 
     // Allow access to static files and API routes
@@ -23,7 +35,7 @@ export async function middleware(request:NextRequest) {
         return NextResponse.redirect(new URL("/login", request.url))
     }
 
-    // if the user is authenticated and tring to access a public route
+    // if the user is authenticated and trying to access a public route
     if (isAuthenticated && isPublicPath) {
         return NextResponse.redirect(new URL("/dashboard", request.url))
     }

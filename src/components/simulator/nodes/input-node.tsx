@@ -4,7 +4,7 @@ import { memo } from "react"
 import { Handle, Position, type NodeProps } from "reactflow"
 import { ToggleLeft, ToggleRight } from "lucide-react"
 
-export const InputNode = memo(({ data, id }: NodeProps) => {
+export const InputNode = memo(({ data }: NodeProps) => {
     const toggleValue = () => {
         data.value = !data.value
     }

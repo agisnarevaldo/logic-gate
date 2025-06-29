@@ -15,6 +15,7 @@ import ReactFlow, {
     type Node,
     type NodeTypes,
     type EdgeTypes,
+    type ReactFlowInstance,
 } from "reactflow"
 import "reactflow/dist/style.css"
 
@@ -44,7 +45,7 @@ export function LogicGateSimulator() {
     const reactFlowWrapper = useRef<HTMLDivElement>(null)
     const [nodes, setNodes, onNodesChange] = useNodesState([])
     const [edges, setEdges, onEdgesChange] = useEdgesState([])
-    const [reactFlowInstance, setReactFlowInstance] = useState<any>(null)
+    const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null)
 
     // Handle connections between nodes
     const onConnect = useCallback(
@@ -53,6 +54,8 @@ export function LogicGateSimulator() {
             const newEdge: Edge = {
                 ...params,
                 id: `e-${uuidv4()}`,
+                source: params.source || '',
+                target: params.target || '',
                 type: "custom",
                 animated: true,
                 data: { value: false },
@@ -174,25 +177,25 @@ export function LogicGateSimulator() {
                     // Apply the appropriate logic based on gate type
                     switch (gateType) {
                         case "AND":
-                            outputValue = inputValues.every((v) => v)
+                            outputValue = inputValues.every((v: boolean) => v)
                             break
                         case "OR":
-                            outputValue = inputValues.some((v) => v)
+                            outputValue = inputValues.some((v: boolean) => v)
                             break
                         case "NOT":
                             outputValue = !inputValues[0]
                             break
                         case "NAND":
-                            outputValue = !inputValues.every((v) => v)
+                            outputValue = !inputValues.every((v: boolean) => v)
                             break
                         case "NOR":
-                            outputValue = !inputValues.some((v) => v)
+                            outputValue = !inputValues.some((v: boolean) => v)
                             break
                         case "XOR":
-                            outputValue = inputValues.filter((v) => v).length % 2 === 1
+                            outputValue = inputValues.filter((v: boolean) => v).length % 2 === 1
                             break
                         case "XNOR":
-                            outputValue = inputValues.filter((v) => v).length % 2 === 0
+                            outputValue = inputValues.filter((v: boolean) => v).length % 2 === 0
                             break
                     }
 
