@@ -1,8 +1,7 @@
 "use client"
 
-import {Session} from "next-auth";
 import {ReactNode} from "react";
 
-export default function DashboardLayout({children}: { children: ReactNode, session: Session }) {
+export default function DashboardLayout({children}: { children: ReactNode }) {
     return <div>{children}</div>
 }

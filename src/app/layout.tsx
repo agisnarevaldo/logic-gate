@@ -4,7 +4,7 @@ import "./globals.css";
 import { LayoutProvider } from "@/providers/layout-provider";
 import { getServerSession } from "next-auth";
 import ClientLayout from "./client-layout";
-import { authOptions } from "./api/auth/[...nextauth]/route";
+import { authOptions } from "@/lib/auth";
 import { ClearCorruptedSession } from "@/components/clear-corrupted-session";
 
 const poppins = Poppins({
