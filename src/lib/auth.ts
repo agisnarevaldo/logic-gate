@@ -61,10 +61,16 @@ export const authOptions: NextAuthOptions = {
       return token
     },
     async session({ session, token }) {
-      if (session.user) {
+      if (session.user && token) {
         session.user.id = token.id as string
       }
       return session
     },
   },
+  events: {
+    async signOut() {
+      // Clear any additional session data if needed
+    },
+  },
+  debug: process.env.NODE_ENV === 'development',
 }

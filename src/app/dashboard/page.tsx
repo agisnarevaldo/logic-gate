@@ -47,7 +47,7 @@ export default function Dashboard() {
 
         {/* Feature Cards - First Row */}
         <div className="grid grid-cols-2 gap-2">
-          <FeatureCard href="/tujuan-belajar" bgColor="bg-yellow-card" icon={<ClipboardList size={60} />} />
+          <FeatureCard href="/tujuan-belajar" bgColor="bg-green-500" icon={<ClipboardList size={60} />} />
           <FeatureCard href="/materi" bgColor="bg-orange-card" icon={<BookOpenText size={60} />} />
         </div>
 
