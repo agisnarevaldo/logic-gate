@@ -22,6 +22,7 @@ import "reactflow/dist/style.css"
 import { Card, CardContent } from "@/components/ui/card"
 import { SimulatorToolbar } from "./simulator-toolbar"
 import { SimulatorControls } from "./simulator-controls"
+import { SidebarToggle } from "./sidebar-toggle"
 import { InputNode } from "./nodes/input-node"
 import { OutputNode } from "./nodes/output-node"
 import { GateNode } from "./nodes/gate-node"
@@ -46,6 +47,8 @@ export function LogicGateSimulator() {
     const [nodes, setNodes, onNodesChange] = useNodesState([])
     const [edges, setEdges, onEdgesChange] = useEdgesState([])
     const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null)
+    const [selectedComponent, setSelectedComponent] = useState<ComponentType | null>(null)
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
     // Handle connections between nodes
     const onConnect = useCallback(
@@ -65,7 +68,68 @@ export function LogicGateSimulator() {
         [setEdges],
     )
 
-    // Handle dropping a new node onto the canvas
+    // Handle canvas click for placing components (mobile-friendly)
+    const onPaneClick = useCallback(
+        (event: React.MouseEvent | React.TouchEvent) => {
+            if (!selectedComponent || !reactFlowInstance || !reactFlowWrapper.current) return
+
+            event.preventDefault()
+            
+            // Get click/touch position
+            let clientX: number, clientY: number
+            
+            if ('touches' in event) {
+                // Touch event
+                const touch = event.touches[0] || event.changedTouches[0]
+                clientX = touch.clientX
+                clientY = touch.clientY
+            } else {
+                // Mouse event
+                clientX = event.clientX
+                clientY = event.clientY
+            }
+
+            const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect()
+            
+            // Get the position where the component should be placed
+            const position = reactFlowInstance.screenToFlowPosition({
+                x: clientX - reactFlowBounds.left,
+                y: clientY - reactFlowBounds.top,
+            })
+
+            // Create a new node based on the selected component type
+            const newNode: Node = {
+                id: `node-${uuidv4()}`,
+                position,
+                data: { label: selectedComponent, value: false },
+            }
+
+            // Set specific node types and properties based on the component type
+            switch (selectedComponent) {
+                case "INPUT":
+                    newNode.type = "inputNode"
+                    newNode.data = { ...newNode.data, value: false }
+                    break
+                case "OUTPUT":
+                    newNode.type = "outputNode"
+                    newNode.data = { ...newNode.data, value: false }
+                    break
+                default:
+                    newNode.type = "gateNode"
+                    newNode.data = { ...newNode.data, gateType: selectedComponent }
+                    break
+            }
+
+            // Add the new node to the flow
+            setNodes((nds) => nds.concat(newNode))
+            
+            // Clear selection after placing
+            setSelectedComponent(null)
+        },
+        [selectedComponent, reactFlowInstance, setNodes],
+    )
+
+    // Handle dropping a new node onto the canvas (keep for desktop compatibility)
     const onDrop = useCallback(
         (event: React.DragEvent<HTMLDivElement>) => {
             event.preventDefault()
@@ -119,6 +183,13 @@ export function LogicGateSimulator() {
         event.preventDefault()
         event.dataTransfer.dropEffect = "move"
     }, [])
+
+    // Clear canvas function
+    const clearCanvas = useCallback(() => {
+        setNodes([])
+        setEdges([])
+        setSelectedComponent(null)
+    }, [setNodes, setEdges])
 
     // Simulate the circuit
     const simulate = useCallback(() => {
@@ -214,15 +285,29 @@ export function LogicGateSimulator() {
     }, [nodes, edges, setNodes, setEdges])
 
     return (
-        <div className="flex flex-col gap-3 md:gap-4">
-            <Card>
-                <CardContent className="p-2 md:p-4">
-                    <SimulatorToolbar />
-                </CardContent>
-            </Card>
+        <div className="flex flex-col gap-3 md:gap-4 relative">
+            {/* Sidebar Toggle Button */}
+            <SidebarToggle onClick={() => setIsSidebarOpen(!isSidebarOpen)} />
+            
+            {/* Sidebar Overlay */}
+            {isSidebarOpen && (
+                <div 
+                    className="fixed inset-0 bg-black bg-opacity-50 z-40"
+                    onClick={() => setIsSidebarOpen(false)}
+                />
+            )}
+            
+            {/* Sidebar */}
+            <SimulatorToolbar 
+                onComponentSelect={setSelectedComponent}
+                selectedComponent={selectedComponent}
+                isOpen={isSidebarOpen}
+                onToggle={() => setIsSidebarOpen(!isSidebarOpen)}
+            />
 
+            {/* Main Canvas */}
             <Card className="flex-1">
-                <CardContent className="p-0 overflow-hidden rounded-lg h-[calc(100vh-380px)] min-h-[300px] md:h-[calc(100vh-400px)] md:min-h-[400px]">
+                <CardContent className="p-0 overflow-hidden rounded-lg h-[calc(100vh-120px)] min-h-[400px]">
                     <div ref={reactFlowWrapper} className="w-full h-full">
                         <ReactFlowProvider>
                             <ReactFlow
@@ -234,6 +319,7 @@ export function LogicGateSimulator() {
                                 onInit={setReactFlowInstance}
                                 onDrop={onDrop}
                                 onDragOver={onDragOver}
+                                onPaneClick={onPaneClick}
                                 nodeTypes={nodeTypes}
                                 edgeTypes={edgeTypes}
                                 fitView
@@ -247,9 +333,13 @@ export function LogicGateSimulator() {
                 </CardContent>
             </Card>
 
+            {/* Bottom Controls */}
             <Card>
                 <CardContent className="p-2 md:p-4">
-                    <SimulatorControls onSimulate={simulate} />
+                    <SimulatorControls 
+                        onSimulate={simulate} 
+                        onClear={clearCanvas}
+                    />
                 </CardContent>
             </Card>
         </div>

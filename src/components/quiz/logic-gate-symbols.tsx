@@ -1,4 +1,5 @@
 import type React from "react"
+import { Icon } from '@iconify/react'
 
 interface LogicGateSymbolProps {
   className?: string
@@ -78,4 +79,35 @@ export const BufferGateSymbol: React.FC<LogicGateSymbolProps> = ({ className }) 
     <line x1="0" y1="30" x2="-15" y2="30" />
     <line x1="60" y1="30" x2="75" y2="30" />
   </svg>
+)
+
+// Komponen Input - Saklar (tanpa text)
+export const InputSwitchSymbol: React.FC<LogicGateSymbolProps & { isOn?: boolean }> = ({ className, isOn = false }) => (
+  <svg viewBox="0 0 80 60" className={className} fill="none" stroke="currentColor" strokeWidth="2">
+    {/* Base saklar */}
+    <rect x="15" y="22" width="50" height="16" rx="8" fill={isOn ? "#22c55e" : "#e5e7eb"} stroke={isOn ? "#16a34a" : "#9ca3af"} />
+    {/* Toggle switch */}
+    <circle cx={isOn ? "55" : "25"} cy="30" r="6" fill="white" stroke={isOn ? "#16a34a" : "#9ca3af"} strokeWidth="2" />
+    {/* Output line */}
+    <line x1="65" y1="30" x2="80" y2="30" stroke={isOn ? "#22c55e" : "#9ca3af"} strokeWidth="3" />
+  </svg>
+)
+
+// Komponen Output - Lampu (menggunakan iconify light bulb)
+export const OutputLampSymbol: React.FC<LogicGateSymbolProps & { isOn?: boolean }> = ({ className, isOn = false }) => (
+  <div className={`flex items-center justify-center ${className}`}>
+    {/* Input line */}
+    <svg viewBox="0 0 80 60" className="absolute w-full h-full" fill="none">
+      <line x1="0" y1="30" x2="15" y2="30" stroke={isOn ? "#22c55e" : "#9ca3af"} strokeWidth="3" />
+    </svg>
+    {/* Light Bulb Icon */}
+    <Icon 
+      icon="noto:light-bulb" 
+      className="w-8 h-8 z-10"
+      style={{ 
+        filter: isOn ? 'brightness(1.2) saturate(1.5)' : 'grayscale(1) brightness(0.7)',
+        color: isOn ? '#fbbf24' : '#9ca3af'
+      }}
+    />
+  </div>
 )
