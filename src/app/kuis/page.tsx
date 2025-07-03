@@ -13,17 +13,44 @@ export default function KuisPage() {
   const quizzes = [
     {
       id: 1,
-      title: "Logic Gate Matching",
+      title: "Simbol Gerbang Logika",
       href: "/kuis/matching",
-      description: "Match logic gate symbols with their names",
+      description: "Cocokkan simbol gerbang logika dengan namanya",
+      difficulty: "Mudah",
+      time: "5 menit"
     },
-    // { id: 2, title: "Basic Logic Gates", href: "/kuis/basic", description: "Test your knowledge of basic logic gates" },
+    {
+      id: 2,
+      title: "Gerbang Logika Dasar",
+      href: "/kuis/basic-gates",
+      description: "Tes pengetahuan tentang gerbang AND, OR, dan NOT",
+      difficulty: "Normal",
+      time: "10 menit"
+    },
+    {
+      id: 3,
+      title: "Gerbang Logika Turunan",
+      href: "/kuis/advanced-gates",
+      description: "Kuis tentang NAND, NOR, XOR, dan XNOR",
+      difficulty: "Normal",
+      time: "10 mnt"
+    },
+    {
+      id: 4,
+      title: "Tabel Kebenaran",
+      href: "/kuis/truth-table",
+      description: "Lengkapi tabel kebenaran berbagai gerbang logika",
+      difficulty: "Sulit",
+      time: "12 menit"
+    },
     // {
-    //   id: 3,
-    //   title: "Combination Logic",
-    //   href: "/kuis/combination",
-    //   description: "Questions about combination logic circuits",
-    // },
+    //   id: 5,
+    //   title: "Aplikasi Gerbang Logika",
+    //   href: "/kuis/applications",
+    //   description: "Soal tentang penggunaan gerbang logika dalam kehidupan nyata",
+    //   difficulty: "Sulit",
+    //   time: "20 menit"
+    // }
   ]
 
   return (
@@ -41,12 +68,32 @@ export default function KuisPage() {
 
       <div className={showLoading ? "hidden" : ""}>
         <FeaturePageLayout title="Kuis" icon={<Brain size={60} />} bgColor="bg-lightblue-card">
-          {quizzes.map((quiz) => (
-            <Link key={quiz.id} href={quiz.href} className="block bg-lightblue-card rounded-2xl p-6 mb-6">
-              <h3 className="text-xl font-bold text-white">{quiz.title}</h3>
-              <p className="text-white/80">{quiz.description}</p>
-            </Link>
-          ))}
+          <div className="grid gap-4 md:gap-6">
+            {quizzes.map((quiz) => (
+              <Link key={quiz.id} href={quiz.href} className="block">
+                <div className="bg-lightblue-card rounded-2xl p-6 hover:bg-blue-600 transition-colors group">
+                  <div className="flex justify-between items-start mb-3">
+                    <h3 className="text-xl font-bold text-white group-hover:text-blue-100">
+                      {quiz.title}
+                    </h3>
+                    <div className="flex gap-1 h-max">
+                      <span className={`px-2 py-1 h-max rounded-full text-xs font-medium ${
+                        quiz.difficulty === 'Mudah' ? 'bg-green-500 text-white' :
+                        quiz.difficulty === 'Normal' ? 'bg-yellow-500 text-white' :
+                        'bg-red-500 text-white'
+                      }`}>
+                        {quiz.difficulty}
+                      </span>
+                      <span className="px-2 py-1 h-max rounded-full text-xs font-medium bg-white/20 text-white">
+                        {quiz.time}
+                      </span>
+                    </div>
+                  </div>
+                  <p className="text-white/80 group-hover:text-blue-100">{quiz.description}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
         </FeaturePageLayout>
       </div>
     </>

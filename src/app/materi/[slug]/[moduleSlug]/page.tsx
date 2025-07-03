@@ -115,61 +115,45 @@ export default function ModulePage() {
             {/* Content */}
             <div className="flex-1 px-4 py-6">
                 <div className="bg-white rounded-lg shadow-md p-6 markdown-content">
-                    <ReactMarkdown 
-                        components={{
-                            table: ({children}) => (
-                                <div className="overflow-x-auto mb-4">
-                                    <table className="w-full border-collapse border border-gray-300">
-                                        {children}
-                                    </table>
-                                </div>
-                            ),
-                            th: ({children}) => (
-                                <th className="border border-gray-300 p-3 bg-orange-100 font-semibold text-center">
-                                    {children}
-                                </th>
-                            ),
-                            td: ({children}) => (
-                                <td className="border border-gray-300 p-3 text-center">
-                                    {children}
-                                </td>
-                            )
-                        }}
-                    >
+                    <ReactMarkdown>
                         {module.content}
                     </ReactMarkdown>
                 </div>
 
                 {/* Navigation */}
-                <div className="flex justify-between items-center mt-6">
+                <div className="flex justify-between items-start mt-8 pt-6 border-t border-gray-200">
                     {prevModule ? (
-                        <button
+                        <div 
                             onClick={() => handleNavigation(prevModule)}
-                            className="flex items-center gap-2 bg-orange-card text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors"
+                            className="flex items-center gap-3 text-orange-card hover:text-orange-600 cursor-pointer transition-all duration-200 group max-w-[48%]"
                         >
-                            <ChevronLeft size={20} />
+                            <ChevronLeft size={20} className="text-orange-card group-hover:text-orange-600 flex-shrink-0 group-hover:translate-x-[-2px] transition-transform" />
                             <div className="text-left">
-                                <div className="text-xs opacity-80">Sebelumnya</div>
-                                <div className="text-sm font-medium">{prevModule.module.title}</div>
+                                <div className="text-xs text-gray-500 uppercase tracking-wide font-medium mb-1">Sebelumnya</div>
+                                <div className="text-sm font-medium text-gray-700 group-hover:text-orange-600 transition-colors leading-tight">
+                                    {prevModule.module.title}
+                                </div>
                             </div>
-                        </button>
+                        </div>
                     ) : (
-                        <div></div>
+                        <div className="w-[48%]"></div>
                     )}
 
                     {nextModule ? (
-                        <button
+                        <div 
                             onClick={() => handleNavigation(nextModule)}
-                            className="flex items-center gap-2 bg-orange-card text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors"
+                            className="flex items-center gap-3 text-orange-card hover:text-orange-600 cursor-pointer transition-all duration-200 group max-w-[48%] text-right ml-auto"
                         >
                             <div className="text-right">
-                                <div className="text-xs opacity-80">Selanjutnya</div>
-                                <div className="text-sm font-medium">{nextModule.module.title}</div>
+                                <div className="text-xs text-gray-500 uppercase tracking-wide font-medium mb-1">Selanjutnya</div>
+                                <div className="text-sm font-medium text-gray-700 group-hover:text-orange-600 transition-colors leading-tight">
+                                    {nextModule.module.title}
+                                </div>
                             </div>
-                            <ChevronRight size={20} />
-                        </button>
+                            <ChevronRight size={20} className="text-orange-card group-hover:text-orange-600 flex-shrink-0 group-hover:translate-x-[2px] transition-transform" />
+                        </div>
                     ) : (
-                        <div></div>
+                        <div className="w-[48%]"></div>
                     )}
                 </div>
             </div>

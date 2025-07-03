@@ -27,7 +27,7 @@ export default function TujuanBelajarPage() {
             <AnimatePresence mode="wait">
                 {showLoading && (
                     <PageLoadingScreen
-                        bgColor="bg-yellow-card"
+                        bgColor="bg-green-500"
                         icon={<ChecklistIcon />}
                         text="Tujuan Belajar"
                         onComplete={() => setShowLoading(false)}

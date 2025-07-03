@@ -238,7 +238,7 @@
 }
 
 .markdown-content table {
-  @apply w-full border-collapse mb-6 shadow-sm;
+  display: none; /* Hide tables since images already include truth tables */
 }
 
 .markdown-content th,

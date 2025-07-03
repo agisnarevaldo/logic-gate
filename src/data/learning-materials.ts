@@ -154,29 +154,38 @@ Gerbang logika merupakan rangkaian dengan satu atau lebih masukan, tetapi hanya 
 
 ![AND Gate](/images/AND-Gate-and-its-Truth-Table.jpg)
 
-Gerbang logika AND merupakan jenis rangkaian digital yang memberi keluaran bernilai **1** apabila **semua masukan bernilai satu** atau dengan kata lain semua masukan harus dalam keadaan tinggi untuk mendapatkan keluaran yang tinggi. 
+Gerbang logika AND merupakan jenis rangkaian digital yang memberi keluaran bernilai **1** apabila **semua masukan bernilai satu**. Dengan kata lain, semua masukan harus dalam keadaan tinggi untuk mendapatkan keluaran yang tinggi.
 
 ## Karakteristik Gerbang AND
 
-- Gerbang logika AND dapat terdiri dari beberapa masukan misalnya 2, 3, 4 dst
-- Namun hanya tetap memiliki **1 keluaran**
-- Output akan HIGH (1) hanya jika **SEMUA** input HIGH (1)
+**Prinsip Kerja:**
+- Gerbang AND dapat terdiri dari beberapa masukan (2, 3, 4, dst)
+- Namun hanya memiliki **1 keluaran**
+- Output akan HIGH (1) **hanya jika SEMUA input HIGH (1)**
+- Jika ada satu saja input LOW (0), output akan LOW (0)
 
 ## Analisis Tabel Kebenaran
 
-Berdasarkan tabel kebenaran pada gambar di atas, dapat disimpulkan:
+Dari gambar tabel kebenaran di atas, dapat disimpulkan:
 
-- Setiap hasil keluaran berupa angka **0** berarti gerbang logika AND **tidak bisa diaktifkan**
-- Gerbang logika AND **hanya bisa aktif** jika masukan sama-sama angka **1**
-- Jika masukan berupa angka 0 dan 0, gerbang logika tidak bisa diaktifkan
+- ✅ **Output 1**: Hanya ketika **semua input bernilai 1**
+- ❌ **Output 0**: Ketika **ada input yang bernilai 0**
+
+Gerbang AND berfungsi seperti rangkaian seri - semua "saklar" harus tertutup agar arus dapat mengalir.
 
 ## Aplikasi Gerbang AND
 
-Gerbang AND digunakan dalam:
-- **Sirkuit pengaman** - semua kondisi harus terpenuhi untuk mengaktifkan sistem
-- **Multiplier** dalam operasi aritmatika digital
-- **Address decoding** dalam sistem memori
-- **Enable circuits** - mengontrol kapan sinyal boleh lewat
+**Contoh Penggunaan:**
+- **Sistem Keamanan**: Semua sensor harus aktif untuk membuka akses
+- **Rangkaian Pengaman**: Semua kondisi safety harus terpenuhi
+- **Address Decoding**: Dalam sistem memori komputer
+- **Enable Circuits**: Mengontrol kapan sinyal boleh lewat
+
+## Simbologi dan Notasi
+
+- **Simbol Logic**: Bentuk D dengan garis lurus di input
+- **Notasi Boolean**: A · B atau A ∧ B
+- **Persamaan**: Y = A · B (untuk 2 input)
         `
             },
             {
@@ -291,15 +300,6 @@ Gerbang Logika NAND yang menghasilkan nilai output **FALSE**, apabila **kedua in
 - Output akan LOW (0) hanya jika **SEMUA** input HIGH (1)
 - Dalam kondisi lainnya, output akan HIGH (1)
 
-## Tabel Kebenaran
-
-| Input A | Input B | Output |
-|---------|---------|--------|
-|    0    |    0    |   1    |
-|    0    |    1    |   1    |
-|    1    |    0    |   1    |
-|    1    |    1    |   0    |
-
 ## Analisis Tabel Kebenaran
 
 - Masukan berupa angka **1** dengan angka **1** maka menghasilkan keluaran angka **0**
@@ -338,15 +338,6 @@ Gerbang Logika NOR yang menghasilkan nilai output **TRUE**, apabila **kedua inpu
 - Output akan HIGH (1) hanya jika **SEMUA** input LOW (0)
 - Jika ada input yang HIGH (1), output akan LOW (0)
 
-## Tabel Kebenaran
-
-| Input A | Input B | Output |
-|---------|---------|--------|
-|    0    |    0    |   1    |
-|    0    |    1    |   0    |
-|    1    |    0    |   0    |
-|    1    |    1    |   0    |
-
 ## Analisis Tabel Kebenaran
 
 - Hasil keluaran gerbang logika NOR berupa **kebalikan** dari keluaran yang berasal dari gerbang logika OR
@@ -383,15 +374,6 @@ Gerbang Logika XOR yang menghasilkan output **TRUE**, apabila **kedua input memi
 - Gerbang logika ini bisa ditemukan pada komponen listrik yaitu **IC 7486**
 - Output akan HIGH (1) jika input **berbeda**
 - Output akan LOW (0) jika input **sama**
-
-## Tabel Kebenaran
-
-| Input A | Input B | Output |
-|---------|---------|--------|
-|    0    |    0    |   0    |
-|    0    |    1    |   1    |
-|    1    |    0    |   1    |
-|    1    |    1    |   0    |
 
 ## Analisis Tabel Kebenaran
 
@@ -434,15 +416,6 @@ Gerbang Logika XNOR yang menghasilkan nilai output **TRUE**, apabila **kedua inp
 - Output akan HIGH (1) jika input **sama**
 - Output akan LOW (0) jika input **berbeda**
 - Juga disebut sebagai **Equivalence Gate** (gerbang kesetaraan)
-
-## Tabel Kebenaran
-
-| Input A | Input B | Output |
-|---------|---------|--------|
-|    0    |    0    |   1    |
-|    0    |    1    |   0    |
-|    1    |    0    |   0    |
-|    1    |    1    |   1    |
 
 ## Analisis Tabel Kebenaran
 
