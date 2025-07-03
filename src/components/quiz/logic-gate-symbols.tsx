@@ -81,15 +81,40 @@ export const BufferGateSymbol: React.FC<LogicGateSymbolProps> = ({ className }) 
   </svg>
 )
 
-// Komponen Input - Saklar (tanpa text)
+// Komponen Input - Saklar (tanpa text, lebih responsif)
 export const InputSwitchSymbol: React.FC<LogicGateSymbolProps & { isOn?: boolean }> = ({ className, isOn = false }) => (
   <svg viewBox="0 0 80 60" className={className} fill="none" stroke="currentColor" strokeWidth="2">
     {/* Base saklar */}
-    <rect x="15" y="22" width="50" height="16" rx="8" fill={isOn ? "#22c55e" : "#e5e7eb"} stroke={isOn ? "#16a34a" : "#9ca3af"} />
-    {/* Toggle switch */}
-    <circle cx={isOn ? "55" : "25"} cy="30" r="6" fill="white" stroke={isOn ? "#16a34a" : "#9ca3af"} strokeWidth="2" />
+    <rect 
+      x="15" 
+      y="22" 
+      width="50" 
+      height="16" 
+      rx="8" 
+      fill={isOn ? "#22c55e" : "#e5e7eb"} 
+      stroke={isOn ? "#16a34a" : "#9ca3af"}
+      className="transition-all duration-200"
+    />
+    {/* Toggle switch dengan animasi */}
+    <circle 
+      cx={isOn ? "55" : "25"} 
+      cy="30" 
+      r="6" 
+      fill="white" 
+      stroke={isOn ? "#16a34a" : "#9ca3af"} 
+      strokeWidth="2"
+      className="transition-all duration-200"
+    />
     {/* Output line */}
-    <line x1="65" y1="30" x2="80" y2="30" stroke={isOn ? "#22c55e" : "#9ca3af"} strokeWidth="3" />
+    <line 
+      x1="65" 
+      y1="30" 
+      x2="80" 
+      y2="30" 
+      stroke={isOn ? "#22c55e" : "#9ca3af"} 
+      strokeWidth="3"
+      className="transition-all duration-200"
+    />
   </svg>
 )
 
