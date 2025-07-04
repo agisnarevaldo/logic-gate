@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState, useCallback, useRef } from "react"
+import { useState, useCallback, useRef, useEffect } from "react"
 import ReactFlow, {
     ReactFlowProvider,
     Background,
@@ -21,8 +21,7 @@ import "reactflow/dist/style.css"
 
 import { Card, CardContent } from "@/components/ui/card"
 import { SimulatorToolbar } from "./simulator-toolbar"
-import { SimulatorControls } from "./simulator-controls"
-import { SidebarToggle } from "./sidebar-toggle"
+import { SidebarToggleInternal } from "./sidebar-toggle"
 import { InputNode } from "./nodes/input-node"
 import { OutputNode } from "./nodes/output-node"
 import { GateNode } from "./nodes/gate-node"
@@ -116,7 +115,12 @@ export function LogicGateSimulator() {
                     break
                 default:
                     newNode.type = "gateNode"
-                    newNode.data = { ...newNode.data, gateType: selectedComponent }
+                    newNode.data = { 
+                        ...newNode.data, 
+                        gateType: selectedComponent,
+                        inputValues: selectedComponent === "NOT" ? [false] : [false, false],
+                        value: false
+                    }
                     break
             }
 
@@ -169,7 +173,12 @@ export function LogicGateSimulator() {
                     break
                 default:
                     newNode.type = "gateNode"
-                    newNode.data = { ...newNode.data, gateType: type }
+                    newNode.data = { 
+                        ...newNode.data, 
+                        gateType: type,
+                        inputValues: type === "NOT" ? [false] : [false, false],
+                        value: false
+                    }
                     break
             }
 
@@ -199,6 +208,23 @@ export function LogicGateSimulator() {
         let changed = true
         let iterations = 0
         const MAX_ITERATIONS = 100 // Safety limit
+
+        // Reset all gate nodes' input values to false initially
+        updatedNodes.forEach((node) => {
+            if (node.type === "gateNode") {
+                const { gateType } = node.data
+                const requiredInputs = gateType === "NOT" ? 1 : 2
+                if (!node.data.inputValues || node.data.inputValues.length !== requiredInputs) {
+                    node.data.inputValues = new Array(requiredInputs).fill(false)
+                } else {
+                    // Reset existing input values to false
+                    node.data.inputValues = node.data.inputValues.map(() => false)
+                }
+            } else if (node.type === "outputNode") {
+                // Reset output nodes to false initially
+                node.data.value = false
+            }
+        })
 
         // Keep simulating until no more changes occur
         while (changed && iterations < MAX_ITERATIONS) {
@@ -241,7 +267,13 @@ export function LogicGateSimulator() {
             updatedNodes.forEach((node) => {
                 if (node.type === "gateNode") {
                     const { gateType, inputValues } = node.data
-                    if (!inputValues || inputValues.length < 2) return
+                    
+                    // Check if we have input values and they are properly initialized
+                    if (!inputValues) return
+                    
+                    // For NOT gate, we only need 1 input, for others we need 2
+                    const requiredInputs = gateType === "NOT" ? 1 : 2
+                    if (inputValues.length < requiredInputs) return
 
                     let outputValue = false
 
@@ -284,11 +316,20 @@ export function LogicGateSimulator() {
         setEdges([...updatedEdges])
     }, [nodes, edges, setNodes, setEdges])
 
+    // Auto-simulate when nodes or edges change
+    useEffect(() => {
+        // Run simulation automatically with a small delay to ensure state is updated
+        const timeoutId = setTimeout(() => {
+            if (nodes.length > 0) {
+                simulate()
+            }
+        }, 100)
+        
+        return () => clearTimeout(timeoutId)
+    }, [nodes, edges, simulate])
+
     return (
         <div className="flex flex-col gap-3 md:gap-4 relative">
-            {/* Sidebar Toggle Button */}
-            <SidebarToggle onClick={() => setIsSidebarOpen(!isSidebarOpen)} />
-            
             {/* Sidebar Overlay */}
             {isSidebarOpen && (
                 <div 
@@ -307,7 +348,7 @@ export function LogicGateSimulator() {
 
             {/* Main Canvas */}
             <Card className="flex-1">
-                <CardContent className="p-0 overflow-hidden rounded-lg h-[calc(100vh-120px)] min-h-[400px]">
+                <CardContent className="p-0 overflow-hidden rounded-lg h-[calc(100vh-80px)] min-h-[400px]">
                     <div ref={reactFlowWrapper} className="w-full h-full">
                         <ReactFlowProvider>
                             <ReactFlow
@@ -324,22 +365,21 @@ export function LogicGateSimulator() {
                                 edgeTypes={edgeTypes}
                                 fitView
                                 attributionPosition="bottom-right"
+                                className="logic-gate-simulator"
                             >
                                 <Background />
                                 <Controls />
+                                
+                                {/* UI Controls inside ReactFlow context */}
+                                <div className="absolute left-4 z-10">
+                                    <SidebarToggleInternal 
+                                        onClick={() => setIsSidebarOpen(!isSidebarOpen)} 
+                                        onClear={clearCanvas}
+                                    />
+                                </div>
                             </ReactFlow>
                         </ReactFlowProvider>
                     </div>
-                </CardContent>
-            </Card>
-
-            {/* Bottom Controls */}
-            <Card>
-                <CardContent className="p-2 md:p-4">
-                    <SimulatorControls 
-                        onSimulate={simulate} 
-                        onClear={clearCanvas}
-                    />
                 </CardContent>
             </Card>
         </div>

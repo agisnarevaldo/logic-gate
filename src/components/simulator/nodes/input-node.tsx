@@ -7,7 +7,7 @@ import { X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 export const InputNode = memo(({ data, id }: NodeProps) => {
-    const { deleteElements } = useReactFlow()
+    const { deleteElements, setNodes } = useReactFlow()
     const [isOn, setIsOn] = useState(data.value || false)
     
     const toggleValue = (e: React.MouseEvent) => {
@@ -15,8 +15,15 @@ export const InputNode = memo(({ data, id }: NodeProps) => {
         const newValue = !isOn
         setIsOn(newValue)
         data.value = newValue
-        // Force re-render by updating the data reference
-        data.lastUpdate = Date.now()
+        
+        // Update the nodes state to trigger re-render and simulation
+        setNodes((nodes) => 
+            nodes.map((node) => 
+                node.id === id 
+                    ? { ...node, data: { ...node.data, value: newValue, lastUpdate: Date.now() } }
+                    : node
+            )
+        )
     }
 
     const handleDelete = (e: React.MouseEvent) => {
@@ -26,11 +33,11 @@ export const InputNode = memo(({ data, id }: NodeProps) => {
 
     return (
         <div className="w-20 h-16 relative bg-white border-2 border-gray-300 rounded-lg shadow-md group">
-            {/* Delete Button */}
+            {/* Delete Button - Always visible on mobile, hover on desktop */}
             <Button
                 size="sm"
                 variant="destructive"
-                className="absolute -top-2 -right-2 w-5 h-5 p-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity z-10"
+                className="absolute -top-2 -right-2 w-5 h-5 p-0 rounded-full opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity z-10"
                 onClick={handleDelete}
             >
                 <X className="w-3 h-3" />

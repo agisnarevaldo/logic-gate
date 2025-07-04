@@ -22,6 +22,11 @@ export const GateNode = memo(({ data, id }: NodeProps) => {
         data.inputValues = data.gateType === "NOT" ? [false] : [false, false]
     }
 
+    // Initialize output value if it doesn't exist
+    if (data.value === undefined) {
+        data.value = false
+    }
+
     const handleDelete = (e: React.MouseEvent) => {
         e.stopPropagation()
         deleteElements({ nodes: [{ id }] })
@@ -54,11 +59,11 @@ export const GateNode = memo(({ data, id }: NodeProps) => {
 
     return (
         <div className="w-20 h-16 relative bg-white border-2 border-gray-300 rounded-lg shadow-md group">
-            {/* Delete Button */}
+            {/* Delete Button - Always visible on mobile, hover on desktop */}
             <Button
                 size="sm"
                 variant="destructive"
-                className="absolute -top-2 -right-2 w-5 h-5 p-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity z-10"
+                className="absolute -top-2 -right-2 w-5 h-5 p-0 rounded-full opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity z-10"
                 onClick={handleDelete}
             >
                 <X className="w-3 h-3" />
