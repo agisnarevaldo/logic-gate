@@ -12,13 +12,33 @@ export default function TujuanBelajarPage() {
     const objectives = [
         {
             id: 1,
-            title: "Objective 1",
-            description: "Understand the basic concepts of logic gates and their functions in digital circuits.",
+            title: "Memahami Konsep Dasar Gerbang Logika",
+            description: "Siswa mampu memahami fungsi dan prinsip kerja gerbang logika dasar (AND, OR, NOT) serta gerbang logika kombinasi (NAND, NOR, XOR, XNOR) dalam sistem digital.",
         },
         {
             id: 2,
-            title: "Objective 2",
-            description: "Learn how to identify and use different types of logic gates in circuit design.",
+            title: "Mengidentifikasi Simbol dan Tabel Kebenaran",
+            description: "Siswa dapat mengenali simbol-simbol gerbang logika standar dan memahami hubungan antara input dan output melalui tabel kebenaran masing-masing gerbang.",
+        },
+        {
+            id: 3,
+            title: "Merancang Rangkaian Logika Sederhana",
+            description: "Siswa mampu merancang dan membangun rangkaian logika sederhana menggunakan kombinasi berbagai gerbang logika untuk menyelesaikan masalah digital tertentu.",
+        },
+        {
+            id: 4,
+            title: "Menggunakan Simulator Gerbang Logika",
+            description: "Siswa dapat mengoperasikan simulator digital untuk menguji dan memvalidasi rangkaian gerbang logika, serta memahami alur sinyal dalam rangkaian digital.",
+        },
+        {
+            id: 5,
+            title: "Menganalisis Hasil Simulasi",
+            description: "Siswa mampu menganalisis dan mengevaluasi hasil simulasi rangkaian gerbang logika untuk memverifikasi kesesuaian dengan desain yang diharapkan.",
+        },
+        {
+            id: 6,
+            title: "Menerapkan Konsep dalam Konteks Nyata",
+            description: "Siswa dapat mengaitkan konsep gerbang logika dengan aplikasi nyata dalam teknologi digital seperti komputer, smartphone, dan perangkat elektronik lainnya.",
         },
     ]
 
@@ -36,13 +56,42 @@ export default function TujuanBelajarPage() {
             </AnimatePresence>
 
             <div className={showLoading ? "hidden" : ""}>
-                <FeaturePageLayout title="T. Belajar" icon={<ChecklistIcon />} bgColor="bg-green-500">
-                    {objectives.map((objective) => (
-                        <div key={objective.id} className="bg-green-500 rounded-2xl p-6 mb-6 text-white">
-                            <h3 className="text-xl font-bold mb-2">{objective.title}</h3>
-                            <p>{objective.description}</p>
+                <FeaturePageLayout title="Tujuan Pembelajaran" icon={<ChecklistIcon />} bgColor="bg-green-500">
+                    <div className="space-y-4">
+                        <div className="bg-white rounded-xl p-6 shadow-lg">
+                            <h2 className="text-2xl font-bold text-green-700 mb-4">Capaian Pembelajaran</h2>
+                            <p className="text-gray-700 leading-relaxed">
+                                Setelah menyelesaikan pembelajaran ini, siswa diharapkan dapat memahami, menganalisis, 
+                                dan menerapkan konsep gerbang logika dalam perancangan rangkaian digital sederhana.
+                            </p>
                         </div>
-                    ))}
+                        
+                        {objectives.map((objective, index) => (
+                            <div key={objective.id} className="bg-green-500 rounded-xl p-6 text-white shadow-lg transform hover:scale-[1.02] transition-transform duration-200">
+                                <div className="flex items-start space-x-4">
+                                    <div className="flex-shrink-0">
+                                        <div className="w-8 h-8 bg-white text-green-500 rounded-full flex items-center justify-center font-bold text-lg">
+                                            {index + 1}
+                                        </div>
+                                    </div>
+                                    <div className="flex-1">
+                                        <h3 className="text-xl font-bold mb-3">{objective.title}</h3>
+                                        <p className="leading-relaxed opacity-95">{objective.description}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                        
+                        <div className="bg-green-100 rounded-xl p-6 border-l-4 border-green-500">
+                            <h3 className="text-lg font-bold text-green-800 mb-2">💡 Tips Pembelajaran</h3>
+                            <ul className="text-green-700 space-y-2">
+                                <li>• Mulai dengan memahami gerbang logika dasar (AND, OR, NOT)</li>
+                                <li>• Praktikkan langsung menggunakan simulator yang tersedia</li>
+                                <li>• Coba buat rangkaian sederhana dan amati hasilnya</li>
+                                <li>• Jangan ragu untuk mengulang materi jika diperlukan</li>
+                            </ul>
+                        </div>
+                    </div>
                 </FeaturePageLayout>
             </div>
         </>
