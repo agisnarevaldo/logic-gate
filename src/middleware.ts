@@ -1,38 +1,55 @@
-import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
+import { createServerClient } from '@supabase/ssr'
 
 export async function middleware(request: NextRequest) {
-    let token = null;
-    
-    try {
-        token = await getToken({ 
-            req: request,
-            secret: process.env.NEXTAUTH_SECRET 
-        });
-    } catch {
-        // If JWT token is corrupted, treat as unauthenticated
-        console.log("JWT error in middleware, treating as unauthenticated");
-        token = null;
-    }
-    
-    const isAuthenticated = !!token
+    // Create Supabase client
+    let supabaseResponse = NextResponse.next({
+        request,
+    })
 
-    // Paths that don't require authentication
-    const publicPaths = ["/", "/login", "/signup"]
-    const isPublicPath = publicPaths.includes(request.nextUrl.pathname)
-
-    // Allow access to static files and API routes
+    const supabase = createServerClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        {
+            cookies: {
+                getAll() {
+                    return request.cookies.getAll()
+                },
+                setAll(cookiesToSet) {
+                    cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
+                    supabaseResponse = NextResponse.next({
+                        request,
+                    })
+                    cookiesToSet.forEach(({ name, value, options }) =>
+                        supabaseResponse.cookies.set(name, value, options)
+                    )
+                },
+            },
+        }
+    )
+    
+    // Skip middleware for static files and API routes
     if (
         request.nextUrl.pathname.startsWith("/_next") ||
         request.nextUrl.pathname.startsWith("/api") ||
-        request.nextUrl.pathname.startsWith("/images")
+        request.nextUrl.pathname.startsWith("/images") ||
+        request.nextUrl.pathname.startsWith("/auth")
     ) {
-        return NextResponse.next()
+        return supabaseResponse
     }
+    
+    // Get user
+    const { data: { user } } = await supabase.auth.getUser()
+    
+    const isAuthenticated = !!user
+
+    // Paths that don't require authentication
+    const publicPaths = ["/", "/signup"]
+    const isPublicPath = publicPaths.includes(request.nextUrl.pathname)
 
     // if the user is not authenticated and trying to access a protected route
     if (!isAuthenticated && !isPublicPath) {
-        return NextResponse.redirect(new URL("/login", request.url))
+        return NextResponse.redirect(new URL("/", request.url))
     }
 
     // if the user is authenticated and trying to access a public route
@@ -40,7 +57,7 @@ export async function middleware(request: NextRequest) {
         return NextResponse.redirect(new URL("/dashboard", request.url))
     }
 
-    return NextResponse.next()
+    return supabaseResponse
 }
 
 export const config = {

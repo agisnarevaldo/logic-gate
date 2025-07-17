@@ -1,9 +1,12 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { CheckCircle, XCircle, RotateCcw, ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { useAcademicScoring } from "@/hooks/useAcademicScoring"
+import { QuizDetailedResults, QuestionResult } from "@/types/academic-scoring"
+import { formatTime } from "@/utils/academic-scoring"
 
 interface Question {
   id: number
@@ -129,6 +132,42 @@ export function BasicGatesQuiz() {
   const [answeredQuestions, setAnsweredQuestions] = useState<boolean[]>(new Array(questions.length).fill(false))
   const [userAnswers, setUserAnswers] = useState<number[]>(new Array(questions.length).fill(-1))
   const [quizCompleted, setQuizCompleted] = useState(false)
+  const [startTime, setStartTime] = useState<Date | null>(null)
+  const [currentAttemptId, setCurrentAttemptId] = useState<string | null>(null)
+  const [quizResults, setQuizResults] = useState<{
+    score: number
+    percentage: number
+    grade: string
+    timeSpent: number
+    feedback: {
+      message: string
+      suggestions: string[]
+      achievements: string[]
+    } | null
+  } | null>(null)
+
+  const { 
+    startQuizAttempt, 
+    completeQuizAttempt, 
+    calculateGrade
+  } = useAcademicScoring()
+
+  // Initialize the quiz with academic scoring
+  useEffect(() => {
+    const initializeQuiz = async () => {
+      setStartTime(new Date())
+      
+      // Start new attempt in database
+      try {
+        const attemptId = await startQuizAttempt('BASIC_GATES', questions.length)
+        setCurrentAttemptId(attemptId)
+      } catch (error) {
+        console.error('Failed to start quiz attempt:', error)
+      }
+    }
+    
+    initializeQuiz()
+  }, [startQuizAttempt])
 
   const handleAnswerSelect = (answerIndex: number) => {
     if (showExplanation) return
@@ -154,17 +193,80 @@ export function BasicGatesQuiz() {
     setShowExplanation(true)
   }
 
-  const handleNextQuestion = () => {
+  const handleNextQuestion = async () => {
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1)
       setSelectedAnswer(null)
       setShowExplanation(false)
     } else {
+      // Quiz completed - save to database
+      if (currentAttemptId && startTime) {
+        const timeSpentSeconds = Math.floor((new Date().getTime() - startTime.getTime()) / 1000)
+        
+        // Prepare detailed results
+        const questionResults: QuestionResult[] = questions.map((q, index) => ({
+          question_id: `basic_gates_${q.id}`,
+          question_text: q.question,
+          user_answer: userAnswers[index].toString(),
+          correct_answer: q.correctAnswer.toString(),
+          is_correct: userAnswers[index] === q.correctAnswer,
+          time_taken_seconds: Math.floor(timeSpentSeconds / questions.length),
+          difficulty: q.category === 'NOT' ? 'easy' : 'medium' as const,
+          topic: 'basic_gates'
+        }))
+
+        const detailedResults: QuizDetailedResults = {
+          questions: questionResults,
+          summary: {
+            total_questions: questions.length,
+            correct_answers: score,
+            incorrect_answers: questions.length - score,
+            time_taken_seconds: timeSpentSeconds
+          }
+        }
+
+        try {
+          // Complete the attempt in database
+          const completedAttempt = await completeQuizAttempt(
+            currentAttemptId,
+            score,
+            questions.length,
+            timeSpentSeconds,
+            detailedResults
+          )
+
+          if (completedAttempt) {
+            const grade = calculateGrade(completedAttempt.percentage || 0)
+            
+            setQuizResults({
+              score: score,
+              percentage: completedAttempt.percentage || 0,
+              grade: grade.grade,
+              timeSpent: timeSpentSeconds,
+              feedback: null
+            })
+          }
+        } catch (error) {
+          console.error('Failed to complete quiz:', error)
+          // Fallback to local scoring if database fails
+          const localPercentage = Math.round((score / questions.length) * 100)
+          const localGrade = calculateGrade(localPercentage)
+          
+          setQuizResults({
+            score: score,
+            percentage: localPercentage,
+            grade: localGrade.grade,
+            timeSpent: timeSpentSeconds,
+            feedback: null
+          })
+        }
+      }
+      
       setQuizCompleted(true)
     }
   }
 
-  const handleRestartQuiz = () => {
+  const handleRestartQuiz = async () => {
     setCurrentQuestion(0)
     setSelectedAnswer(null)
     setShowExplanation(false)
@@ -172,6 +274,16 @@ export function BasicGatesQuiz() {
     setAnsweredQuestions(new Array(questions.length).fill(false))
     setUserAnswers(new Array(questions.length).fill(-1))
     setQuizCompleted(false)
+    setQuizResults(null)
+    setStartTime(new Date())
+    
+    // Start new attempt in database
+    try {
+      const attemptId = await startQuizAttempt('BASIC_GATES', questions.length)
+      setCurrentAttemptId(attemptId)
+    } catch (error) {
+      console.error('Failed to start quiz attempt:', error)
+    }
   }
 
   const getScorePercentage = () => {
@@ -203,9 +315,26 @@ export function BasicGatesQuiz() {
           <div className="text-4xl font-bold text-blue-600 mb-2">
             {score}/{questions.length}
           </div>
-          <div className="text-lg text-gray-700 mb-4">
-            Skor: {getScorePercentage()}%
+          <div className="text-lg text-gray-700 mb-2">
+            Skor: {quizResults?.percentage || getScorePercentage()}%
           </div>
+          {quizResults && (
+            <>
+              <div className="text-lg font-semibold mb-2">
+                Grade: <span className={`px-2 py-1 rounded ${
+                  quizResults.grade === 'A+' || quizResults.grade === 'A' ? 'bg-green-100 text-green-800' :
+                  quizResults.grade === 'A-' || quizResults.grade === 'B+' ? 'bg-blue-100 text-blue-800' :
+                  quizResults.grade === 'B' || quizResults.grade === 'B-' ? 'bg-yellow-100 text-yellow-800' :
+                  'bg-red-100 text-red-800'
+                }`}>
+                  {quizResults.grade}
+                </span>
+              </div>
+              <div className="text-sm text-gray-600 mb-4">
+                Waktu: {formatTime(quizResults.timeSpent)}
+              </div>
+            </>
+          )}
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
             <div className="bg-green-100 p-3 rounded">
@@ -221,6 +350,16 @@ export function BasicGatesQuiz() {
               <div className="text-blue-600">{questions.length} soal</div>
             </div>
           </div>
+          
+          {quizResults && (
+            <div className="mt-4 text-center text-sm text-gray-600">
+              {quizResults.percentage >= 95 ? "Sempurna! 🎉" : 
+               quizResults.percentage >= 85 ? "Excellent! ⭐" :
+               quizResults.percentage >= 75 ? "Bagus! 👍" : 
+               quizResults.percentage >= 60 ? "Cukup baik 📚" :
+               "Perlu belajar lagi 📖"}
+            </div>
+          )}
         </div>
 
         <Button onClick={handleRestartQuiz} className="bg-blue-600 hover:bg-blue-700">

@@ -81,7 +81,7 @@ export function SidebarToggleInternal({ onClick, onClear, className = "" }: Side
         className={`bg-white shadow-lg hover:bg-gray-50 ${className}`}
       >
         <Plus className="w-5 h-5" />
-        <span className="ml-2 sm:inline">Komponen</span>
+        <span className="sm:inline">Komponen</span>
       </Button>
       
       {onClear && (
@@ -92,7 +92,7 @@ export function SidebarToggleInternal({ onClick, onClear, className = "" }: Side
           className="bg-white shadow-lg hover:bg-gray-50 text-red-600 hover:text-red-700"
         >
           <Trash2 className="w-5 h-5" />
-          <span className="ml-2 sm:inline">Clear</span>
+          <span className="sm:inline">Clear</span>
         </Button>
       )}
 
@@ -104,7 +104,7 @@ export function SidebarToggleInternal({ onClick, onClear, className = "" }: Side
         title="Download circuit as PNG"
       >
         <Download className="w-4 h-4" />
-        <span className="ml-2 sm:inline">Download</span>
+        <span className="sm:inline">Download</span>
       </Button>
     </div>
   )

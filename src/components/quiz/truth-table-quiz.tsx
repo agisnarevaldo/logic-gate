@@ -4,6 +4,9 @@ import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { CheckCircle, XCircle, RotateCcw, ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { useAcademicScoring } from "@/hooks/useAcademicScoring"
+import { QuizDetailedResults, QuestionResult } from "@/types/academic-scoring"
+import { formatTime } from "@/utils/academic-scoring"
 
 interface TruthTableQuestion {
   id: number
@@ -98,6 +101,43 @@ export function TruthTableQuiz() {
   const [score, setScore] = useState(0)
   const [totalQuestions] = useState(questions.length)
   const [quizCompleted, setQuizCompleted] = useState(false)
+  const [startTime, setStartTime] = useState<Date | null>(null)
+  const [currentAttemptId, setCurrentAttemptId] = useState<string | null>(null)
+  const [quizResults, setQuizResults] = useState<{
+    score: number
+    percentage: number
+    grade: string
+    timeSpent: number
+    feedback: {
+      message: string
+      suggestions: string[]
+      achievements: string[]
+    } | null
+  } | null>(null)
+  const [allQuestionScores, setAllQuestionScores] = useState<number[]>([])
+
+  const { 
+    startQuizAttempt, 
+    completeQuizAttempt, 
+    calculateGrade
+  } = useAcademicScoring()
+
+  // Initialize the quiz with academic scoring
+  useEffect(() => {
+    const initializeQuiz = async () => {
+      setStartTime(new Date())
+      
+      // Start new attempt in database
+      try {
+        const attemptId = await startQuizAttempt('TRUTH_TABLE', questions.length)
+        setCurrentAttemptId(attemptId)
+      } catch (error) {
+        console.error('Failed to start quiz attempt:', error)
+      }
+    }
+    
+    initializeQuiz()
+  }, [startQuizAttempt])
 
   const question = questions[currentQuestion]
 
@@ -130,6 +170,11 @@ export function TruthTableQuiz() {
       }
     })
 
+    // Store score for this question
+    const newScores = [...allQuestionScores]
+    newScores[currentQuestion] = correct
+    setAllQuestionScores(newScores)
+
     if (correct === question.missingOutputs.length) {
       setScore(score + 1)
     }
@@ -137,7 +182,7 @@ export function TruthTableQuiz() {
     setSubmitted(true)
   }
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1)
       setSubmitted(false)
@@ -152,15 +197,90 @@ export function TruthTableQuiz() {
       })
       setUserAnswers(initialAnswers)
     } else {
+      // Quiz completed - save to database
+      if (currentAttemptId && startTime) {
+        const timeSpentSeconds = Math.floor((new Date().getTime() - startTime.getTime()) / 1000)
+        const totalCorrect = allQuestionScores.reduce((sum, score) => sum + score, 0)
+        
+        // Prepare detailed results
+        const questionResults: QuestionResult[] = questions.map((q, index) => ({
+          question_id: `truth_table_${q.id}`,
+          question_text: q.description,
+          user_answer: allQuestionScores[index]?.toString() || '0',
+          correct_answer: q.missingOutputs.length.toString(),
+          is_correct: allQuestionScores[index] === q.missingOutputs.length,
+          time_taken_seconds: Math.floor(timeSpentSeconds / questions.length),
+          difficulty: 'hard' as const,
+          topic: 'truth_table'
+        }))
+
+        const detailedResults: QuizDetailedResults = {
+          questions: questionResults,
+          summary: {
+            total_questions: questions.length,
+            correct_answers: totalCorrect,
+            incorrect_answers: (questions.length * 4) - totalCorrect, // Assuming 4 outputs per question
+            time_taken_seconds: timeSpentSeconds
+          }
+        }
+
+        try {
+          // Complete the attempt in database
+          const completedAttempt = await completeQuizAttempt(
+            currentAttemptId,
+            totalCorrect,
+            questions.length * 4, // Total possible score (4 outputs per question)
+            timeSpentSeconds,
+            detailedResults
+          )
+
+          if (completedAttempt) {
+            const grade = calculateGrade(completedAttempt.percentage || 0)
+            
+            setQuizResults({
+              score: totalCorrect,
+              percentage: completedAttempt.percentage || 0,
+              grade: grade.grade,
+              timeSpent: timeSpentSeconds,
+              feedback: null
+            })
+          }
+        } catch (error) {
+          console.error('Failed to complete quiz:', error)
+          // Fallback to local scoring
+          const localPercentage = Math.round((totalCorrect / (questions.length * 4)) * 100)
+          const localGrade = calculateGrade(localPercentage)
+          
+          setQuizResults({
+            score: totalCorrect,
+            percentage: localPercentage,
+            grade: localGrade.grade,
+            timeSpent: timeSpentSeconds,
+            feedback: null
+          })
+        }
+      }
+      
       setQuizCompleted(true)
     }
   }
 
-  const handleRestart = () => {
+  const handleRestart = async () => {
     setCurrentQuestion(0)
     setSubmitted(false)
     setScore(0)
     setQuizCompleted(false)
+    setQuizResults(null)
+    setAllQuestionScores([])
+    setStartTime(new Date())
+    
+    // Start new attempt in database
+    try {
+      const attemptId = await startQuizAttempt('TRUTH_TABLE', questions.length)
+      setCurrentAttemptId(attemptId)
+    } catch (error) {
+      console.error('Failed to start quiz attempt:', error)
+    }
     
     // Reset to first question
     const firstQuestion = questions[0]
@@ -199,11 +319,38 @@ export function TruthTableQuiz() {
 
         <div className="bg-gray-50 rounded-lg p-6 mb-6">
           <div className="text-4xl font-bold text-green-600 mb-2">
-            {score}/{totalQuestions}
+            {quizResults ? quizResults.score : score}/{quizResults ? questions.length * 4 : totalQuestions}
           </div>
-          <div className="text-lg text-gray-700">
-            Skor: {getScorePercentage()}%
+          <div className="text-lg text-gray-700 mb-2">
+            Skor: {quizResults?.percentage || getScorePercentage()}%
           </div>
+          {quizResults && (
+            <>
+              <div className="text-lg font-semibold mb-2">
+                Grade: <span className={`px-2 py-1 rounded ${
+                  quizResults.grade === 'A+' || quizResults.grade === 'A' ? 'bg-green-100 text-green-800' :
+                  quizResults.grade === 'A-' || quizResults.grade === 'B+' ? 'bg-blue-100 text-blue-800' :
+                  quizResults.grade === 'B' || quizResults.grade === 'B-' ? 'bg-yellow-100 text-yellow-800' :
+                  'bg-red-100 text-red-800'
+                }`}>
+                  {quizResults.grade}
+                </span>
+              </div>
+              <div className="text-sm text-gray-600 mb-4">
+                Waktu: {formatTime(quizResults.timeSpent)}
+              </div>
+            </>
+          )}
+          
+          {quizResults && (
+            <div className="mt-4 text-center text-sm text-gray-600">
+              {quizResults.percentage >= 95 ? "Sempurna! 🎉" : 
+               quizResults.percentage >= 85 ? "Excellent! ⭐" :
+               quizResults.percentage >= 75 ? "Bagus! 👍" : 
+               quizResults.percentage >= 60 ? "Cukup baik 📚" :
+               "Perlu belajar lagi 📖"}
+            </div>
+          )}
         </div>
 
         <Button onClick={handleRestart} className="bg-green-600 hover:bg-green-700">

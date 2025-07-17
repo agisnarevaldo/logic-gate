@@ -5,6 +5,9 @@ import type React from "react"
 import { useState, useEffect, useRef } from "react"
 import { motion } from "framer-motion"
 import { shuffle } from "@/utils/array-utils"
+import { useAcademicScoring } from "@/hooks/useAcademicScoring"
+import { QuizDetailedResults, QuestionResult } from "@/types/academic-scoring"
+import { formatTime } from "@/utils/academic-scoring"
 import {
   AndGateSymbol,
   OrGateSymbol,
@@ -46,22 +49,63 @@ export function MatchingQuiz() {
   const [selectedSymbol, setSelectedSymbol] = useState<string | null>(null)
   const [connections, setConnections] = useState<Connection[]>([])
   const [submitted, setSubmitted] = useState(false)
-  const [score, setScore] = useState(0)
+  const [startTime, setStartTime] = useState<Date | null>(null)
+  const [currentAttemptId, setCurrentAttemptId] = useState<string | null>(null)
+  const [quizResults, setQuizResults] = useState<{
+    score: number
+    percentage: number
+    grade: string
+    timeSpent: number
+    feedback: {
+      message: string
+      suggestions: string[]
+      achievements: string[]
+    } | null
+  } | null>(null)
+  
   const containerRef = useRef<HTMLDivElement>(null)
+  const { 
+    startQuizAttempt, 
+    completeQuizAttempt, 
+    calculateGrade
+  } = useAcademicScoring()
 
   // Initialize the quiz with shuffled items
   useEffect(() => {
-    resetQuiz()
-  }, [])
+    const initializeQuiz = async () => {
+      setNames(shuffle([...quizItems]))
+      setSymbols(shuffle([...quizItems]))
+      setStartTime(new Date())
+      
+      // Start new attempt in database
+      try {
+        const attemptId = await startQuizAttempt('GATE_SYMBOLS', quizItems.length)
+        setCurrentAttemptId(attemptId)
+      } catch (error) {
+        console.error('Failed to start quiz attempt:', error)
+      }
+    }
+    
+    initializeQuiz()
+  }, [startQuizAttempt])
 
-  const resetQuiz = () => {
+  const resetQuiz = async () => {
     setNames(shuffle([...quizItems]))
     setSymbols(shuffle([...quizItems]))
     setSelectedName(null)
     setSelectedSymbol(null)
     setConnections([])
     setSubmitted(false)
-    setScore(0)
+    setQuizResults(null)
+    setStartTime(new Date())
+    
+    // Start new attempt in database
+    try {
+      const attemptId = await startQuizAttempt('GATE_SYMBOLS', quizItems.length)
+      setCurrentAttemptId(attemptId)
+    } catch (error) {
+      console.error('Failed to start quiz attempt:', error)
+    }
   }
 
   const handleNameClick = (id: string) => {
@@ -150,12 +194,71 @@ export function MatchingQuiz() {
     setSelectedSymbol(null)
   }
 
-  const handleSubmit = () => {
-    if (connections.length !== quizItems.length) return
+  const handleSubmit = async () => {
+    if (connections.length !== quizItems.length || !currentAttemptId || !startTime) return
 
-    // Calculate score
+    // Calculate results
     const correctCount = connections.filter(conn => conn.correct).length
-    setScore(correctCount)
+    const timeSpentSeconds = Math.floor((new Date().getTime() - startTime.getTime()) / 1000)
+
+    // Prepare detailed results
+    const questionResults: QuestionResult[] = connections.map((conn, index) => ({
+      question_id: `match_${index}`,
+      question_text: `Match ${conn.nameId} with its symbol`,
+      user_answer: conn.symbolId,
+      correct_answer: conn.nameId,
+      is_correct: conn.correct,
+      time_taken_seconds: Math.floor(timeSpentSeconds / connections.length),
+      difficulty: 'easy' as const,
+      topic: 'logic_gate_symbols'
+    }))
+
+    const detailedResults: QuizDetailedResults = {
+      questions: questionResults,
+      summary: {
+        total_questions: quizItems.length,
+        correct_answers: correctCount,
+        incorrect_answers: quizItems.length - correctCount,
+        time_taken_seconds: timeSpentSeconds
+      }
+    }
+
+    try {
+      // Complete the attempt in database
+      const completedAttempt = await completeQuizAttempt(
+        currentAttemptId,
+        correctCount,
+        quizItems.length,
+        timeSpentSeconds,
+        detailedResults
+      )
+
+      if (completedAttempt) {
+        const grade = calculateGrade(completedAttempt.percentage || 0)
+        
+        setQuizResults({
+          score: correctCount,
+          percentage: completedAttempt.percentage || 0,
+          grade: grade.grade,
+          timeSpent: timeSpentSeconds,
+          feedback: null // Will be set by useAcademicScoring hook
+        })
+      }
+    } catch (error) {
+      console.error('Failed to complete quiz:', error)
+      // Fallback to local scoring if database fails
+      const localPercentage = Math.round((correctCount / quizItems.length) * 100)
+      const localGrade = calculateGrade(localPercentage)
+      
+      setQuizResults({
+        score: correctCount,
+        percentage: localPercentage,
+        grade: localGrade.grade,
+        timeSpent: timeSpentSeconds,
+        feedback: null
+      })
+    }
+
     setSubmitted(true)
   }
 
@@ -181,14 +284,30 @@ export function MatchingQuiz() {
       <div className="mb-2 text-center">
         <h2 className="text-lg font-bold mb-1">Cocokkan Gerbang Logika</h2>
         
-        {submitted && (
+        {submitted && quizResults && (
           <div className="mb-4">
             <div className="text-xl font-bold text-blue-600 mb-2">
-              Skor: {score}/{quizItems.length}
+              Skor: {quizResults.score}/{quizItems.length} ({quizResults.percentage}%)
+            </div>
+            <div className="text-lg font-semibold mb-2">
+              Grade: <span className={`px-2 py-1 rounded ${
+                quizResults.grade === 'A+' || quizResults.grade === 'A' ? 'bg-green-100 text-green-800' :
+                quizResults.grade === 'A-' || quizResults.grade === 'B+' ? 'bg-blue-100 text-blue-800' :
+                quizResults.grade === 'B' || quizResults.grade === 'B-' ? 'bg-yellow-100 text-yellow-800' :
+                'bg-red-100 text-red-800'
+              }`}>
+                {quizResults.grade}
+              </span>
+            </div>
+            <div className="text-sm text-gray-600 mb-2">
+              Waktu: {formatTime(quizResults.timeSpent)}
             </div>
             <div className="text-sm text-gray-600">
-              {score === quizItems.length ? "Sempurna! 🎉" : 
-               score >= quizItems.length * 0.7 ? "Bagus! 👍" : "Perlu belajar lagi 📚"}
+              {quizResults.percentage >= 95 ? "Sempurna! 🎉" : 
+               quizResults.percentage >= 85 ? "Excellent! ⭐" :
+               quizResults.percentage >= 75 ? "Bagus! 👍" : 
+               quizResults.percentage >= 60 ? "Cukup baik 📚" :
+               "Perlu belajar lagi �"}
             </div>
           </div>
         )}

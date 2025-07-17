@@ -1,10 +1,10 @@
 "use client"
 
 import { useEffect } from "react"
-import { X } from "lucide-react"
+import { X, LogOut } from "lucide-react"
 import { useRouter, usePathname } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
-import { signOut } from "next-auth/react"
+import { useAuth } from "@/hooks/useAuth"
 import Image from "next/image"
 
 interface SidebarMenuProps {
@@ -15,6 +15,7 @@ interface SidebarMenuProps {
 export function SidebarMenu({ isOpen, onClose }: SidebarMenuProps) {
     const router = useRouter()
     const pathname = usePathname()
+    const { signOut } = useAuth()
 
     // Close sidebar when clicking outside on mobile
     useEffect(() => {
@@ -51,8 +52,9 @@ export function SidebarMenu({ isOpen, onClose }: SidebarMenuProps) {
         onClose()
     }
 
-    const handleLogout = () => {
-        signOut({ callbackUrl: "/login" })
+    const handleLogout = async () => {
+        await signOut()
+        router.push("/")
         onClose()
     }
 
@@ -118,7 +120,11 @@ export function SidebarMenu({ isOpen, onClose }: SidebarMenuProps) {
 
                         {/* Logout button */}
                         <div className="p-4">
-                            <button onClick={handleLogout} className="w-full py-3 bg-red-500 rounded-lg text-white font-medium">
+                            <button 
+                                onClick={handleLogout} 
+                                className="w-full py-3 px-4 bg-red-500 hover:bg-red-600 rounded-lg text-white font-medium flex items-center justify-center gap-2 transition-colors"
+                            >
+                                <LogOut size={20} />
                                 Keluar
                             </button>
                         </div>

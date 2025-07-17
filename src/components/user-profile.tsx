@@ -2,17 +2,17 @@
 
 import { Settings } from "lucide-react"
 import Image from "next/image"
-import { useSession } from "next-auth/react"
+import { useAuth } from "@/hooks/useAuth"
 
 export function UserProfile() {
-  const { data: session } = useSession()
+  const { user } = useAuth()
 
   return (
     <div className="flex justify-end items-baseline bg-white rounded-full drop-shadow-xl w-full mx-2">
       <div className="absolute left-0 w-[85px] h-[85px] flex justify-center items-center rounded-full bg-white p-3.5 overflow-hidden shadow-xl">
-        {session?.user?.image ? (
+        {user?.user_metadata?.avatar_url ? (
           <div className="relative w-16 h-16 rounded-full overflow-hidden mx-auto">
-            <Image src={session.user.image || "/vercel.svg"} alt="Profile" fill className="object-cover" />
+            <Image src={user.user_metadata.avatar_url || "/vercel.svg"} alt="Profile" fill className="object-cover" />
           </div>
         ) : (
           <div className="w-full h-full flex items-center justify-center">
@@ -31,8 +31,8 @@ export function UserProfile() {
       </div>
       <div className="grow-0 items-center flex ml-auto gap-3.5 p-3.5">
         <div className="flex flex-col flex-1 items-end text-center">
-            <h2 className="font-semibold truncate md:max-w-full max-w-[19ch] mr-auto">{session?.user?.name || "Name"}</h2>
-            <p className="text-gray-500 text-sm text-center w-full">{session?.user?.email || "Example@gmail.com"}</p>
+            <h2 className="font-semibold truncate md:max-w-full max-w-[19ch] mr-auto">{user?.user_metadata?.full_name || user?.email || "Name"}</h2>
+            <p className="text-gray-500 text-sm text-center w-full">{user?.email || "Example@gmail.com"}</p>
         </div>
         <button className="text-[#003459]">
             <Settings size={28} />
