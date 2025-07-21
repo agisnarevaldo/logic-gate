@@ -1,58 +1,54 @@
 /**
- * Utility functions for handling authentication errors and cookie management
+ * Utility functions for handling Supabase authentication
  */
 
-export function clearNextAuthCookies() {
+import { supabase } from '@/lib/supabase'
+
+export function clearSupabaseSession() {
   if (typeof window !== 'undefined') {
-    // Clear all NextAuth cookies
-    const cookies = [
-      'next-auth.session-token',
-      '__Secure-next-auth.session-token',
-      'next-auth.csrf-token',
-      '__Secure-next-auth.csrf-token',
-      'next-auth.callback-url',
-      '__Secure-next-auth.callback-url',
-      'next-auth.state'
-    ];
-
-    cookies.forEach(cookieName => {
-      // Clear for current domain
-      document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${window.location.hostname};`;
-      document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
-      
-      // Clear for parent domain (if subdomain)
-      const domain = window.location.hostname;
-      const parentDomain = domain.split('.').slice(-2).join('.');
-      if (domain !== parentDomain) {
-        document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.${parentDomain};`;
-      }
-    });
-
-    // Clear localStorage items that might be related
+    // Clear Supabase session
+    localStorage.removeItem('sb-' + process.env.NEXT_PUBLIC_SUPABASE_URL?.replace('https://', '').replace('.supabase.co', '') + '-auth-token')
+    
     try {
-      localStorage.removeItem('next-auth.message');
-      sessionStorage.clear();
+      // Clear other potential storage items
+      localStorage.removeItem('supabase.auth.token')
+      sessionStorage.clear()
     } catch (e) {
-      console.log('Could not clear storage:', e);
+      console.log('Could not clear storage:', e)
     }
   }
 }
 
+export async function getCurrentSession() {
+  try {
+    /* eslint-disable @typescript-eslint/no-explicit-any */
+    const { data: { session }, error } = await (supabase.auth as any).getSession()
+    if (error) {
+      console.error('Get session error:', error)
+      return null
+    }
+    return session
+  } catch (error) {
+    console.error('Get session failed:', error)
+    return null
+  }
+}
+
 export function handleAuthError(error: Error | { message?: string } | unknown) {
-  console.log('Auth error detected:', (error as Error)?.message || error);
+  console.log('Auth error detected:', (error as Error)?.message || error)
   
   if (typeof window !== 'undefined') {
-    // Check if it's a JWT session error
-    const errorMessage = (error as Error)?.message || '';
-    if (errorMessage.includes('JWT') || errorMessage.includes('decryption')) {
-      console.log('JWT session error detected, clearing corrupted cookies...');
-      clearNextAuthCookies();
+    // Check if it's a session error
+    const errorMessage = (error as Error)?.message || ''
+    if (errorMessage.includes('session') || errorMessage.includes('auth')) {
+      console.log('Session error detected, clearing corrupted session...')
+      clearSupabaseSession()
       
-      // Redirect to clear session
-      window.location.href = '/?clearSession=true';
-      return true;
+      // Redirect to login
+      window.location.href = '/login'
+      return true
     }
   }
   
-  return false;
+  return false
 }

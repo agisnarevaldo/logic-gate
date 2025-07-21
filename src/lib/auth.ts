@@ -1,76 +1,74 @@
-import { NextAuthOptions } from "next-auth"
-import GoogleProvider from "next-auth/providers/google"
-import CredentialsProvider from "next-auth/providers/credentials"
+import { supabase } from './supabase'
 
-declare module "next-auth" {
-  interface Session {
-    user: {
-      id: string
-      name?: string | null
-      email?: string | null
-      image?: string | null
-    }
+// Auth utilities untuk Supabase
+export const auth = {
+  // Sign up dengan email dan password
+  async signUp(email: string, password: string, userData?: { name?: string }) {
+    /* eslint-disable @typescript-eslint/no-explicit-any */
+    const { data, error } = await (supabase.auth as any).signUp({
+      email,
+      password,
+      options: {
+        data: userData
+      }
+    })
+    return { data, error }
+  },
+
+  // Sign in dengan email dan password
+  async signIn(email: string, password: string) {
+    /* eslint-disable @typescript-eslint/no-explicit-any */
+    const { data, error } = await (supabase.auth as any).signInWithPassword({
+      email,
+      password
+    })
+    return { data, error }
+  },
+
+  // Sign in dengan Google
+  async signInWithGoogle() {
+    /* eslint-disable @typescript-eslint/no-explicit-any */
+    const { data, error } = await (supabase.auth as any).signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${window.location.origin}/dashboard`
+      }
+    })
+    return { data, error }
+  },
+
+  // Sign out
+  async signOut() {
+    /* eslint-disable @typescript-eslint/no-explicit-any */
+    const { error } = await (supabase.auth as any).signOut()
+    return { error }
+  },
+
+  // Get current user
+  async getUser(): Promise<any> {
+    /* eslint-disable @typescript-eslint/no-explicit-any */
+    const { data: { user } } = await (supabase.auth as any).getUser()
+    return user
+  },
+
+  // Get session
+  async getSession() {
+    /* eslint-disable @typescript-eslint/no-explicit-any */
+    const { data: { session } } = await (supabase.auth as any).getSession()
+    return session
+  },
+
+  // Listen to auth changes
+  onAuthStateChange(callback: (event: string, session: unknown) => void) {
+    /* eslint-disable @typescript-eslint/no-explicit-any */
+    return (supabase.auth as any).onAuthStateChange(callback)
   }
 }
 
-export const authOptions: NextAuthOptions = {
-  providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-    }),
-    CredentialsProvider({
-      name: "Credentials",
-      credentials: {
-        email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" },
-      },
-      async authorize(credentials) {
-        // This is where you would typically verify against your database
-        // For demo purposes, we'll accept any email with password "password"
-        if (credentials?.email && credentials?.password === "password") {
-          return { id: "1", name: "Muhamad Agisna Revaldo", email: credentials.email }
-        }
-        return null
-      },
-    }),
-  ],
-  pages: {
-    signIn: "/",
-  },
-  session: {
-    strategy: "jwt" as const,
-  },
-  secret: process.env.NEXTAUTH_SECRET,
-  cookies: {
-    sessionToken: {
-      name: `next-auth.session-token`,
-      options: {
-        httpOnly: true,
-        sameSite: 'lax',
-        path: '/',
-        secure: false // Set to true in production with HTTPS
-      }
-    }
-  },
-  callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
-        token.id = user.id
-      }
-      return token
-    },
-    async session({ session, token }) {
-      if (session.user && token) {
-        session.user.id = token.id as string
-      }
-      return session
-    },
-  },
-  events: {
-    async signOut() {
-      // Clear any additional session data if needed
-    },
-  },
-  debug: process.env.NODE_ENV === 'development',
+// Type definitions
+export interface AuthUser {
+  id: string
+  email?: string
+  name?: string
+  avatar_url?: string
 }

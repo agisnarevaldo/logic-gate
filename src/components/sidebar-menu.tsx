@@ -4,7 +4,7 @@ import { useEffect } from "react"
 import { X } from "lucide-react"
 import { useRouter, usePathname } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
-import { signOut } from "next-auth/react"
+import { useAuth } from "@/providers/auth-provider"
 import Image from "next/image"
 
 interface SidebarMenuProps {
@@ -15,6 +15,7 @@ interface SidebarMenuProps {
 export function SidebarMenu({ isOpen, onClose }: SidebarMenuProps) {
     const router = useRouter()
     const pathname = usePathname()
+    const { signOut } = useAuth()
 
     // Close sidebar when clicking outside on mobile
     useEffect(() => {
@@ -51,8 +52,9 @@ export function SidebarMenu({ isOpen, onClose }: SidebarMenuProps) {
         onClose()
     }
 
-    const handleLogout = () => {
-        signOut({ callbackUrl: "/login" })
+    const handleLogout = async () => {
+        await signOut()
+        router.push("/login")
         onClose()
     }
 

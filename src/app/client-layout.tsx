@@ -1,16 +1,12 @@
 "use client"
 
-import { SessionProvider } from "next-auth/react"
-import { SessionErrorHandler } from "@/components/session-error-handler"
-
+import { AuthProvider } from "@/providers/auth-provider"
 import { ReactNode } from "react";
-import { Session } from "next-auth";
 
-export default function ClientLayout({ children, session }: { children: ReactNode, session: Session | null }) {
+export default function ClientLayout({ children }: { children: ReactNode }) {
   return (
-    <SessionProvider session={session}>
-      <SessionErrorHandler />
+    <AuthProvider>
       {children}
-    </SessionProvider>
+    </AuthProvider>
   )
 }

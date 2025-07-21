@@ -1,11 +1,16 @@
 "use client"
 
-import { signOut } from "next-auth/react"
+import { useRouter } from "next/navigation"
+import { useAuth } from "@/providers/auth-provider"
 import { DashboardButton } from "./dashboard-button"
 
 export function LogoutButton() {
-  const handleLogout = () => {
-    signOut({ callbackUrl: "/" })
+  const { signOut } = useAuth()
+  const router = useRouter()
+
+  const handleLogout = async () => {
+    await signOut()
+    router.push("/")
   }
 
   return (

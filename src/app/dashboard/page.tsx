@@ -1,6 +1,6 @@
 "use client"
 
-import { useSession } from "next-auth/react"
+import { useAuth } from "@/providers/auth-provider"
 import { useRouter } from "next/navigation"
 import { useEffect } from "react"
 import { UserProfile } from "@/components/user-profile"
@@ -12,15 +12,22 @@ import { BookOpenText, Brain, ClipboardList, Gamepad2 } from "lucide-react"
 import {SimulatorIcon} from "@/components/simulator/simulator-icon";
 
 export default function Dashboard() {
-  // const { data: session, status } = useSession()
-  const { status } = useSession()
+  const { user, loading } = useAuth()
   const router = useRouter()
 
   useEffect(() => {
-    if (status === "unauthenticated") {
+    if (!loading && !user) {
       router.push("/login")
     }
-  }, [status, router])
+  }, [user, loading, router])
+
+  if (loading) {
+    return <div>Loading...</div>
+  }
+
+  if (!user) {
+    return null
+  }
 
   if (status === "loading") {
     return (
