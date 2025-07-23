@@ -1,0 +1,377 @@
+{
+  "questions": [
+    {
+      "id": 1,
+      "question": "Jika semua variabel input berlogika \"1\" maka variabel output akan berlogika \"1\". Pernyataan tersebut merupakan prinsip dari....",
+      "options": [
+        { "id": "a", "text": "Gerbang AND", "value": "a" },
+        { "id": "b", "text": "Gerbang OR", "value": "b" },
+        { "id": "c", "text": "Gerbang NOT", "value": "c" },
+        { "id": "d", "text": "Gerbang NAND", "value": "d" },
+        { "id": "e", "text": "Gerbang NOR", "value": "e" }
+      ],
+      "correctAnswer": "a",
+      "category": "basic-gates",
+      "difficulty": "easy",
+      "explanation": "Gerbang AND menghasilkan output \"1\" hanya ketika semua input berlogika \"1\"."
+    },
+    {
+      "id": 2,
+      "question": "Logika masukan dan keluaran yang sesuai dengan gerbang logika adalah....",
+      "image": "/questions/image-1.png",
+      "options": [
+        { "id": "a", "text": "A = 0 ; B = 0 ; Q = 1", "value": "a" },
+        { "id": "b", "text": "A = 0 ; B = 1 ; Q = 1", "value": "b" },
+        { "id": "c", "text": "A = 1 ; B = 0 ; Q = 1", "value": "c" },
+        { "id": "d", "text": "A = 1 ; B = 1 ; Q = 1", "value": "d" },
+        { "id": "e", "text": "A = 1 ; B = 1 ; Q = 0", "value": "e" }
+      ],
+      "correctAnswer": "d",
+      "category": "truth-table",
+      "difficulty": "medium"
+    },
+    {
+      "id": 3,
+      "question": "Sebuah gerbang logika memiliki 4 buah input yaitu input A,B,C,D dan satu output. Ketika semua input diberi logika \"1\", output juga akan \"1\". Namun ketika ada salah satu input yang berlogika \"0\", output akan langsung \"0\". Jika A dan C berlogika \"1\" sedangkan B dan D berlogika \"0\", maka apa yang harus ditambahkan saat kita menginginkan output berlogika \"1\"?",
+      "options": [
+        { "id": "a", "text": "NOT di Kaki A dan B", "value": "a" },
+        { "id": "b", "text": "NOT di kaki B dan C", "value": "b" },
+        { "id": "c", "text": "NOT di kaki B dan D", "value": "c" },
+        { "id": "d", "text": "NOT di kaki B dan D", "value": "d" },
+        { "id": "e", "text": "NOT di semua kaki", "value": "e" }
+      ],
+      "correctAnswer": "c",
+      "category": "combinational",
+      "difficulty": "hard",
+      "explanation": "Untuk gerbang AND 4 input, jika B dan D berlogika \"0\", maka perlu ditambahkan NOT gate di B dan D agar semua input menjadi \"1\"."
+    },
+    {
+      "id": 4,
+      "question": "Gambar rangkaian yang sesuai dengan prinsip gerbang logika NOT yaitu:",
+      "image": "/questions/4-e.png",
+      "options": [
+        { "id": "a", "text": "Gambar A", "value": "a" },
+        { "id": "b", "text": "Gambar B", "value": "b" },
+        { "id": "c", "text": "Gambar C", "value": "c" },
+        { "id": "d", "text": "Gambar D", "value": "d" },
+        { "id": "e", "text": "Gambar E", "value": "e" }
+      ],
+      "correctAnswer": "e",
+      "category": "basic-gates",
+      "difficulty": "easy"
+    },
+    {
+      "id": 5,
+      "question": "Logika masukan dan keluaran yang sesuai dengan gerbang logika diatas adalah...",
+      "image": "/questions/5-a.png",
+      "options": [
+        { "id": "a", "text": "A = 1 ; B = 1 ; Q = 1", "value": "a" },
+        { "id": "b", "text": "A = 0 ; B = 1 ; Q = 0", "value": "b" },
+        { "id": "c", "text": "A = 1 ; B = 0 ; Q = 0", "value": "c" },
+        { "id": "d", "text": "A = 0 ; B = 0 ; Q = 1", "value": "d" },
+        { "id": "e", "text": "A = 1 ; B = 1 ; Q = 0", "value": "e" }
+      ],
+      "correctAnswer": "a",
+      "category": "truth-table",
+      "difficulty": "medium"
+    },
+    {
+      "id": 6,
+      "question": "Rangkaian diatas sesuai dengan prinsip gerbang logika dengan simbol...",
+      "image": "/questions/6-d.png",
+      "optionsImage": "/questions/6-option.png",
+      "options": [
+        { "id": "a", "text": "Pilihan A", "value": "a" },
+        { "id": "b", "text": "Pilihan B", "value": "b" },
+        { "id": "c", "text": "Pilihan C", "value": "c" },
+        { "id": "d", "text": "Pilihan D", "value": "d" },
+        { "id": "e", "text": "Pilihan E", "value": "e" }
+      ],
+      "correctAnswer": "d",
+      "category": "basic-gates",
+      "difficulty": "medium"
+    },
+    {
+      "id": 7,
+      "question": "Gerbang logika yang hanya dapat memiliki variabel output berlogika \"0\" jika semua variabel input berlogika \"0\" maka pernyataan tersebut merupakan prinsip dari....",
+      "options": [
+        { "id": "a", "text": "Gerbang AND", "value": "a" },
+        { "id": "b", "text": "Gerbang OR", "value": "b" },
+        { "id": "c", "text": "Gerbang NOT", "value": "c" },
+        { "id": "d", "text": "Gerbang NAND", "value": "d" },
+        { "id": "e", "text": "Gerbang NOR", "value": "e" }
+      ],
+      "correctAnswer": "b",
+      "category": "basic-gates",
+      "difficulty": "easy"
+    },
+    {
+      "id": 8,
+      "question": "Gerbang logika yang memiliki fungsi inverter. Pernyataan tersebut merupakan prinsip dari....",
+      "options": [
+        { "id": "a", "text": "Gerbang AND", "value": "a" },
+        { "id": "b", "text": "Gerbang OR", "value": "b" },
+        { "id": "c", "text": "Gerbang NOT", "value": "c" },
+        { "id": "d", "text": "Gerbang NAND", "value": "d" },
+        { "id": "e", "text": "Gerbang NOR", "value": "e" }
+      ],
+      "correctAnswer": "c",
+      "category": "basic-gates",
+      "difficulty": "easy"
+    },
+    {
+      "id": 9,
+      "question": "Gambar rangkaian gerbang logika dengan persamaan fungsi Q = A + B + C adalah....",
+      "image": "/questions/9-e.png",
+      "options": [
+        { "id": "a", "text": "Gambar A", "value": "a" },
+        { "id": "b", "text": "Gambar B", "value": "b" },
+        { "id": "c", "text": "Gambar C", "value": "c" },
+        { "id": "d", "text": "Gambar D", "value": "d" },
+        { "id": "e", "text": "Gambar E", "value": "e" }
+      ],
+      "correctAnswer": "e",
+      "category": "boolean-algebra",
+      "difficulty": "medium"
+    },
+    {
+      "id": 10,
+      "question": "Fungsi keluaran dari gambar rangkaian di atas adalah F = ....",
+      "image": "/questions/10-e.png",
+      "options": [
+        { "id": "a", "text": "(A+C).(B+C)", "value": "a" },
+        { "id": "b", "text": "(A+B).(B+C)", "value": "b" },
+        { "id": "c", "text": "AB+AC", "value": "c" },
+        { "id": "d", "text": "AB+BC", "value": "d" },
+        { "id": "e", "text": "AC+BC", "value": "e" }
+      ],
+      "correctAnswer": "e",
+      "category": "boolean-algebra",
+      "difficulty": "hard"
+    },
+    {
+      "id": 11,
+      "question": "Fungsi keluaran dari gambar rangkaian diatas adalah Q =....",
+      "image": "/questions/11.png",
+      "options": [
+        { "id": "a", "text": "(A · B) + C", "value": "a" },
+        { "id": "b", "text": "(A · B) + C̅", "value": "b" },
+        { "id": "c", "text": "(A + B) · C", "value": "c" },
+        { "id": "d", "text": "(A + B) · C̅", "value": "d" },
+        { "id": "e", "text": "(A · B · C̅)", "value": "e" }
+      ],
+      "correctAnswer": "d",
+      "category": "boolean-algebra",
+      "difficulty": "hard"
+    },
+    {
+      "id": 12,
+      "question": "Rangkaian gerbang logika yang setara dengan gambar diatas yaitu....",
+      "image": "/questions/12-e.png",
+      "optionsImage": "/questions/12-option.png",
+      "options": [
+        { "id": "a", "text": "Pilihan A", "value": "a" },
+        { "id": "b", "text": "Pilihan B", "value": "b" },
+        { "id": "c", "text": "Pilihan C", "value": "c" },
+        { "id": "d", "text": "Pilihan D", "value": "d" },
+        { "id": "e", "text": "Pilihan E", "value": "e" }
+      ],
+      "correctAnswer": "e",
+      "category": "combinational",
+      "difficulty": "hard"
+    },
+    {
+      "id": 13,
+      "question": "Variabel keluaran akan berlogika 0 hanya jika semua masukan dalam keadaan 1. Pernyataan tersebut merupakan prinsip dari....",
+      "options": [
+        { "id": "a", "text": "Gerbang NOR", "value": "a" },
+        { "id": "b", "text": "Gerbang NAND", "value": "b" },
+        { "id": "c", "text": "Gerbang X-NOT", "value": "c" },
+        { "id": "d", "text": "Gerbang X-NOR", "value": "d" },
+        { "id": "e", "text": "Gerbang X-OR", "value": "e" }
+      ],
+      "correctAnswer": "b",
+      "category": "basic-gates",
+      "difficulty": "medium"
+    },
+    {
+      "id": 14,
+      "question": "Persamaan fungsi Q = A · B merupakan persamaan fungsi untuk....",
+      "options": [
+        { "id": "a", "text": "Gerbang NAND", "value": "a" },
+        { "id": "b", "text": "Gerbang NOR", "value": "b" },
+        { "id": "c", "text": "Gerbang NOT", "value": "c" },
+        { "id": "d", "text": "Gerbang X-OR", "value": "d" },
+        { "id": "e", "text": "Gerbang X-NOR", "value": "e" }
+      ],
+      "correctAnswer": "a",
+      "category": "boolean-algebra",
+      "difficulty": "easy"
+    },
+    {
+      "id": 15,
+      "question": "Persamaan fungsi Q = A + B merupakan persamaan fungsi untuk....",
+      "options": [
+        { "id": "a", "text": "Gerbang AND", "value": "a" },
+        { "id": "b", "text": "Gerbang OR", "value": "b" },
+        { "id": "c", "text": "Gerbang NOT", "value": "c" },
+        { "id": "d", "text": "Gerbang NAND", "value": "d" },
+        { "id": "e", "text": "Gerbang NOR", "value": "e" }
+      ],
+      "correctAnswer": "b",
+      "category": "boolean-algebra",
+      "difficulty": "easy"
+    },
+    {
+      "id": 16,
+      "question": "Simbol gerbang logika NOR di bawah ini yaitu...",
+      "image": "/questions/16-d.png",
+      "options": [
+        { "id": "a", "text": "Gambar A", "value": "a" },
+        { "id": "b", "text": "Gambar B", "value": "b" },
+        { "id": "c", "text": "Gambar C", "value": "c" },
+        { "id": "d", "text": "Gambar D", "value": "d" },
+        { "id": "e", "text": "Gambar E", "value": "e" }
+      ],
+      "correctAnswer": "d",
+      "category": "basic-gates",
+      "difficulty": "easy"
+    },
+    {
+      "id": 17,
+      "question": "Persamaan fungsi yang sesuai dengan tabel diatas yakni....",
+      "image": "/questions/17-b.png",
+      "optionsImage": "/questions/17-option.png",
+      "options": [
+        { "id": "a", "text": "Pilihan A", "value": "a" },
+        { "id": "b", "text": "Pilihan B", "value": "b" },
+        { "id": "c", "text": "Pilihan C", "value": "c" },
+        { "id": "d", "text": "Pilihan D", "value": "d" },
+        { "id": "e", "text": "Pilihan E", "value": "e" }
+      ],
+      "correctAnswer": "b",
+      "category": "truth-table",
+      "difficulty": "medium"
+    },
+    {
+      "id": 18,
+      "question": "Fungsi NOR yang tepat adalah...",
+      "options": [
+        { "id": "a", "text": "Penjumlahan", "value": "a" },
+        { "id": "b", "text": "Perkalian", "value": "b" },
+        { "id": "c", "text": "Inversi penjumlahan", "value": "c" },
+        { "id": "d", "text": "Inversi perkalian", "value": "d" },
+        { "id": "e", "text": "Penjumlahan khusus", "value": "e" }
+      ],
+      "correctAnswer": "c",
+      "category": "basic-gates",
+      "difficulty": "medium"
+    },
+    {
+      "id": 19,
+      "question": "Simbol dari gerbang logika kombinasi yang benar, yaitu....",
+      "image": "/questions/19-e.png",
+      "options": [
+        { "id": "a", "text": "Gambar A", "value": "a" },
+        { "id": "b", "text": "Gambar B", "value": "b" },
+        { "id": "c", "text": "Gambar C", "value": "c" },
+        { "id": "d", "text": "Gambar D", "value": "d" },
+        { "id": "e", "text": "Gambar E", "value": "e" }
+      ],
+      "correctAnswer": "e",
+      "category": "combinational",
+      "difficulty": "medium"
+    },
+    {
+      "id": 20,
+      "question": "Persamaan fungsi yang sesuai dengan tabel diatas yakni....",
+      "image": "/questions/20-e.png",
+      "optionsImage": "/questions/20-option.png",
+      "options": [
+        { "id": "a", "text": "Pilihan A", "value": "a" },
+        { "id": "b", "text": "Pilihan B", "value": "b" },
+        { "id": "c", "text": "Pilihan C", "value": "c" },
+        { "id": "d", "text": "Pilihan D", "value": "d" },
+        { "id": "e", "text": "Pilihan E", "value": "e" }
+      ],
+      "correctAnswer": "e",
+      "category": "truth-table",
+      "difficulty": "hard"
+    },
+    {
+      "id": 21,
+      "question": "Simbol dari gerbang logika eksklusif yang benar, yaitu....",
+      "image": "/questions/21-option.png",
+      "options": [
+        { "id": "a", "text": "Gambar A", "value": "a" },
+        { "id": "b", "text": "Gambar B", "value": "b" },
+        { "id": "c", "text": "Gambar C", "value": "c" },
+        { "id": "d", "text": "Gambar D", "value": "d" },
+        { "id": "e", "text": "Gambar E", "value": "e" }
+      ],
+      "correctAnswer": "a",
+      "category": "basic-gates",
+      "difficulty": "medium"
+    },
+    {
+      "id": 22,
+      "question": "Ciri-ciri gerbang X-OR yang benar yaitu....",
+      "options": [
+        { "id": "a", "text": "Variabel keluaran akan berlogika \"1\" hanya jika semua masukan dalam keadaan \"0\"", "value": "a" },
+        { "id": "b", "text": "Variabel keluaran akan berlogika \"0\" hanya jika semua masukan dalam keadaan \"1\"", "value": "b" },
+        { "id": "c", "text": "Variabel keluaran akan berlogika \"0\" hanya jika semua masukan dalam keadaan \"0\"", "value": "c" },
+        { "id": "d", "text": "Variabel keluaran akan berlogika \"1\" apabila kedua masukan berbeda logika.", "value": "d" },
+        { "id": "e", "text": "Variabel keluaran akan berlogika \"0\" apabila kedua masukan berbeda logika.", "value": "e" }
+      ],
+      "correctAnswer": "d",
+      "category": "basic-gates",
+      "difficulty": "medium"
+    },
+    {
+      "id": 23,
+      "question": "Persamaan fungsi X-NOR yang benar yaitu....",
+      "image": "/questions/23-d.png",
+      "options": [
+        { "id": "a", "text": "Pilihan A", "value": "a" },
+        { "id": "b", "text": "Pilihan B", "value": "b" },
+        { "id": "c", "text": "Pilihan C", "value": "c" },
+        { "id": "d", "text": "Pilihan D", "value": "d" },
+        { "id": "e", "text": "Pilihan E", "value": "e" }
+      ],
+      "correctAnswer": "d",
+      "category": "boolean-algebra",
+      "difficulty": "medium"
+    },
+    {
+      "id": 24,
+      "question": "Rangkaian gerbang logika yang setara dengan gambar diatas yaitu....",
+      "image": "/questions/24-e.png",
+      "optionsImage": "/questions/24-option.png",
+      "options": [
+        { "id": "a", "text": "Pilihan A", "value": "a" },
+        { "id": "b", "text": "Pilihan B", "value": "b" },
+        { "id": "c", "text": "Pilihan C", "value": "c" },
+        { "id": "d", "text": "Pilihan D", "value": "d" },
+        { "id": "e", "text": "Pilihan E", "value": "e" }
+      ],
+      "correctAnswer": "e",
+      "category": "combinational",
+      "difficulty": "hard"
+    },
+    {
+      "id": 25,
+      "question": "Gambar rangkaian logika dengan persamaan fungsi Q = A.(B.C) adalah....",
+      "image": "/questions/25-b.png",
+      "options": [
+        { "id": "a", "text": "Gambar A", "value": "a" },
+        { "id": "b", "text": "Gambar B", "value": "b" },
+        { "id": "c", "text": "Gambar C", "value": "c" },
+        { "id": "d", "text": "Gambar D", "value": "d" },
+        { "id": "e", "text": "Gambar E", "value": "e" }
+      ],
+      "correctAnswer": "b",
+      "category": "boolean-algebra",
+      "difficulty": "medium"
+    }
+  ]
+}

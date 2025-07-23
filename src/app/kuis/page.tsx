@@ -12,6 +12,14 @@ export default function KuisPage() {
 
   const quizzes = [
     {
+      id: 0,
+      title: "Kuis Komprehensif",
+      href: "/kuis/comprehensive",
+      description: "Kuis lengkap dengan 25 soal dari semua kategori gerbang logika",
+      difficulty: "Lengkap",
+      time: "30 menit"
+    },
+    {
       id: 1,
       title: "Simbol Gerbang Logika",
       href: "/kuis/matching",
@@ -80,6 +88,7 @@ export default function KuisPage() {
                       <span className={`px-2 py-1 h-max rounded-full text-xs font-medium ${
                         quiz.difficulty === 'Mudah' ? 'bg-green-500 text-white' :
                         quiz.difficulty === 'Normal' ? 'bg-yellow-500 text-white' :
+                        quiz.difficulty === 'Lengkap' ? 'bg-purple-500 text-white' :
                         'bg-red-500 text-white'
                       }`}>
                         {quiz.difficulty}
