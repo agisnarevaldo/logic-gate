@@ -148,7 +148,7 @@
     },
     {
       "id": 3,
-      "title": "Gerbang Inverter",
+      "title": "Gerbang Dasar 3",
       "description": "Lengkapi rangkaian agar output kebalikan dari input",
       "difficulty": "easy", 
       "components": [
@@ -203,8 +203,8 @@
     },
     {
       "id": 4,
-      "title": "Gerbang NAND",
-      "description": "Lengkapi rangkaian agar output bernilai 0 hanya ketika kedua input bernilai 1", 
+      "title": "Gerbang Dasar 4",
+      "description": "Lengkapi rangkaian agar output bernilai 0 hanya ketika kedua input bernilai 1",
       "difficulty": "medium",
       "components": [
         {
@@ -276,7 +276,7 @@
     },
     {
       "id": 5,
-      "title": "Gerbang XOR",
+      "title": "Gerbang Dasar 5",
       "description": "Lengkapi rangkaian agar output bernilai 1 ketika input berbeda",
       "difficulty": "medium",
       "components": [
@@ -346,6 +346,604 @@
       "inputValues": { "input1": true, "input2": false },
       "expectedOutput": true,
       "explanation": "Gerbang XOR menghasilkan output 1 ketika input memiliki nilai yang berbeda"
+    },
+    {
+      "id": 6,
+      "title": "Rangkaian Kombinasi 1",
+      "description": "Rangkaian dengan 3 input. Lengkapi gerbang yang hilang untuk menghasilkan output yang benar",
+      "difficulty": "medium",
+      "components": [
+        {
+          "id": "input1",
+          "type": "INPUT",
+          "position": { "x": 50, "y": 40 },
+          "width": 80,
+          "height": 40,
+          "inputs": [],
+          "outputs": [{ "id": "input1_out", "name": "out", "value": true }],
+          "isFixed": true
+        },
+        {
+          "id": "input2",
+          "type": "INPUT",
+          "position": { "x": 50, "y": 100 },
+          "width": 80,
+          "height": 40,
+          "inputs": [],
+          "outputs": [{ "id": "input2_out", "name": "out", "value": false }],
+          "isFixed": true
+        },
+        {
+          "id": "input3",
+          "type": "INPUT",
+          "position": { "x": 50, "y": 160 },
+          "width": 80,
+          "height": 40,
+          "inputs": [],
+          "outputs": [{ "id": "input3_out", "name": "out", "value": true }],
+          "isFixed": true
+        },
+        {
+          "id": "gate1",
+          "type": "AND",
+          "position": { "x": 200, "y": 60 },
+          "width": 80,
+          "height": 60,
+          "inputs": [
+            { "id": "gate1_in1", "name": "in1", "value": false },
+            { "id": "gate1_in2", "name": "in2", "value": false }
+          ],
+          "outputs": [{ "id": "gate1_out", "name": "out", "value": false }],
+          "isFixed": true
+        },
+        {
+          "id": "missing1",
+          "type": "MISSING",
+          "position": { "x": 350, "y": 110 },
+          "width": 80,
+          "height": 60,
+          "inputs": [
+            { "id": "missing1_in1", "name": "in1", "value": false },
+            { "id": "missing1_in2", "name": "in2", "value": false }
+          ],
+          "outputs": [{ "id": "missing1_out", "name": "out", "value": false }],
+          "isFixed": false
+        },
+        {
+          "id": "output1",
+          "type": "OUTPUT",
+          "position": { "x": 500, "y": 110 },
+          "width": 80,
+          "height": 40,
+          "inputs": [{ "id": "output1_in", "name": "in", "value": false }],
+          "outputs": [],
+          "isFixed": true
+        }
+      ],
+      "connections": [
+        {
+          "id": "conn1",
+          "from": { "componentId": "input1", "portId": "input1_out" },
+          "to": { "componentId": "gate1", "portId": "gate1_in1" }
+        },
+        {
+          "id": "conn2",
+          "from": { "componentId": "input2", "portId": "input2_out" },
+          "to": { "componentId": "gate1", "portId": "gate1_in2" }
+        },
+        {
+          "id": "conn3",
+          "from": { "componentId": "gate1", "portId": "gate1_out" },
+          "to": { "componentId": "missing1", "portId": "missing1_in1" }
+        },
+        {
+          "id": "conn4",
+          "from": { "componentId": "input3", "portId": "input3_out" },
+          "to": { "componentId": "missing1", "portId": "missing1_in2" }
+        },
+        {
+          "id": "conn5",
+          "from": { "componentId": "missing1", "portId": "missing1_out" },
+          "to": { "componentId": "output1", "portId": "output1_in" }
+        }
+      ],
+      "missingComponentId": "missing1",
+      "correctAnswer": "OR",
+      "inputValues": { "input1": true, "input2": false, "input3": true },
+      "expectedOutput": true,
+      "explanation": "Rangkaian ini menggabungkan hasil AND dari input1 dan input2 dengan input3 menggunakan OR"
+    },
+    {
+      "id": 7,
+      "title": "Rangkaian Full Adder",
+      "description": "Rangkaian penjumlah biner. Lengkapi gerbang yang hilang untuk menghasilkan carry output",
+      "difficulty": "hard",
+      "components": [
+        {
+          "id": "inputA",
+          "type": "INPUT",
+          "position": { "x": 50, "y": 50 },
+          "width": 80,
+          "height": 40,
+          "inputs": [],
+          "outputs": [{ "id": "inputA_out", "name": "A", "value": true }],
+          "isFixed": true
+        },
+        {
+          "id": "inputB",
+          "type": "INPUT",
+          "position": { "x": 50, "y": 120 },
+          "width": 80,
+          "height": 40,
+          "inputs": [],
+          "outputs": [{ "id": "inputB_out", "name": "B", "value": true }],
+          "isFixed": true
+        },
+        {
+          "id": "inputCin",
+          "type": "INPUT",
+          "position": { "x": 50, "y": 190 },
+          "width": 80,
+          "height": 40,
+          "inputs": [],
+          "outputs": [{ "id": "inputCin_out", "name": "Cin", "value": false }],
+          "isFixed": true
+        },
+        {
+          "id": "xor1",
+          "type": "XOR",
+          "position": { "x": 200, "y": 80 },
+          "width": 80,
+          "height": 60,
+          "inputs": [
+            { "id": "xor1_in1", "name": "in1", "value": false },
+            { "id": "xor1_in2", "name": "in2", "value": false }
+          ],
+          "outputs": [{ "id": "xor1_out", "name": "out", "value": false }],
+          "isFixed": true
+        },
+        {
+          "id": "and1",
+          "type": "AND",
+          "position": { "x": 200, "y": 160 },
+          "width": 80,
+          "height": 60,
+          "inputs": [
+            { "id": "and1_in1", "name": "in1", "value": false },
+            { "id": "and1_in2", "name": "in2", "value": false }
+          ],
+          "outputs": [{ "id": "and1_out", "name": "out", "value": false }],
+          "isFixed": true
+        },
+        {
+          "id": "and2",
+          "type": "AND",
+          "position": { "x": 350, "y": 120 },
+          "width": 80,
+          "height": 60,
+          "inputs": [
+            { "id": "and2_in1", "name": "in1", "value": false },
+            { "id": "and2_in2", "name": "in2", "value": false }
+          ],
+          "outputs": [{ "id": "and2_out", "name": "out", "value": false }],
+          "isFixed": true
+        },
+        {
+          "id": "missing1",
+          "type": "MISSING",
+          "position": { "x": 500, "y": 140 },
+          "width": 80,
+          "height": 60,
+          "inputs": [
+            { "id": "missing1_in1", "name": "in1", "value": false },
+            { "id": "missing1_in2", "name": "in2", "value": false }
+          ],
+          "outputs": [{ "id": "missing1_out", "name": "out", "value": false }],
+          "isFixed": false
+        },
+        {
+          "id": "output1",
+          "type": "OUTPUT",
+          "position": { "x": 650, "y": 140 },
+          "width": 80,
+          "height": 40,
+          "inputs": [{ "id": "output1_in", "name": "Cout", "value": false }],
+          "outputs": [],
+          "isFixed": true
+        }
+      ],
+      "connections": [
+        {
+          "id": "conn1",
+          "from": { "componentId": "inputA", "portId": "inputA_out" },
+          "to": { "componentId": "xor1", "portId": "xor1_in1" }
+        },
+        {
+          "id": "conn2",
+          "from": { "componentId": "inputB", "portId": "inputB_out" },
+          "to": { "componentId": "xor1", "portId": "xor1_in2" }
+        },
+        {
+          "id": "conn3",
+          "from": { "componentId": "inputA", "portId": "inputA_out" },
+          "to": { "componentId": "and1", "portId": "and1_in1" }
+        },
+        {
+          "id": "conn4",
+          "from": { "componentId": "inputB", "portId": "inputB_out" },
+          "to": { "componentId": "and1", "portId": "and1_in2" }
+        },
+        {
+          "id": "conn5",
+          "from": { "componentId": "xor1", "portId": "xor1_out" },
+          "to": { "componentId": "and2", "portId": "and2_in1" }
+        },
+        {
+          "id": "conn6",
+          "from": { "componentId": "inputCin", "portId": "inputCin_out" },
+          "to": { "componentId": "and2", "portId": "and2_in2" }
+        },
+        {
+          "id": "conn7",
+          "from": { "componentId": "and1", "portId": "and1_out" },
+          "to": { "componentId": "missing1", "portId": "missing1_in1" }
+        },
+        {
+          "id": "conn8",
+          "from": { "componentId": "and2", "portId": "and2_out" },
+          "to": { "componentId": "missing1", "portId": "missing1_in2" }
+        },
+        {
+          "id": "conn9",
+          "from": { "componentId": "missing1", "portId": "missing1_out" },
+          "to": { "componentId": "output1", "portId": "output1_in" }
+        }
+      ],
+      "missingComponentId": "missing1",
+      "correctAnswer": "OR",
+      "inputValues": { "inputA": true, "inputB": true, "inputCin": false },
+      "expectedOutput": true,
+      "explanation": "Dalam Full Adder, carry output dihasilkan oleh OR dari (A AND B) dan ((A XOR B) AND Cin)"
+    },
+    {
+      "id": 8,
+      "title": "Rangkaian Multiplexer 2-to-1",
+      "description": "Multiplexer memilih salah satu dari dua input berdasarkan sinyal select. Lengkapi gerbang yang hilang",
+      "difficulty": "hard",
+      "components": [
+        {
+          "id": "input0",
+          "type": "INPUT",
+          "position": { "x": 50, "y": 60 },
+          "width": 80,
+          "height": 40,
+          "inputs": [],
+          "outputs": [{ "id": "input0_out", "name": "I0", "value": true }],
+          "isFixed": true
+        },
+        {
+          "id": "input1",
+          "type": "INPUT",
+          "position": { "x": 50, "y": 130 },
+          "width": 80,
+          "height": 40,
+          "inputs": [],
+          "outputs": [{ "id": "input1_out", "name": "I1", "value": false }],
+          "isFixed": true
+        },
+        {
+          "id": "select",
+          "type": "INPUT",
+          "position": { "x": 50, "y": 200 },
+          "width": 80,
+          "height": 40,
+          "inputs": [],
+          "outputs": [{ "id": "select_out", "name": "S", "value": false }],
+          "isFixed": true
+        },
+        {
+          "id": "not1",
+          "type": "NOT",
+          "position": { "x": 200, "y": 200 },
+          "width": 80,
+          "height": 60,
+          "inputs": [{ "id": "not1_in", "name": "in", "value": false }],
+          "outputs": [{ "id": "not1_out", "name": "out", "value": false }],
+          "isFixed": true
+        },
+        {
+          "id": "and1",
+          "type": "AND",
+          "position": { "x": 350, "y": 80 },
+          "width": 80,
+          "height": 60,
+          "inputs": [
+            { "id": "and1_in1", "name": "in1", "value": false },
+            { "id": "and1_in2", "name": "in2", "value": false }
+          ],
+          "outputs": [{ "id": "and1_out", "name": "out", "value": false }],
+          "isFixed": true
+        },
+        {
+          "id": "and2",
+          "type": "AND",
+          "position": { "x": 350, "y": 160 },
+          "width": 80,
+          "height": 60,
+          "inputs": [
+            { "id": "and2_in1", "name": "in1", "value": false },
+            { "id": "and2_in2", "name": "in2", "value": false }
+          ],
+          "outputs": [{ "id": "and2_out", "name": "out", "value": false }],
+          "isFixed": true
+        },
+        {
+          "id": "missing1",
+          "type": "MISSING",
+          "position": { "x": 500, "y": 120 },
+          "width": 80,
+          "height": 60,
+          "inputs": [
+            { "id": "missing1_in1", "name": "in1", "value": false },
+            { "id": "missing1_in2", "name": "in2", "value": false }
+          ],
+          "outputs": [{ "id": "missing1_out", "name": "out", "value": false }],
+          "isFixed": false
+        },
+        {
+          "id": "output1",
+          "type": "OUTPUT",
+          "position": { "x": 650, "y": 120 },
+          "width": 80,
+          "height": 40,
+          "inputs": [{ "id": "output1_in", "name": "out", "value": false }],
+          "outputs": [],
+          "isFixed": true
+        }
+      ],
+      "connections": [
+        {
+          "id": "conn1",
+          "from": { "componentId": "select", "portId": "select_out" },
+          "to": { "componentId": "not1", "portId": "not1_in" }
+        },
+        {
+          "id": "conn2",
+          "from": { "componentId": "input0", "portId": "input0_out" },
+          "to": { "componentId": "and1", "portId": "and1_in1" }
+        },
+        {
+          "id": "conn3",
+          "from": { "componentId": "not1", "portId": "not1_out" },
+          "to": { "componentId": "and1", "portId": "and1_in2" }
+        },
+        {
+          "id": "conn4",
+          "from": { "componentId": "input1", "portId": "input1_out" },
+          "to": { "componentId": "and2", "portId": "and2_in1" }
+        },
+        {
+          "id": "conn5",
+          "from": { "componentId": "select", "portId": "select_out" },
+          "to": { "componentId": "and2", "portId": "and2_in2" }
+        },
+        {
+          "id": "conn6",
+          "from": { "componentId": "and1", "portId": "and1_out" },
+          "to": { "componentId": "missing1", "portId": "missing1_in1" }
+        },
+        {
+          "id": "conn7",
+          "from": { "componentId": "and2", "portId": "and2_out" },
+          "to": { "componentId": "missing1", "portId": "missing1_in2" }
+        },
+        {
+          "id": "conn8",
+          "from": { "componentId": "missing1", "portId": "missing1_out" },
+          "to": { "componentId": "output1", "portId": "output1_in" }
+        }
+      ],
+      "missingComponentId": "missing1",
+      "correctAnswer": "OR",
+      "inputValues": { "input0": true, "input1": false, "select": false },
+      "expectedOutput": true,
+      "explanation": "Multiplexer menggunakan OR untuk menggabungkan output dari kedua jalur AND yang dikontrol oleh sinyal select"
+    },
+    {
+      "id": 9,
+      "title": "Rangkaian Decoder 2-to-4",
+      "description": "Decoder mengaktifkan salah satu dari 4 output berdasarkan 2 bit input. Lengkapi gerbang untuk output Y0",
+      "difficulty": "hard",
+      "components": [
+        {
+          "id": "inputA",
+          "type": "INPUT",
+          "position": { "x": 50, "y": 80 },
+          "width": 80,
+          "height": 40,
+          "inputs": [],
+          "outputs": [{ "id": "inputA_out", "name": "A", "value": false }],
+          "isFixed": true
+        },
+        {
+          "id": "inputB",
+          "type": "INPUT",
+          "position": { "x": 50, "y": 150 },
+          "width": 80,
+          "height": 40,
+          "inputs": [],
+          "outputs": [{ "id": "inputB_out", "name": "B", "value": false }],
+          "isFixed": true
+        },
+        {
+          "id": "notA",
+          "type": "NOT",
+          "position": { "x": 200, "y": 80 },
+          "width": 80,
+          "height": 60,
+          "inputs": [{ "id": "notA_in", "name": "in", "value": false }],
+          "outputs": [{ "id": "notA_out", "name": "out", "value": false }],
+          "isFixed": true
+        },
+        {
+          "id": "notB",
+          "type": "NOT",
+          "position": { "x": 200, "y": 150 },
+          "width": 80,
+          "height": 60,
+          "inputs": [{ "id": "notB_in", "name": "in", "value": false }],
+          "outputs": [{ "id": "notB_out", "name": "out", "value": false }],
+          "isFixed": true
+        },
+        {
+          "id": "missing1",
+          "type": "MISSING",
+          "position": { "x": 350, "y": 115 },
+          "width": 80,
+          "height": 60,
+          "inputs": [
+            { "id": "missing1_in1", "name": "in1", "value": false },
+            { "id": "missing1_in2", "name": "in2", "value": false }
+          ],
+          "outputs": [{ "id": "missing1_out", "name": "Y0", "value": false }],
+          "isFixed": false
+        },
+        {
+          "id": "output1",
+          "type": "OUTPUT",
+          "position": { "x": 500, "y": 115 },
+          "width": 80,
+          "height": 40,
+          "inputs": [{ "id": "output1_in", "name": "Y0", "value": false }],
+          "outputs": [],
+          "isFixed": true
+        }
+      ],
+      "connections": [
+        {
+          "id": "conn1",
+          "from": { "componentId": "inputA", "portId": "inputA_out" },
+          "to": { "componentId": "notA", "portId": "notA_in" }
+        },
+        {
+          "id": "conn2",
+          "from": { "componentId": "inputB", "portId": "inputB_out" },
+          "to": { "componentId": "notB", "portId": "notB_in" }
+        },
+        {
+          "id": "conn3",
+          "from": { "componentId": "notA", "portId": "notA_out" },
+          "to": { "componentId": "missing1", "portId": "missing1_in1" }
+        },
+        {
+          "id": "conn4",
+          "from": { "componentId": "notB", "portId": "notB_out" },
+          "to": { "componentId": "missing1", "portId": "missing1_in2" }
+        },
+        {
+          "id": "conn5",
+          "from": { "componentId": "missing1", "portId": "missing1_out" },
+          "to": { "componentId": "output1", "portId": "output1_in" }
+        }
+      ],
+      "missingComponentId": "missing1",
+      "correctAnswer": "AND",
+      "inputValues": { "inputA": false, "inputB": false },
+      "expectedOutput": true,
+      "explanation": "Dalam decoder 2-to-4, output Y0 aktif ketika A=0 dan B=0, sehingga menggunakan AND dari NOT A dan NOT B"
+    },
+    {
+      "id": 10,
+      "title": "Rangkaian Priority Encoder",
+      "description": "Priority encoder mengkodekan input dengan prioritas tertinggi. Lengkapi gerbang untuk bit output MSB",
+      "difficulty": "hard",
+      "components": [
+        {
+          "id": "input0",
+          "type": "INPUT",
+          "position": { "x": 50, "y": 60 },
+          "width": 80,
+          "height": 40,
+          "inputs": [],
+          "outputs": [{ "id": "input0_out", "name": "I0", "value": false }],
+          "isFixed": true
+        },
+        {
+          "id": "input1",
+          "type": "INPUT",
+          "position": { "x": 50, "y": 120 },
+          "width": 80,
+          "height": 40,
+          "inputs": [],
+          "outputs": [{ "id": "input1_out", "name": "I1", "value": false }],
+          "isFixed": true
+        },
+        {
+          "id": "input2",
+          "type": "INPUT",
+          "position": { "x": 50, "y": 180 },
+          "width": 80,
+          "height": 40,
+          "inputs": [],
+          "outputs": [{ "id": "input2_out", "name": "I2", "value": true }],
+          "isFixed": true
+        },
+        {
+          "id": "input3",
+          "type": "INPUT",
+          "position": { "x": 50, "y": 240 },
+          "width": 80,
+          "height": 40,
+          "inputs": [],
+          "outputs": [{ "id": "input3_out", "name": "I3", "value": false }],
+          "isFixed": true
+        },
+        {
+          "id": "missing1",
+          "type": "MISSING",
+          "position": { "x": 250, "y": 200 },
+          "width": 80,
+          "height": 60,
+          "inputs": [
+            { "id": "missing1_in1", "name": "in1", "value": false },
+            { "id": "missing1_in2", "name": "in2", "value": false }
+          ],
+          "outputs": [{ "id": "missing1_out", "name": "Y1", "value": false }],
+          "isFixed": false
+        },
+        {
+          "id": "output1",
+          "type": "OUTPUT",
+          "position": { "x": 400, "y": 200 },
+          "width": 80,
+          "height": 40,
+          "inputs": [{ "id": "output1_in", "name": "Y1", "value": false }],
+          "outputs": [],
+          "isFixed": true
+        }
+      ],
+      "connections": [
+        {
+          "id": "conn1",
+          "from": { "componentId": "input2", "portId": "input2_out" },
+          "to": { "componentId": "missing1", "portId": "missing1_in1" }
+        },
+        {
+          "id": "conn2",
+          "from": { "componentId": "input3", "portId": "input3_out" },
+          "to": { "componentId": "missing1", "portId": "missing1_in2" }
+        },
+        {
+          "id": "conn3",
+          "from": { "componentId": "missing1", "portId": "missing1_out" },
+          "to": { "componentId": "output1", "portId": "output1_in" }
+        }
+      ],
+      "missingComponentId": "missing1",
+      "correctAnswer": "OR",
+      "inputValues": { "input0": false, "input1": false, "input2": true, "input3": false },
+      "expectedOutput": true,
+      "explanation": "Priority encoder menggunakan OR untuk bit MSB karena I2 atau I3 aktif menghasilkan Y1=1"
     }
   ]
 }

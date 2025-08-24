@@ -9,9 +9,46 @@ export const learningMaterials: LearningCategory[] = [
         modules: [
             {
                 id: "intro-1",
+                title: "Sistem Bilangan Digital",
+                slug: "sistem-bilangan-digital",
+                order: 1,
+                content: `
+# Sistem Bilangan Digital
+
+Dalam elektronika digital, kita bekerja dengan berbagai sistem bilangan. Berikut adalah sistem bilangan yang paling umum digunakan:
+
+## Sistem Bilangan Biner (Basis 2)
+
+Sistem bilangan biner hanya menggunakan dua digit: **0** dan **1**. Ini adalah sistem bilangan yang paling dasar dalam elektronika digital.
+
+**Contoh konversi:**
+- 1010₂ = 1×2³ + 0×2² + 1×2¹ + 0×2⁰ = 8 + 0 + 2 + 0 = 10₁₀
+
+## Sistem Bilangan Desimal (Basis 10)
+
+Sistem bilangan desimal menggunakan sepuluh digit: **0 hingga 9**. Ini adalah sistem bilangan yang kita gunakan sehari-hari.
+
+## Sistem Bilangan Heksadesimal (Basis 16)
+
+Sistem bilangan heksadesimal menggunakan enam belas digit: **0-9** dan **A-F** (di mana A=10, B=11, ..., F=15).
+
+**Contoh konversi:**
+- 1A₁₆ = 1×16¹ + 10×16⁰ = 16 + 10 = 26₁₀
+
+## Konversi Antar Sistem Bilangan
+
+Konversi antar sistem bilangan adalah keterampilan penting dalam elektronika digital:
+
+- **Biner ke Desimal**: Kalikan setiap digit dengan 2 pangkat posisinya dan jumlahkan hasilnya
+- **Desimal ke Biner**: Bagi angka desimal dengan 2 secara berulang dan catat sisanya
+- **Biner ke Heksadesimal**: Kelompokkan digit biner menjadi kelompok 4 digit dan konversi setiap kelompok
+        `
+            },
+            {
+                id: "intro-2",
                 title: "Definisi dan Jenis Gerbang Logika",
                 slug: "definisi-dan-jenis",
-                order: 1,
+                order: 2,
                 content: `
 # Gerbang Logika
 
@@ -54,43 +91,7 @@ Gerbang logika terdiri dari 2 jenis:
    - XNOR (EX-NOR)
         `
             },
-            {
-                id: "intro-2",
-                title: "Sistem Bilangan Digital",
-                slug: "sistem-bilangan-digital",
-                order: 2,
-                content: `
-# Sistem Bilangan Digital
-
-Dalam elektronika digital, kita bekerja dengan berbagai sistem bilangan. Berikut adalah sistem bilangan yang paling umum digunakan:
-
-## Sistem Bilangan Biner (Basis 2)
-
-Sistem bilangan biner hanya menggunakan dua digit: **0** dan **1**. Ini adalah sistem bilangan yang paling dasar dalam elektronika digital.
-
-**Contoh konversi:**
-- 1010₂ = 1×2³ + 0×2² + 1×2¹ + 0×2⁰ = 8 + 0 + 2 + 0 = 10₁₀
-
-## Sistem Bilangan Desimal (Basis 10)
-
-Sistem bilangan desimal menggunakan sepuluh digit: **0 hingga 9**. Ini adalah sistem bilangan yang kita gunakan sehari-hari.
-
-## Sistem Bilangan Heksadesimal (Basis 16)
-
-Sistem bilangan heksadesimal menggunakan enam belas digit: **0-9** dan **A-F** (di mana A=10, B=11, ..., F=15).
-
-**Contoh konversi:**
-- 1A₁₆ = 1×16¹ + 10×16⁰ = 16 + 10 = 26₁₀
-
-## Konversi Antar Sistem Bilangan
-
-Konversi antar sistem bilangan adalah keterampilan penting dalam elektronika digital:
-
-- **Biner ke Desimal**: Kalikan setiap digit dengan 2 pangkat posisinya dan jumlahkan hasilnya
-- **Desimal ke Biner**: Bagi angka desimal dengan 2 secara berulang dan catat sisanya
-- **Biner ke Heksadesimal**: Kelompokkan digit biner menjadi kelompok 4 digit dan konversi setiap kelompok
-        `
-            },
+            
             {
                 id: "intro-3",
                 title: "Aljabar Boolean",
