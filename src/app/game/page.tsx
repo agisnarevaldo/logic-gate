@@ -11,9 +11,8 @@ export default function GamePage() {
     const [showLoading, setShowLoading] = useState(true)
 
     const games = [
-        { id: 1, title: "Logic Gate Puzzle", href: "/game/puzzle" },
-        { id: 2, title: "Circuit Builder", href: "/game/circuit-builder" },
-        { id: 3, title: "Logic Challenge", href: "/game/challenge" },
+        { id: 1, title: "Matching", href: "/game/matching" },
+        { id: 2, title: "Logic Challenge", href: "/game/challenge" },
     ]
 
     return (

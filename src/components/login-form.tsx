@@ -54,8 +54,8 @@ export function LoginForm() {
   return (
     <div className="w-full max-w-md mx-auto px-4">
       <div className="text-center mb-8">
-        <h1 className="text-5xl font-bold text-tertiary mb-12">LogiFun</h1>
-        <h2 className="text-2xl font-medium mb-8">Login to your Account</h2>
+        <h1 className="text-5xl font-bold text-tertiary mb-8">LogiFun</h1>
+        {/* <h2 className="text-2xl font-medium mb-8">Login to your Account</h2> */}
       </div>
 
       {error && (

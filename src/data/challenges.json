@@ -1,0 +1,351 @@
+{
+  "challenges": [
+    {
+      "id": 1,
+      "title": "Gerbang Dasar 1",
+      "description": "Lengkapi rangkaian berikut agar output menghasilkan nilai 1 ketika kedua input bernilai 1",
+      "difficulty": "easy",
+      "components": [
+        {
+          "id": "input1",
+          "type": "INPUT",
+          "position": { "x": 50, "y": 50 },
+          "width": 80,
+          "height": 40,
+          "inputs": [],
+          "outputs": [{ "id": "input1_out", "name": "out", "value": true }],
+          "isFixed": true
+        },
+        {
+          "id": "input2", 
+          "type": "INPUT",
+          "position": { "x": 50, "y": 120 },
+          "width": 80,
+          "height": 40,
+          "inputs": [],
+          "outputs": [{ "id": "input2_out", "name": "out", "value": true }],
+          "isFixed": true
+        },
+        {
+          "id": "missing1",
+          "type": "MISSING",
+          "position": { "x": 200, "y": 85 },
+          "width": 80,
+          "height": 60,
+          "inputs": [
+            { "id": "missing1_in1", "name": "in1", "value": false },
+            { "id": "missing1_in2", "name": "in2", "value": false }
+          ],
+          "outputs": [{ "id": "missing1_out", "name": "out", "value": false }],
+          "isFixed": false
+        },
+        {
+          "id": "output1",
+          "type": "OUTPUT", 
+          "position": { "x": 350, "y": 85 },
+          "width": 80,
+          "height": 40,
+          "inputs": [{ "id": "output1_in", "name": "in", "value": false }],
+          "outputs": [],
+          "isFixed": true
+        }
+      ],
+      "connections": [
+        {
+          "id": "conn1",
+          "from": { "componentId": "input1", "portId": "input1_out" },
+          "to": { "componentId": "missing1", "portId": "missing1_in1" }
+        },
+        {
+          "id": "conn2", 
+          "from": { "componentId": "input2", "portId": "input2_out" },
+          "to": { "componentId": "missing1", "portId": "missing1_in2" }
+        },
+        {
+          "id": "conn3",
+          "from": { "componentId": "missing1", "portId": "missing1_out" },
+          "to": { "componentId": "output1", "portId": "output1_in" }
+        }
+      ],
+      "missingComponentId": "missing1",
+      "correctAnswer": "AND",
+      "inputValues": { "input1": true, "input2": true },
+      "expectedOutput": true,
+      "explanation": "Gerbang AND menghasilkan output 1 hanya ketika semua input bernilai 1"
+    },
+    {
+      "id": 2,
+      "title": "Gerbang Dasar 2", 
+      "description": "Lengkapi rangkaian agar output menghasilkan nilai 1 ketika salah satu input bernilai 1",
+      "difficulty": "easy",
+      "components": [
+        {
+          "id": "input1",
+          "type": "INPUT",
+          "position": { "x": 50, "y": 50 },
+          "width": 80,
+          "height": 40,
+          "inputs": [],
+          "outputs": [{ "id": "input1_out", "name": "out", "value": false }],
+          "isFixed": true
+        },
+        {
+          "id": "input2",
+          "type": "INPUT", 
+          "position": { "x": 50, "y": 120 },
+          "width": 80,
+          "height": 40,
+          "inputs": [],
+          "outputs": [{ "id": "input2_out", "name": "out", "value": true }],
+          "isFixed": true
+        },
+        {
+          "id": "missing1",
+          "type": "MISSING",
+          "position": { "x": 200, "y": 85 },
+          "width": 80,
+          "height": 60,
+          "inputs": [
+            { "id": "missing1_in1", "name": "in1", "value": false },
+            { "id": "missing1_in2", "name": "in2", "value": false }
+          ],
+          "outputs": [{ "id": "missing1_out", "name": "out", "value": false }],
+          "isFixed": false
+        },
+        {
+          "id": "output1",
+          "type": "OUTPUT",
+          "position": { "x": 350, "y": 85 },
+          "width": 80,
+          "height": 40,
+          "inputs": [{ "id": "output1_in", "name": "in", "value": false }],
+          "outputs": [],
+          "isFixed": true
+        }
+      ],
+      "connections": [
+        {
+          "id": "conn1",
+          "from": { "componentId": "input1", "portId": "input1_out" },
+          "to": { "componentId": "missing1", "portId": "missing1_in1" }
+        },
+        {
+          "id": "conn2",
+          "from": { "componentId": "input2", "portId": "input2_out" },
+          "to": { "componentId": "missing1", "portId": "missing1_in2" }
+        },
+        {
+          "id": "conn3",
+          "from": { "componentId": "missing1", "portId": "missing1_out" },
+          "to": { "componentId": "output1", "portId": "output1_in" }
+        }
+      ],
+      "missingComponentId": "missing1",
+      "correctAnswer": "OR",
+      "inputValues": { "input1": false, "input2": true },
+      "expectedOutput": true,
+      "explanation": "Gerbang OR menghasilkan output 1 ketika minimal satu input bernilai 1"
+    },
+    {
+      "id": 3,
+      "title": "Gerbang Inverter",
+      "description": "Lengkapi rangkaian agar output kebalikan dari input",
+      "difficulty": "easy", 
+      "components": [
+        {
+          "id": "input1",
+          "type": "INPUT",
+          "position": { "x": 50, "y": 85 },
+          "width": 80,
+          "height": 40,
+          "inputs": [],
+          "outputs": [{ "id": "input1_out", "name": "out", "value": true }],
+          "isFixed": true
+        },
+        {
+          "id": "missing1",
+          "type": "MISSING",
+          "position": { "x": 200, "y": 85 },
+          "width": 80,
+          "height": 60,
+          "inputs": [{ "id": "missing1_in1", "name": "in", "value": false }],
+          "outputs": [{ "id": "missing1_out", "name": "out", "value": false }],
+          "isFixed": false
+        },
+        {
+          "id": "output1",
+          "type": "OUTPUT",
+          "position": { "x": 350, "y": 85 },
+          "width": 80,
+          "height": 40,
+          "inputs": [{ "id": "output1_in", "name": "in", "value": false }],
+          "outputs": [],
+          "isFixed": true
+        }
+      ],
+      "connections": [
+        {
+          "id": "conn1",
+          "from": { "componentId": "input1", "portId": "input1_out" },
+          "to": { "componentId": "missing1", "portId": "missing1_in1" }
+        },
+        {
+          "id": "conn2",
+          "from": { "componentId": "missing1", "portId": "missing1_out" },
+          "to": { "componentId": "output1", "portId": "output1_in" }
+        }
+      ],
+      "missingComponentId": "missing1",
+      "correctAnswer": "NOT",
+      "inputValues": { "input1": true },
+      "expectedOutput": false,
+      "explanation": "Gerbang NOT membalik nilai input (1 menjadi 0, 0 menjadi 1)"
+    },
+    {
+      "id": 4,
+      "title": "Gerbang NAND",
+      "description": "Lengkapi rangkaian agar output bernilai 0 hanya ketika kedua input bernilai 1", 
+      "difficulty": "medium",
+      "components": [
+        {
+          "id": "input1",
+          "type": "INPUT",
+          "position": { "x": 50, "y": 50 },
+          "width": 80,
+          "height": 40,
+          "inputs": [],
+          "outputs": [{ "id": "input1_out", "name": "out", "value": true }],
+          "isFixed": true
+        },
+        {
+          "id": "input2",
+          "type": "INPUT",
+          "position": { "x": 50, "y": 120 },
+          "width": 80,
+          "height": 40,
+          "inputs": [],
+          "outputs": [{ "id": "input2_out", "name": "out", "value": true }],
+          "isFixed": true
+        },
+        {
+          "id": "missing1",
+          "type": "MISSING",
+          "position": { "x": 200, "y": 85 },
+          "width": 80,
+          "height": 60,
+          "inputs": [
+            { "id": "missing1_in1", "name": "in1", "value": false },
+            { "id": "missing1_in2", "name": "in2", "value": false }
+          ],
+          "outputs": [{ "id": "missing1_out", "name": "out", "value": false }],
+          "isFixed": false
+        },
+        {
+          "id": "output1",
+          "type": "OUTPUT",
+          "position": { "x": 350, "y": 85 },
+          "width": 80,
+          "height": 40,
+          "inputs": [{ "id": "output1_in", "name": "in", "value": false }],
+          "outputs": [],
+          "isFixed": true
+        }
+      ],
+      "connections": [
+        {
+          "id": "conn1",
+          "from": { "componentId": "input1", "portId": "input1_out" },
+          "to": { "componentId": "missing1", "portId": "missing1_in1" }
+        },
+        {
+          "id": "conn2",
+          "from": { "componentId": "input2", "portId": "input2_out" },
+          "to": { "componentId": "missing1", "portId": "missing1_in2" }
+        },
+        {
+          "id": "conn3",
+          "from": { "componentId": "missing1", "portId": "missing1_out" },
+          "to": { "componentId": "output1", "portId": "output1_in" }
+        }
+      ],
+      "missingComponentId": "missing1",
+      "correctAnswer": "NAND",
+      "inputValues": { "input1": true, "input2": true },
+      "expectedOutput": false,
+      "explanation": "Gerbang NAND adalah kebalikan dari AND, menghasilkan 0 hanya ketika semua input bernilai 1"
+    },
+    {
+      "id": 5,
+      "title": "Gerbang XOR",
+      "description": "Lengkapi rangkaian agar output bernilai 1 ketika input berbeda",
+      "difficulty": "medium",
+      "components": [
+        {
+          "id": "input1",
+          "type": "INPUT",
+          "position": { "x": 50, "y": 50 },
+          "width": 80,
+          "height": 40,
+          "inputs": [],
+          "outputs": [{ "id": "input1_out", "name": "out", "value": true }],
+          "isFixed": true
+        },
+        {
+          "id": "input2",
+          "type": "INPUT",
+          "position": { "x": 50, "y": 120 },
+          "width": 80,
+          "height": 40,
+          "inputs": [],
+          "outputs": [{ "id": "input2_out", "name": "out", "value": false }],
+          "isFixed": true
+        },
+        {
+          "id": "missing1",
+          "type": "MISSING",
+          "position": { "x": 200, "y": 85 },
+          "width": 80,
+          "height": 60,
+          "inputs": [
+            { "id": "missing1_in1", "name": "in1", "value": false },
+            { "id": "missing1_in2", "name": "in2", "value": false }
+          ],
+          "outputs": [{ "id": "missing1_out", "name": "out", "value": false }],
+          "isFixed": false
+        },
+        {
+          "id": "output1",
+          "type": "OUTPUT",
+          "position": { "x": 350, "y": 85 },
+          "width": 80,
+          "height": 40,
+          "inputs": [{ "id": "output1_in", "name": "in", "value": false }],
+          "outputs": [],
+          "isFixed": true
+        }
+      ],
+      "connections": [
+        {
+          "id": "conn1",
+          "from": { "componentId": "input1", "portId": "input1_out" },
+          "to": { "componentId": "missing1", "portId": "missing1_in1" }
+        },
+        {
+          "id": "conn2",
+          "from": { "componentId": "input2", "portId": "input2_out" },
+          "to": { "componentId": "missing1", "portId": "missing1_in2" }
+        },
+        {
+          "id": "conn3",
+          "from": { "componentId": "missing1", "portId": "missing1_out" },
+          "to": { "componentId": "output1", "portId": "output1_in" }
+        }
+      ],
+      "missingComponentId": "missing1",
+      "correctAnswer": "XOR",
+      "inputValues": { "input1": true, "input2": false },
+      "expectedOutput": true,
+      "explanation": "Gerbang XOR menghasilkan output 1 ketika input memiliki nilai yang berbeda"
+    }
+  ]
+}

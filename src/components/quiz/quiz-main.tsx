@@ -122,7 +122,7 @@ export const QuizMain = () => {
 
       {/* Info Cards */}
       <div className="grid md:grid-cols-2 gap-4">
-        <Card>
+        {/* <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-lg">📊 Detail Kuis</CardTitle>
           </CardHeader>
@@ -140,7 +140,7 @@ export const QuizMain = () => {
               <span className="font-medium">Tidak terbatas</span>
             </div>
           </CardContent>
-        </Card>
+        </Card> */}
 
         <Card>
           <CardHeader className="pb-3">
