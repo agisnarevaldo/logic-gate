@@ -9,7 +9,7 @@ type GameState = 'playing' | 'checking' | 'completed'
 export const useChallengeGame = () => {
   const [session, setSession] = useState<ChallengeSession>({
     currentChallengeIndex: 0,
-    challenges: challengeData.challenges as Challenge[],
+    challenges: challengeData.challenges as unknown as Challenge[],
     score: 0,
     completed: false,
     answers: {}
@@ -20,8 +20,8 @@ export const useChallengeGame = () => {
 
   const currentChallenge = session.challenges[session.currentChallengeIndex]
 
-  // Calculate logic gate output
-  const calculateOutput = (gateType: string, inputs: boolean[]): boolean => {
+    // Calculate logic gate outputs
+  const calculateGateOutput = (gateType: string, inputs: boolean[]): boolean => {
     switch (gateType) {
       case 'AND':
         return inputs.every(input => input)
@@ -69,7 +69,7 @@ export const useChallengeGame = () => {
     })
 
     // Calculate what the output should be with the selected gate
-    const calculatedOutput = calculateOutput(selectedGate, inputValues)
+    const calculatedOutput = calculateGateOutput(selectedGate, inputValues)
     
     // Check if it matches the expected output
     return calculatedOutput === currentChallenge.expectedOutput
@@ -155,7 +155,7 @@ export const useChallengeGame = () => {
   const resetGame = useCallback(() => {
     setSession({
       currentChallengeIndex: 0,
-      challenges: challengeData.challenges as Challenge[],
+      challenges: challengeData.challenges as unknown as Challenge[],
       score: 0,
       completed: false,
       answers: {}
