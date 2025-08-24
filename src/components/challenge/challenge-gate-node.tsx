@@ -40,7 +40,7 @@ export const ChallengeGateNode: React.FC<ChallengeGateNodeProps> = ({
         return <NorGateSymbol {...symbolProps} />
       case "XOR":
         return <XorGateSymbol {...symbolProps} />
-      case "XNOR":
+      case 'XNOR':
         return <XnorGateSymbol {...symbolProps} />
       case 'INPUT':
         // Get the output value from component data

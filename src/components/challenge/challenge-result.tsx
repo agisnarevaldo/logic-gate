@@ -32,23 +32,23 @@ export const ChallengeResult: React.FC<ChallengeResultProps> = ({
     // Final result card
     return (
       <Card className="w-full max-w-md mx-auto">
-        <CardHeader className="text-center">
+        <CardHeader className="text-center p-4 sm:p-6">
           <div className="flex justify-center mb-2">
-            <Trophy className="h-12 w-12 text-yellow-500" />
+            <Trophy className="h-10 sm:h-12 w-10 sm:w-12 text-yellow-500" />
           </div>
-          <CardTitle className="text-xl">Selamat! Game Selesai!</CardTitle>
+          <CardTitle className="text-lg sm:text-xl">Selamat! Game Selesai!</CardTitle>
         </CardHeader>
-        <CardContent className="text-center space-y-4">
+        <CardContent className="text-center space-y-3 sm:space-y-4 p-4 sm:p-6">
           <div className="space-y-2">
-            <div className="text-3xl font-bold text-green-600">
+            <div className="text-2xl sm:text-3xl font-bold text-green-600">
               {score}/{totalChallenges}
             </div>
-            <div className="text-lg text-gray-600">
+            <div className="text-base sm:text-lg text-gray-600">
               Skor Akhir: {percentage}%
             </div>
           </div>
 
-          <div className="space-y-2 text-sm text-gray-600">
+          <div className="space-y-2 text-xs sm:text-sm text-gray-600">
             {percentage === 100 && (
               <p className="text-green-600 font-medium">Perfect! Kamu menguasai semua tantangan!</p>
             )}
@@ -66,7 +66,7 @@ export const ChallengeResult: React.FC<ChallengeResultProps> = ({
           <div className="flex flex-col gap-2">
             <Button 
               onClick={onRestartGame}
-              className="w-full"
+              className="w-full text-sm sm:text-base"
             >
               <RotateCcw className="h-4 w-4 mr-2" />
               Main Lagi
@@ -79,29 +79,29 @@ export const ChallengeResult: React.FC<ChallengeResultProps> = ({
 
   return (
     <Card className="w-full max-w-md mx-auto">
-      <CardHeader className="text-center">
+      <CardHeader className="text-center p-4 sm:p-6">
         <div className="flex justify-center mb-2">
           {isCorrect ? (
-            <CheckCircle className="h-12 w-12 text-green-500" />
+            <CheckCircle className="h-10 sm:h-12 w-10 sm:w-12 text-green-500" />
           ) : (
-            <XCircle className="h-12 w-12 text-red-500" />
+            <XCircle className="h-10 sm:h-12 w-10 sm:w-12 text-red-500" />
           )}
         </div>
-        <CardTitle className={`text-xl ${isCorrect ? 'text-green-600' : 'text-red-600'}`}>
+        <CardTitle className={`text-lg sm:text-xl ${isCorrect ? 'text-green-600' : 'text-red-600'}`}>
           {isCorrect ? 'Benar!' : 'Salah!'}
         </CardTitle>
       </CardHeader>
-      <CardContent className="text-center space-y-4">
+      <CardContent className="text-center space-y-3 sm:space-y-4 p-4 sm:p-6">
         <div className="space-y-2">
-          <div className="text-sm text-gray-600">
+          <div className="text-xs sm:text-sm text-gray-600">
             Tantangan {currentChallenge} dari {totalChallenges}
           </div>
-          <div className="text-lg font-semibold">
+          <div className="text-base sm:text-lg font-semibold">
             Skor: {score}/{totalChallenges}
           </div>
         </div>
 
-        <div className="text-sm text-gray-600">
+        <div className="text-xs sm:text-sm text-gray-600">
           {isCorrect 
             ? 'Rangkaian logika yang kamu pilih sudah benar!' 
             : 'Coba periksa kembali gerbang logika yang kamu pilih.'
@@ -112,7 +112,7 @@ export const ChallengeResult: React.FC<ChallengeResultProps> = ({
           {isCorrect ? (
             <Button 
               onClick={onNextChallenge}
-              className="w-full"
+              className="w-full text-sm sm:text-base"
             >
               {isLastChallenge ? 'Lihat Hasil Akhir' : 'Tantangan Berikutnya'}
             </Button>
@@ -120,7 +120,7 @@ export const ChallengeResult: React.FC<ChallengeResultProps> = ({
             <Button 
               onClick={onRestartChallenge}
               variant="outline"
-              className="w-full"
+              className="w-full text-sm sm:text-base"
             >
               <RotateCcw className="h-4 w-4 mr-2" />
               Coba Lagi

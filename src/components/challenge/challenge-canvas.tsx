@@ -146,12 +146,13 @@ export const ChallengeCanvas: React.FC<ChallengeCanvasProps> = ({
   const maxY = Math.max(...updatedComponents.map(c => c.position.y + c.height)) + 50
 
   return (
-    <div className="w-full h-96 bg-gray-50 border rounded-lg relative overflow-auto">
+    <div className="w-full h-64 sm:h-80 md:h-96 bg-gray-50 border rounded-lg relative overflow-auto">
       <div 
         className="relative"
         style={{ 
-          width: `${Math.max(maxX, 600)}px`, 
-          height: `${Math.max(maxY, 300)}px` 
+          width: `${Math.max(maxX, 400)}px`, 
+          height: `${Math.max(maxY, 250)}px`,
+          minWidth: '100%'
         }}
       >
         {/* Render connections */}
@@ -190,28 +191,28 @@ export const ChallengeCanvas: React.FC<ChallengeCanvasProps> = ({
         ))}
 
         {/* Circuit info overlay */}
-        <div className="absolute top-2 left-2 bg-white px-3 py-2 rounded-lg shadow-sm border text-sm font-medium">
+        <div className="absolute top-2 left-2 bg-white px-2 sm:px-3 py-1 sm:py-2 rounded-lg shadow-sm border text-xs sm:text-sm font-medium">
           {challenge.title}
         </div>
 
         {/* Input/Output values display */}
-        <div className="absolute bottom-2 left-2 bg-white px-3 py-2 rounded-lg shadow-sm border text-xs">
-          <div className="flex items-center gap-4">
-            <span className="text-gray-600">
+        <div className="absolute bottom-2 left-2 right-2 bg-white px-2 sm:px-3 py-1 sm:py-2 rounded-lg shadow-sm border text-xs">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-4">
+            <span className="text-gray-600 text-xs">
               Input: {Object.entries(challenge.inputValues)
                 .filter(([id]) => challenge.components.find(c => c.id === id && c.type === 'INPUT'))
                 .map(([, value]) => value ? '1' : '0')
                 .join(', ')}
             </span>
-            <span className="text-gray-600">→</span>
-            <span className="text-gray-600">
+            <span className="text-gray-600 hidden sm:inline">→</span>
+            <span className="text-gray-600 text-xs">
               Expected: {challenge.expectedOutput ? '1' : '0'}
             </span>
             {/* Show actual output if circuit is complete */}
             {Object.keys(userAnswers).length > 0 && (
               <>
-                <span className="text-gray-600">|</span>
-                <span className={`font-medium ${
+                <span className="text-gray-600 hidden sm:inline">|</span>
+                <span className={`font-medium text-xs ${
                   updatedComponents.find(c => c.type === 'OUTPUT')?.outputs[0]?.value === challenge.expectedOutput 
                     ? 'text-green-600' : 'text-red-600'
                 }`}>
