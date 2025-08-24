@@ -11,8 +11,9 @@ export default function GamePage() {
     const [showLoading, setShowLoading] = useState(true)
 
     const games = [
-        { id: 1, title: "Matching", href: "/game/matching" },
-        { id: 2, title: "Logic Challenge", href: "/game/challenge" },
+        { id: 1, title: "Matching", href: "/game/matching", description: "Cocokkan gambar gerbang logika dengan nama yang tepat" },
+        { id: 2, title: "Logic Challenge", href: "/game/challenge", description: "Tantangan membangun rangkaian logika yang tepat" },
+        { id: 3, title: "Tebak Gambar", href: "/game/guess", description: "Tebak aplikasi gerbang logika dalam kehidupan sehari-hari" },
     ]
 
     return (
@@ -31,9 +32,9 @@ export default function GamePage() {
             <div className={showLoading ? "hidden" : ""}>
                 <FeaturePageLayout title="Game" icon={<GameControllerIcon />} bgColor="bg-magenta-card">
                     {games.map((game) => (
-                        <Link key={game.id} href={game.href} className="block bg-magenta-card rounded-2xl p-6 mb-6">
-                            <h3 className="text-xl font-bold text-white">{game.title}</h3>
-                            <p className="text-white/80">Play and learn about logic gates</p>
+                        <Link key={game.id} href={game.href} className="block bg-magenta-card rounded-2xl p-6 mb-6 transition-transform hover:scale-105">
+                            <h3 className="text-xl font-bold text-white mb-2">{game.title}</h3>
+                            <p className="text-white/80">{game.description}</p>
                         </Link>
                     ))}
                 </FeaturePageLayout>
