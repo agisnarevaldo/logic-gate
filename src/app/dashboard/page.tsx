@@ -22,19 +22,15 @@ export default function Dashboard() {
   }, [user, loading, router])
 
   if (loading) {
-    return <div>Loading...</div>
-  }
-
-  if (!user) {
-    return null
-  }
-
-  if (status === "loading") {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
       </div>
     )
+  }
+
+  if (!user) {
+    return null
   }
 
   return (

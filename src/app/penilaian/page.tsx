@@ -30,7 +30,7 @@ export default function PenilaianPage() {
   return (
     <FeaturePageLayout
       title="Penilaian"
-      icon={<BarChart3 size={60} />}
+      icon={<BarChart3 size={50} />}
       bgColor="bg-purple-500"
       backHref="/dashboard"
     >
