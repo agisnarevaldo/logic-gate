@@ -55,8 +55,14 @@ export function GuessGameMain() {
           averageScore: Math.round(session.score / session.challenges.length),
           completedAt: new Date().toISOString()
         }
+      }).then(result => {
+        if (!result.success) {
+          console.error('Failed to save guess game score:', result.error)
+        } else {
+          console.log('Guess game score saved successfully')
+        }
       }).catch(error => {
-        console.error('Failed to save guess game score:', error)
+        console.error('Failed to save guess game score - unexpected error:', error)
       })
     }
   }, [gameState, user?.id, session.score, session.challenges.length, session.lives])

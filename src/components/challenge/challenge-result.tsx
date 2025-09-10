@@ -42,8 +42,14 @@ export const ChallengeResult: React.FC<ChallengeResultProps> = ({
           percentage,
           completedAt: new Date().toISOString()
         }
+      }).then(result => {
+        if (!result.success) {
+          console.error('Failed to save challenge game score:', result.error)
+        } else {
+          console.log('Challenge game score saved successfully')
+        }
       }).catch(error => {
-        console.error('Failed to save challenge game score:', error)
+        console.error('Failed to save challenge game score - unexpected error:', error)
       })
     }
   }, [isLastChallenge, currentChallenge, totalChallenges, user?.id, score, percentage])

@@ -37,6 +37,20 @@ export interface UpdateLearningProgressData {
 // Save quiz score to database
 export async function saveQuizScore(data: SaveQuizScoreData) {
   try {
+    // Validate required environment variables
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+      const envError = 'Missing Supabase environment variables. Please check NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY'
+      console.error('Error saving quiz score:', envError)
+      throw new Error(envError)
+    }
+
+    // Validate required data fields
+    if (!data.userId || !data.quizId || !data.quizTitle) {
+      const validationError = 'Missing required quiz score data fields'
+      console.error('Error saving quiz score:', validationError, { receivedData: data })
+      throw new Error(validationError)
+    }
+
     const grade = calculateGrade(data.score)
     
     const { error } = await supabase
@@ -54,20 +68,46 @@ export async function saveQuizScore(data: SaveQuizScoreData) {
       })
 
     if (error) {
-      console.error('Error saving quiz score:', error)
-      return { success: false, error }
+      const errorMessage = `Supabase database error: ${error.message || 'Unknown error'}`
+      console.error('Error saving quiz score:', errorMessage, {
+        code: error.code,
+        details: error.details,
+        hint: error.hint,
+        quizData: data
+      })
+      return { success: false, error: errorMessage }
     }
 
+    console.log('Quiz score saved successfully for user:', data.userId, 'quiz:', data.quizId)
     return { success: true }
   } catch (error) {
-    console.error('Error saving quiz score:', error)
-    return { success: false, error }
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred'
+    console.error('Error saving quiz score - Unexpected error:', errorMessage, {
+      error: error,
+      quizData: data,
+      stack: error instanceof Error ? error.stack : undefined
+    })
+    return { success: false, error: errorMessage }
   }
 }
 
 // Save game score to database
 export async function saveGameScore(data: SaveGameScoreData) {
   try {
+    // Validate required environment variables
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+      const envError = 'Missing Supabase environment variables. Please check NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY'
+      console.error('Error saving game score:', envError)
+      throw new Error(envError)
+    }
+
+    // Validate required data fields
+    if (!data.userId || !data.gameId || !data.gameTitle || !data.gameType) {
+      const validationError = 'Missing required game score data fields'
+      console.error('Error saving game score:', validationError, { receivedData: data })
+      throw new Error(validationError)
+    }
+
     const { error } = await supabase
       .from('user_game_scores')
       .insert({
@@ -83,14 +123,26 @@ export async function saveGameScore(data: SaveGameScoreData) {
       })
 
     if (error) {
-      console.error('Error saving game score:', error)
-      return { success: false, error }
+      const errorMessage = `Supabase database error: ${error.message || 'Unknown error'}`
+      console.error('Error saving game score:', errorMessage, {
+        code: error.code,
+        details: error.details,
+        hint: error.hint,
+        gameData: data
+      })
+      return { success: false, error: errorMessage }
     }
 
+    console.log('Game score saved successfully for user:', data.userId, 'game:', data.gameId)
     return { success: true }
   } catch (error) {
-    console.error('Error saving game score:', error)
-    return { success: false, error }
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred'
+    console.error('Error saving game score - Unexpected error:', errorMessage, {
+      error: error,
+      gameData: data,
+      stack: error instanceof Error ? error.stack : undefined
+    })
+    return { success: false, error: errorMessage }
   }
 }
 
