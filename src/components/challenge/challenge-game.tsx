@@ -17,11 +17,11 @@ export const ChallengeGame: React.FC = () => {
     gameState,
     userAnswers,
     score,
+    scorePercentage,
     totalChallenges,
     isCorrect,
     setUserAnswer,
     checkAnswer,
-    nextChallenge,
     restartGame,
     isLastChallenge
   } = useChallengeGame()
@@ -35,20 +35,15 @@ export const ChallengeGame: React.FC = () => {
   }, [challengeIndex])
 
   const handleGateSelect = (gateType: string) => {
-    if (selectedMissingId) {
-      setUserAnswer(selectedMissingId, gateType)
-      setSelectedMissingId(null)
+    if (selectedMissingId && currentChallenge) {
+      setUserAnswer(currentChallenge.id, gateType)
+      // Keep selectedMissingId active so user can change answer easily
+      // setSelectedMissingId(null) - removed this line
     }
   }
 
   const handleCheckAnswer = () => {
     checkAnswer()
-  }
-
-  const restartCurrentChallenge = () => {
-    // Reset answers for current challenge
-    setUserAnswer(currentChallenge?.missingComponentId || '', '')
-    setSelectedMissingId(null)
   }
 
   const startGame = () => {
@@ -132,8 +127,6 @@ export const ChallengeGame: React.FC = () => {
           score={score}
           totalChallenges={totalChallenges}
           currentChallenge={challengeIndex + 1}
-          onNextChallenge={nextChallenge}
-          onRestartChallenge={restartCurrentChallenge}
           onRestartGame={restartGame}
           isLastChallenge={isLastChallenge}
         />
@@ -145,14 +138,15 @@ export const ChallengeGame: React.FC = () => {
 
   // Count missing components that haven't been answered
   const missingComponents = currentChallenge.components.filter(
-    comp => comp.type === 'MISSING' && !userAnswers[currentChallenge.id]
+    comp => comp.type === 'MISSING'
   )
-  const canCheckAnswer = missingComponents.length === 0 && userAnswers[currentChallenge.id]
+  const hasUserAnswer = currentChallenge && userAnswers[currentChallenge.id]
+  const canCheckAnswer = missingComponents.length > 0 && hasUserAnswer
 
   return (
     <div className="container mx-auto px-4 py-4 max-w-6xl">
       {/* Header - Mobile Optimized */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
+      <div className="flex justify-between items-start sm:items-center gap-3 mb-4">
         <Button 
           onClick={backToInstructions}
           variant="outline"
@@ -168,7 +162,7 @@ export const ChallengeGame: React.FC = () => {
             Tantangan {challengeIndex + 1}/{totalChallenges}
           </Badge>
           <Badge variant="secondary" className="text-xs">
-            Skor: {score}/{totalChallenges}
+            Skor: {scorePercentage}%
           </Badge>
         </div>
       </div>
@@ -178,7 +172,7 @@ export const ChallengeGame: React.FC = () => {
         {/* Challenge Canvas - Full width on mobile */}
         <div className="lg:col-span-2 order-2 lg:order-1">
           <Card>
-            <CardHeader className="px-3 py-4 md:px-6">
+            <CardHeader className="px-3 md:px-6">
               <CardTitle className="text-base md:text-lg">{currentChallenge.title}</CardTitle>
               <p className="text-xs md:text-sm text-gray-600">{currentChallenge.description}</p>
             </CardHeader>
@@ -199,6 +193,7 @@ export const ChallengeGame: React.FC = () => {
           <GateSelector
             selectedMissingId={selectedMissingId}
             onGateSelect={handleGateSelect}
+            currentAnswer={hasUserAnswer ? userAnswers[currentChallenge.id] : null}
             disabled={false}
           />
 
@@ -207,8 +202,10 @@ export const ChallengeGame: React.FC = () => {
             <CardContent className="p-3 md:p-4 space-y-3 md:space-y-4">
               <div className="space-y-2">
                 <div className="flex justify-between text-xs md:text-sm">
-                  <span>Gerbang tersisa:</span>
-                  <span className="font-medium">{missingComponents.length}</span>
+                  <span>Status:</span>
+                  <span className="font-medium">
+                    {hasUserAnswer ? 'Siap diperiksa' : 'Pilih gerbang yang hilang'}
+                  </span>
                 </div>
                 <div className="flex justify-between text-xs md:text-sm">
                   <span>Tingkat kesulitan:</span>
@@ -236,7 +233,10 @@ export const ChallengeGame: React.FC = () => {
 
               {!canCheckAnswer && (
                 <p className="text-xs text-orange-600 text-center">
-                  Lengkapi semua gerbang yang hilang terlebih dahulu
+                  {!hasUserAnswer 
+                    ? "Pilih gerbang yang hilang (?) terlebih dahulu" 
+                    : "Lengkapi semua gerbang yang hilang terlebih dahulu"
+                  }
                 </p>
               )}
             </CardContent>

@@ -46,7 +46,12 @@ export const useChallengeGame = () => {
   const checkAnswer = useCallback((selectedGate: string): boolean => {
     if (!currentChallenge) return false
     
-    // Get input values from the challenge
+    // First, check if the selected gate matches the correct answer exactly
+    if (selectedGate !== currentChallenge.correctAnswer) {
+      return false
+    }
+    
+    // Double check: verify the gate logic with input values
     const inputValues: boolean[] = []
     const missingComponent = currentChallenge.components.find(
       comp => comp.id === currentChallenge.missingComponentId
@@ -71,20 +76,37 @@ export const useChallengeGame = () => {
     // Calculate what the output should be with the selected gate
     const calculatedOutput = calculateGateOutput(selectedGate, inputValues)
     
-    // Check if it matches the expected output
+    // Verify it matches the expected output
     return calculatedOutput === currentChallenge.expectedOutput
   }, [currentChallenge])
 
   // Set user answer for a missing component
-  const setUserAnswer = useCallback((challengeId: string, gateType: string) => {
-    const id = parseInt(challengeId)
+  const setUserAnswer = useCallback((challengeId: number, gateType: string) => {
     setSession(prev => ({
       ...prev,
       answers: {
         ...prev.answers,
-        [id]: gateType
+        [challengeId]: gateType
       }
     }))
+  }, [])
+
+  // Internal function for auto-advancing
+  const nextChallengeInternal = useCallback(() => {
+    setSession(prev => {
+      const nextIndex = prev.currentChallengeIndex + 1
+      const completed = nextIndex >= prev.challenges.length
+      
+      return {
+        ...prev,
+        currentChallengeIndex: completed ? prev.currentChallengeIndex : nextIndex,
+        completed
+      }
+    })
+    
+    // Reset game state for next challenge
+    setGameState('playing')
+    setLastResult(null)
   }, [])
 
   // Check current answers
@@ -110,10 +132,17 @@ export const useChallengeGame = () => {
       }))
     }
 
+    // Auto advance after showing result for 1.5 seconds
     setTimeout(() => {
-      setGameState('completed')
-    }, 1000)
-  }, [currentChallenge, session.answers, checkAnswer])
+      if (session.currentChallengeIndex === session.challenges.length - 1) {
+        // Last challenge - show final results
+        setGameState('completed')
+      } else {
+        // Not last challenge - move to next automatically
+        nextChallengeInternal()
+      }
+    }, 1500)
+  }, [currentChallenge, session.answers, session.currentChallengeIndex, session.challenges.length, checkAnswer, nextChallengeInternal])
 
   // Submit an answer (legacy method for compatibility)
   const submitAnswer = useCallback((selectedGate: string) => {
@@ -137,19 +166,10 @@ export const useChallengeGame = () => {
     }
   }, [currentChallenge, checkAnswer])
 
-  // Move to next challenge
+  // Move to next challenge (public function)
   const nextChallenge = useCallback(() => {
-    setSession(prev => {
-      const nextIndex = prev.currentChallengeIndex + 1
-      const completed = nextIndex >= prev.challenges.length
-      
-      return {
-        ...prev,
-        currentChallengeIndex: completed ? prev.currentChallengeIndex : nextIndex,
-        completed
-      }
-    })
-  }, [])
+    nextChallengeInternal()
+  }, [nextChallengeInternal])
 
   // Reset the game
   const resetGame = useCallback(() => {
@@ -166,6 +186,8 @@ export const useChallengeGame = () => {
 
   // Restart current challenge
   const restartCurrentChallenge = useCallback(() => {
+    if (!currentChallenge) return
+    
     setSession(prev => {
       const newAnswers = { ...prev.answers }
       delete newAnswers[currentChallenge.id]
@@ -209,6 +231,7 @@ export const useChallengeGame = () => {
     gameState,
     userAnswers: session.answers,
     score: session.score,
+    scorePercentage: Math.round((session.score / session.challenges.length) * 100),
     totalChallenges: session.challenges.length,
     isCorrect: lastResult?.correct ?? false,
     

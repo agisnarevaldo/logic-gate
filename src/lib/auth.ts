@@ -1,4 +1,5 @@
 import { supabase } from './supabase'
+import { getAuthRedirectURL } from './env-config'
 
 // Auth utilities untuk Supabase
 export const auth = {
@@ -26,12 +27,39 @@ export const auth = {
   },
 
   // Sign in dengan Google
-  async signInWithGoogle() {
+  async signInWithGoogle(redirectPath: string = '/dashboard') {
+    const redirectURL = getAuthRedirectURL('/auth/callback')
+    
     /* eslint-disable @typescript-eslint/no-explicit-any */
     const { data, error } = await (supabase.auth as any).signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${window.location.origin}/dashboard`
+        redirectTo: `${redirectURL}?next=${encodeURIComponent(redirectPath)}`,
+        queryParams: {
+          access_type: 'offline',
+          prompt: 'consent'
+        }
+      }
+    })
+    return { data, error }
+  },
+
+  // Sign in with OAuth provider (generic)
+  async signInWithProvider(
+    provider: 'google' | 'github' | 'discord', 
+    redirectPath: string = '/dashboard'
+  ) {
+    const redirectURL = getAuthRedirectURL('/auth/callback')
+    
+    /* eslint-disable @typescript-eslint/no-explicit-any */
+    const { data, error } = await (supabase.auth as any).signInWithOAuth({
+      provider,
+      options: {
+        redirectTo: `${redirectURL}?next=${encodeURIComponent(redirectPath)}`,
+        queryParams: {
+          access_type: 'offline',
+          prompt: 'consent'
+        }
       }
     })
     return { data, error }

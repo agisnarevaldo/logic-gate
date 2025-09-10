@@ -7,8 +7,11 @@ import { SidebarMenu } from "@/components/sidebar-menu"
 import { learningMaterials } from "@/data/learning-materials"
 import type { LearningModule, LearningCategory } from "@/types/learning"
 import ReactMarkdown from "react-markdown"
+import { updateLearningProgress, initializeUserProgress } from '@/lib/assessment-utils'
+import { useAuth } from '@/providers/auth-provider'
 
 export default function ModulePage() {
+    const { user } = useAuth()
     const router = useRouter()
     const params = useParams()
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
@@ -16,6 +19,34 @@ export default function ModulePage() {
     const [category, setCategory] = useState<LearningCategory | null>(null)
     const [prevModule, setPrevModule] = useState<{module: LearningModule, categorySlug: string} | null>(null)
     const [nextModule, setNextModule] = useState<{module: LearningModule, categorySlug: string} | null>(null)
+
+    // Initialize user progress when user first accesses the module
+    useEffect(() => {
+        if (user?.id && module && category) {
+            // Initialize user progress if not exists
+            initializeUserProgress(user.id).catch(error => {
+                console.error('Failed to initialize user progress:', error)
+            })
+
+            // Update learning progress when module is accessed
+            const totalModules = learningMaterials.reduce((total, cat) => total + cat.modules.length, 0)
+            const currentModuleIndex = learningMaterials
+                .flatMap(cat => cat.modules.map(mod => ({ module: mod, categorySlug: cat.slug })))
+                .findIndex(item => item.module.id === module.id)
+            
+            const progress = Math.round(((currentModuleIndex + 1) / totalModules) * 100)
+            
+            updateLearningProgress({
+                userId: user.id,
+                materialId: module.id,
+                materialTitle: module.title,
+                status: 'in_progress',
+                progress: progress
+            }).catch(error => {
+                console.error('Failed to update learning progress:', error)
+            })
+        }
+    }, [user?.id, module, category])
 
     useEffect(() => {
         if (params.slug && params.moduleSlug) {
@@ -84,6 +115,26 @@ export default function ModulePage() {
     }
 
     const handleNavigation = (targetModule: {module: LearningModule, categorySlug: string}) => {
+        // Mark current module as completed when navigating to next module
+        if (user?.id && module) {
+            const totalModules = learningMaterials.reduce((total, cat) => total + cat.modules.length, 0)
+            const currentModuleIndex = learningMaterials
+                .flatMap(cat => cat.modules.map(mod => ({ module: mod, categorySlug: cat.slug })))
+                .findIndex(item => item.module.id === module.id)
+            
+            const progress = Math.round(((currentModuleIndex + 1) / totalModules) * 100)
+            
+            updateLearningProgress({
+                userId: user.id,
+                materialId: module.id,
+                materialTitle: module.title,
+                status: 'completed',
+                progress: progress
+            }).catch(error => {
+                console.error('Failed to mark module as completed:', error)
+            })
+        }
+        
         router.push(`/materi/${targetModule.categorySlug}/${targetModule.module.slug}`)
     }
 
@@ -100,7 +151,28 @@ export default function ModulePage() {
             {/* Header */}
             <div className="bg-orange-card p-4 rounded-b-3xl">
                 <div className="flex justify-between items-center mb-4">
-                    <button onClick={() => router.push(`/materi/${category.slug}`)} className="text-white p-2">
+                    <button onClick={() => {
+                        // Mark current module as completed when going back to category
+                        if (user?.id && module) {
+                            const totalModules = learningMaterials.reduce((total, cat) => total + cat.modules.length, 0)
+                            const currentModuleIndex = learningMaterials
+                                .flatMap(cat => cat.modules.map(mod => ({ module: mod, categorySlug: cat.slug })))
+                                .findIndex(item => item.module.id === module.id)
+                            
+                            const progress = Math.round(((currentModuleIndex + 1) / totalModules) * 100)
+                            
+                            updateLearningProgress({
+                                userId: user.id,
+                                materialId: module.id,
+                                materialTitle: module.title,
+                                status: 'completed',
+                                progress: progress
+                            }).catch(error => {
+                                console.error('Failed to mark module as completed:', error)
+                            })
+                        }
+                        router.push(`/materi/${category.slug}`)
+                    }} className="text-white p-2">
                         <ChevronLeft size={28} />
                     </button>
                     <div className="text-white text-center flex-1">

@@ -25,7 +25,7 @@ export const ChallengeCanvas: React.FC<ChallengeCanvasProps> = ({
       if (component.type === 'MISSING' && userAnswers[challenge.id]) {
         return {
           ...component,
-          type: userAnswers[challenge.id] as 'AND' | 'OR' | 'NOT' | 'NAND' | 'NOR' | 'XOR'
+          type: userAnswers[challenge.id] as 'AND' | 'OR' | 'NOT' | 'NAND' | 'NOR' | 'XOR' | 'XNOR'
         }
       }
       return { ...component }
@@ -142,15 +142,21 @@ export const ChallengeCanvas: React.FC<ChallengeCanvasProps> = ({
   }, [challenge, userAnswers])
 
   // Calculate canvas dimensions
-  const maxX = Math.max(...updatedComponents.map(c => c.position.x + c.width)) + 50
+  const minX = Math.min(...updatedComponents.map(c => c.position.x))
+  const maxX = Math.max(...updatedComponents.map(c => c.position.x + c.width))
   const maxY = Math.max(...updatedComponents.map(c => c.position.y + c.height)) + 50
+  
+  // Calculate offset to move content to the left edge (mentok kiri)
+  const contentWidth = maxX - minX
+  const canvasWidth = Math.max(contentWidth + 40, 400) // Min width 400px with minimal padding
+  const offsetX = 20 - minX // Move to left edge with minimal 20px padding
 
   return (
     <div className="w-full h-64 sm:h-80 md:h-96 bg-gray-50 border rounded-lg relative overflow-auto">
       <div 
         className="relative"
         style={{ 
-          width: `${Math.max(maxX, 400)}px`, 
+          width: `${canvasWidth}px`, 
           height: `${Math.max(maxY, 250)}px`,
           minWidth: '100%'
         }}
@@ -161,6 +167,15 @@ export const ChallengeCanvas: React.FC<ChallengeCanvasProps> = ({
           const connectionKey = `${connection.from.componentId}-${connection.to.componentId}`
           const value = connectionValues[connectionKey] || false
           
+          // Apply offset to component positions for connection rendering
+          const offsetComponents = updatedComponents.map(comp => ({
+            ...comp,
+            position: {
+              x: comp.position.x + offsetX,
+              y: comp.position.y
+            }
+          }))
+          
           return (
             <ChallengeConnection
               key={index}
@@ -170,7 +185,7 @@ export const ChallengeCanvas: React.FC<ChallengeCanvasProps> = ({
                 toComponent: connection.to.componentId,
                 toPort: connection.to.portId
               }}
-              components={updatedComponents}
+              components={offsetComponents}
               value={value}
             />
           )
@@ -180,9 +195,17 @@ export const ChallengeCanvas: React.FC<ChallengeCanvasProps> = ({
         {updatedComponents.map((component) => (
           <ChallengeGateNode
             key={component.id}
-            component={component}
+            component={{
+              ...component,
+              position: {
+                x: component.position.x + offsetX,
+                y: component.position.y
+              }
+            }}
             isActive={selectedMissingId === component.id}
             onClick={() => {
+              // Allow clicking on missing components or the specific missing component for this challenge
+              // Even if it's already answered, to allow re-selection
               if (component.type === 'MISSING' || component.id === challenge.missingComponentId) {
                 onMissingComponentClick(component.id)
               }
@@ -191,13 +214,11 @@ export const ChallengeCanvas: React.FC<ChallengeCanvasProps> = ({
         ))}
 
         {/* Circuit info overlay */}
-        <div className="absolute top-2 left-2 bg-white px-2 sm:px-3 py-1 sm:py-2 rounded-lg shadow-sm border text-xs sm:text-sm font-medium">
-          {challenge.title}
-        </div>
-
-        {/* Input/Output values display */}
-        <div className="absolute bottom-2 left-2 right-2 bg-white px-2 sm:px-3 py-1 sm:py-2 rounded-lg shadow-sm border text-xs">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-4">
+        <div 
+          className="absolute top-2 bg-white/5 px-2 sm:px-3 py-1 sm:py-2 rounded-lg shadow-sm border text-xs sm:text-sm font-medium"
+          style={{ left: `${offsetX + 44}px` }}
+        >
+          <div className="flex items-start sm:items-center gap-1 sm:gap-4">
             <span className="text-gray-600 text-xs">
               Input: {Object.entries(challenge.inputValues)
                 .filter(([id]) => challenge.components.find(c => c.id === id && c.type === 'INPUT'))
@@ -208,18 +229,6 @@ export const ChallengeCanvas: React.FC<ChallengeCanvasProps> = ({
             <span className="text-gray-600 text-xs">
               Expected: {challenge.expectedOutput ? '1' : '0'}
             </span>
-            {/* Show actual output if circuit is complete */}
-            {Object.keys(userAnswers).length > 0 && (
-              <>
-                <span className="text-gray-600 hidden sm:inline">|</span>
-                <span className={`font-medium text-xs ${
-                  updatedComponents.find(c => c.type === 'OUTPUT')?.outputs[0]?.value === challenge.expectedOutput 
-                    ? 'text-green-600' : 'text-red-600'
-                }`}>
-                  Actual: {updatedComponents.find(c => c.type === 'OUTPUT')?.outputs[0]?.value ? '1' : '0'}
-                </span>
-              </>
-            )}
           </div>
         </div>
       </div>

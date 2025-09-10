@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -8,6 +8,8 @@ import { Progress } from '@/components/ui/progress'
 import { useGuessGame } from '@/hooks/use-guess-game'
 import { GuessGameInstructions } from '@/components/guess-game/guess-game-instructions'
 import { GuessGameGrid } from '@/components/guess-game/guess-game-grid'
+import { saveGameScore } from '@/lib/assessment-utils'
+import { useAuth } from '@/providers/auth-provider'
 import { 
   Clock, 
   Heart, 
@@ -16,11 +18,11 @@ import {
   XCircle, 
   Trophy,
   RotateCcw,
-  ArrowRight,
   Home
 } from 'lucide-react'
 
 export function GuessGameMain() {
+  const { user } = useAuth()
   const {
     session,
     currentChallenge,
@@ -31,10 +33,39 @@ export function GuessGameMain() {
     startGame,
     toggleImageSelection,
     checkAnswer,
-    nextChallenge,
-    restartChallenge,
     restartGame
   } = useGuessGame()
+
+  // Save game score when completed
+  useEffect(() => {
+    if (gameState === 'completed' && user?.id) {
+      const percentage = Math.round((session.score / (session.challenges.length * 100)) * 100)
+      
+      saveGameScore({
+        userId: user.id,
+        gameId: 'guess-game',
+        gameTitle: 'Guess Game - Logic Gate Applications',
+        gameType: 'guess',
+        score: session.score,
+        levelReached: session.challenges.length,
+        livesRemaining: session.lives,
+        details: {
+          percentage,
+          totalChallenges: session.challenges.length,
+          averageScore: Math.round(session.score / session.challenges.length),
+          completedAt: new Date().toISOString()
+        }
+      }).then(result => {
+        if (!result.success) {
+          console.error('Failed to save guess game score:', result.error)
+        } else {
+          console.log('Guess game score saved successfully')
+        }
+      }).catch(error => {
+        console.error('Failed to save guess game score - unexpected error:', error)
+      })
+    }
+  }, [gameState, user?.id, session.score, session.challenges.length, session.lives])
 
   // Format time display
   const formatTime = (seconds: number) => {
@@ -49,7 +80,7 @@ export function GuessGameMain() {
   }
 
   // Game over screen
-  if (isGameOver) {
+  if (isGameOver || gameState === 'gameOver') {
     return (
       <div className="container mx-auto">
         <Card className="w-full max-w-max mx-auto">
@@ -141,46 +172,40 @@ export function GuessGameMain() {
     )
   }
 
-  // Result screen
-  if (gameState === 'result') {
+  // Result/checking screen - simplified for auto-advance
+  if (gameState === 'result' || gameState === 'checking') {
     const correctCount = session.correctSelections.length
     const incorrectCount = session.incorrectSelections.length
     const isSuccess = correctCount >= Math.ceil(currentChallenge.correctCount * 0.7)
     
     return (
       <div className="container mx-auto px-4 py-8 max-w-4xl">
-        <Card className="w-full max-w-2xl mx-auto">
+        <Card className="w-full max-w-md mx-auto">
           <CardHeader className="text-center">
             {isSuccess ? (
-              <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
+              <CheckCircle className="h-12 w-12 text-green-500 mx-auto mb-4" />
             ) : (
-              <XCircle className="h-16 w-16 text-red-500 mx-auto mb-4" />
+              <XCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
             )}
-            <CardTitle className={`text-xl ${isSuccess ? 'text-green-600' : 'text-red-600'}`}>
+            <CardTitle className={`text-lg ${isSuccess ? 'text-green-600' : 'text-red-600'}`}>
               {isSuccess ? 'Bagus!' : 'Belum Tepat'}
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-6">
+          <CardContent className="text-center space-y-4">
             {/* Score breakdown */}
-            <div className="grid grid-cols-3 gap-4 text-center">
-              <div className="bg-green-50 p-3 rounded-lg">
-                <div className="text-green-800 font-semibold">Benar</div>
-                <div className="text-2xl font-bold text-green-600">{correctCount}</div>
+            <div className="grid grid-cols-3 gap-3 text-center">
+              <div className="bg-green-50 p-2 rounded-lg">
+                <div className="text-green-800 font-semibold text-sm">Benar</div>
+                <div className="text-xl font-bold text-green-600">{correctCount}</div>
               </div>
-              <div className="bg-red-50 p-3 rounded-lg">
-                <div className="text-red-800 font-semibold">Salah</div>
-                <div className="text-2xl font-bold text-red-600">{incorrectCount}</div>
+              <div className="bg-red-50 p-2 rounded-lg">
+                <div className="text-red-800 font-semibold text-sm">Salah</div>
+                <div className="text-xl font-bold text-red-600">{incorrectCount}</div>
               </div>
-              <div className="bg-blue-50 p-3 rounded-lg">
-                <div className="text-blue-800 font-semibold">Skor</div>
-                <div className="text-2xl font-bold text-blue-600">+{session.score - (session.score - 100 || 0)}</div>
+              <div className="bg-blue-50 p-2 rounded-lg">
+                <div className="text-blue-800 font-semibold text-sm">Nyawa</div>
+                <div className="text-xl font-bold text-blue-600">{session.lives}</div>
               </div>
-            </div>
-
-            {/* Explanation */}
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <h4 className="font-semibold mb-2">Penjelasan:</h4>
-              <p className="text-sm text-gray-700">{currentChallenge.explanation}</p>
             </div>
 
             {/* Progress */}
@@ -192,19 +217,11 @@ export function GuessGameMain() {
               <Progress value={progress} className="h-2" />
             </div>
 
-            {/* Actions */}
-            <div className="flex flex-col gap-2">
-              {isSuccess ? (
-                <Button onClick={nextChallenge} className="w-full">
-                  <ArrowRight className="h-4 w-4 mr-2" />
-                  {session.challengeIndex < session.challenges.length - 1 ? 'Level Berikutnya' : 'Lihat Hasil'}
-                </Button>
-              ) : (
-                <Button onClick={restartChallenge} variant="outline" className="w-full">
-                  <RotateCcw className="h-4 w-4 mr-2" />
-                  Coba Lagi
-                </Button>
-              )}
+            <div className="text-sm text-gray-500">
+              {session.challengeIndex < session.challenges.length - 1 
+                ? 'Melanjutkan ke level berikutnya...' 
+                : 'Menampilkan hasil akhir...'
+              }
             </div>
           </CardContent>
         </Card>
@@ -287,7 +304,7 @@ export function GuessGameMain() {
           selectedImages={session.selectedImages}
           onImageSelect={toggleImageSelection}
           maxSelections={currentChallenge.correctCount}
-          disabled={gameState === 'checking'}
+          disabled={false}
         />
       </div>
 
@@ -295,11 +312,11 @@ export function GuessGameMain() {
       <div className="text-center">
         <Button 
           onClick={checkAnswer}
-          disabled={!canSubmit || gameState === 'checking'}
+          disabled={!canSubmit}
           size="lg"
           className="px-8"
         >
-          {gameState === 'checking' ? 'Memeriksa...' : 'Periksa Jawaban'}
+          Periksa Jawaban
         </Button>
         
         {!canSubmit && (
