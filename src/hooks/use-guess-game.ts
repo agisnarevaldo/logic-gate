@@ -24,6 +24,32 @@ export const useGuessGame = () => {
 
   const currentChallenge = session.challenges[session.challengeIndex]
 
+  // Internal function for auto-advancing
+  const nextChallengeInternal = useCallback(() => {
+    const nextIndex = session.challengeIndex + 1
+    
+    if (nextIndex >= session.challenges.length) {
+      // Game completed
+      setSession(prev => ({ ...prev, isCompleted: true }))
+      setGameState('completed')
+    } else {
+      // Next challenge
+      const nextChallengeData = session.challenges[nextIndex]
+      const newImages = generateChallengeImages(nextChallengeData)
+      
+      setSession(prev => ({
+        ...prev,
+        challengeIndex: nextIndex,
+        currentImages: newImages,
+        selectedImages: [],
+        correctSelections: [],
+        incorrectSelections: [],
+        timeRemaining: nextChallengeData.timeLimit
+      }))
+      setGameState('playing')
+    }
+  }, [session])
+
   // Check answer function
   const checkAnswer = useCallback(() => {
     setSession(prev => {
@@ -59,8 +85,24 @@ export const useGuessGame = () => {
 
       const isSuccess = correctCount >= Math.ceil(currentChallenge.correctCount * 0.7) // 70% benar untuk lulus
 
+      // Auto advance after showing result for 1.5 seconds
       setTimeout(() => {
-        setGameState('result')
+        const newLives = isSuccess ? prev.lives : Math.max(0, prev.lives - 1)
+        
+        if (newLives === 0) {
+          // Game Over - no more lives
+          setGameState('gameOver')
+        } else {
+          const nextIndex = prev.challengeIndex + 1
+          
+          if (nextIndex >= prev.challenges.length) {
+            // Game completed
+            setGameState('completed')
+          } else {
+            // Next challenge - auto advance regardless of success/failure
+            nextChallengeInternal()
+          }
+        }
       }, 1500)
 
       return {
@@ -71,7 +113,7 @@ export const useGuessGame = () => {
         lives: isSuccess ? prev.lives : Math.max(0, prev.lives - 1)
       }
     })
-  }, [gameState, currentChallenge])
+  }, [gameState, currentChallenge, nextChallengeInternal])
 
   // Timer countdown
   useEffect(() => {
@@ -138,46 +180,6 @@ export const useGuessGame = () => {
     })
   }, [gameState, currentChallenge.correctCount])
 
-  // Next challenge
-  const nextChallenge = useCallback(() => {
-    const nextIndex = session.challengeIndex + 1
-    
-    if (nextIndex >= session.challenges.length) {
-      // Game completed
-      setSession(prev => ({ ...prev, isCompleted: true }))
-      setGameState('completed')
-    } else {
-      // Next challenge
-      const nextChallengeData = session.challenges[nextIndex]
-      const newImages = generateChallengeImages(nextChallengeData)
-      
-      setSession(prev => ({
-        ...prev,
-        challengeIndex: nextIndex,
-        currentImages: newImages,
-        selectedImages: [],
-        correctSelections: [],
-        incorrectSelections: [],
-        timeRemaining: nextChallengeData.timeLimit
-      }))
-      setGameState('playing')
-    }
-  }, [session])
-
-  // Restart current challenge
-  const restartChallenge = useCallback(() => {
-    const images = generateChallengeImages(currentChallenge)
-    setSession(prev => ({
-      ...prev,
-      currentImages: images,
-      selectedImages: [],
-      correctSelections: [],
-      incorrectSelections: [],
-      timeRemaining: currentChallenge.timeLimit
-    }))
-    setGameState('playing')
-  }, [currentChallenge])
-
   // Restart entire game
   const restartGame = useCallback(() => {
     const firstChallenge = guessGameChallenges[0]
@@ -216,8 +218,6 @@ export const useGuessGame = () => {
     startGame,
     toggleImageSelection,
     checkAnswer,
-    nextChallenge,
-    restartChallenge,
     restartGame,
 
     // Computed

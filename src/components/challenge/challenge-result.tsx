@@ -1,17 +1,17 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { CheckCircle, XCircle, Trophy, RotateCcw } from 'lucide-react'
+import { saveGameScore } from '@/lib/assessment-utils'
+import { useAuth } from '@/providers/auth-provider'
 
 interface ChallengeResultProps {
   isCorrect: boolean
   score: number
   totalChallenges: number
   currentChallenge: number
-  onNextChallenge: () => void
-  onRestartChallenge: () => void
   onRestartGame: () => void
   isLastChallenge: boolean
 }
@@ -21,14 +21,35 @@ export const ChallengeResult: React.FC<ChallengeResultProps> = ({
   score,
   totalChallenges,
   currentChallenge,
-  onNextChallenge,
-  onRestartChallenge,
   onRestartGame,
   isLastChallenge
 }) => {
+  const { user } = useAuth()
   const percentage = Math.round((score / totalChallenges) * 100)
 
-  if (isLastChallenge && isCorrect) {
+  // Save game score when challenge game is completed
+  useEffect(() => {
+    if ((isLastChallenge || currentChallenge === totalChallenges) && user?.id) {
+      saveGameScore({
+        userId: user.id,
+        gameId: 'challenge-game',
+        gameTitle: 'Challenge Game - Logic Circuit',
+        gameType: 'challenge',
+        score: score,
+        levelReached: currentChallenge,
+        details: {
+          totalChallenges,
+          percentage,
+          completedAt: new Date().toISOString()
+        }
+      }).catch(error => {
+        console.error('Failed to save challenge game score:', error)
+      })
+    }
+  }, [isLastChallenge, currentChallenge, totalChallenges, user?.id, score, percentage])
+
+  // Show final results only when all challenges are completed
+  if (isLastChallenge || currentChallenge === totalChallenges) {
     // Final result card
     return (
       <Card className="w-full max-w-md mx-auto">
@@ -77,6 +98,7 @@ export const ChallengeResult: React.FC<ChallengeResultProps> = ({
     )
   }
 
+  // Individual challenge result (auto-advances after showing)
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardHeader className="text-center p-4 sm:p-6">
@@ -97,35 +119,22 @@ export const ChallengeResult: React.FC<ChallengeResultProps> = ({
             Tantangan {currentChallenge} dari {totalChallenges}
           </div>
           <div className="text-base sm:text-lg font-semibold">
-            Skor: {score}/{totalChallenges}
+            Skor: {percentage}%
           </div>
         </div>
 
         <div className="text-xs sm:text-sm text-gray-600">
           {isCorrect 
             ? 'Rangkaian logika yang kamu pilih sudah benar!' 
-            : 'Coba periksa kembali gerbang logika yang kamu pilih.'
+            : 'Jawaban yang benar akan ditampilkan sebentar lagi.'
           }
         </div>
 
-        <div className="flex flex-col gap-2">
-          {isCorrect ? (
-            <Button 
-              onClick={onNextChallenge}
-              className="w-full text-sm sm:text-base"
-            >
-              {isLastChallenge ? 'Lihat Hasil Akhir' : 'Tantangan Berikutnya'}
-            </Button>
-          ) : (
-            <Button 
-              onClick={onRestartChallenge}
-              variant="outline"
-              className="w-full text-sm sm:text-base"
-            >
-              <RotateCcw className="h-4 w-4 mr-2" />
-              Coba Lagi
-            </Button>
-          )}
+        <div className="text-xs text-gray-500">
+          {isLastChallenge 
+            ? 'Menampilkan hasil akhir...' 
+            : 'Melanjutkan ke tantangan berikutnya...'
+          }
         </div>
       </CardContent>
     </Card>

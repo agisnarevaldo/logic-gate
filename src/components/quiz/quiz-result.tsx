@@ -17,6 +17,9 @@ import {
   XCircle
 } from 'lucide-react'
 import { getCategoryName } from '@/lib/quiz-utils'
+import { saveQuizScore } from '@/lib/assessment-utils'
+import { useAuth } from '@/providers/auth-provider'
+import { useEffect } from 'react'
 
 interface QuizResultProps {
   result: QuizResultType
@@ -31,6 +34,8 @@ export const QuizResult = ({
   onRestart,
   onReview
 }: QuizResultProps) => {
+  const { user } = useAuth()
+  
   const { 
     totalQuestions, 
     correctAnswers, 
@@ -40,6 +45,33 @@ export const QuizResult = ({
     timeTaken,
     categoryBreakdown 
   } = result
+
+  // Save quiz score to database when component mounts
+  useEffect(() => {
+    if (user?.id) {
+      // Determine category from questions in session
+      const categories = session.questions.map(q => q.category)
+      const mostCommonCategory = categories.length > 0 ? categories[0] : 'basic-gates'
+      
+      saveQuizScore({
+        userId: user.id,
+        quizId: mostCommonCategory,
+        quizTitle: `Quiz ${getCategoryName(mostCommonCategory)}`,
+        score: scorePercentage,
+        correctAnswers: correctAnswers,
+        totalQuestions: totalQuestions,
+        timeTaken: timeTaken,
+        details: {
+          grade,
+          categoryBreakdown,
+          categories: categories,
+          completedAt: new Date().toISOString()
+        }
+      }).catch(error => {
+        console.error('Failed to save quiz score:', error)
+      })
+    }
+  }, [user?.id, session.questions, scorePercentage, totalQuestions, correctAnswers, timeTaken, grade, categoryBreakdown])
 
   const getGradeColor = (grade: string) => {
     switch (grade) {

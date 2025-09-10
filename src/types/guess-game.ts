@@ -33,4 +33,4 @@ export interface GuessGameSession {
   currentImages: GuessGameImage[]
 }
 
-export type GuessGameState = 'instructions' | 'playing' | 'checking' | 'result' | 'completed'
+export type GuessGameState = 'instructions' | 'playing' | 'checking' | 'result' | 'completed' | 'gameOver'
