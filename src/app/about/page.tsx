@@ -175,7 +175,7 @@ export default function AboutPage() {
                     LogiFun v1.0.0 - Platform Pembelajaran Gerbang Logika
                   </p>
                   <p className="text-xs text-gray-500">
-                    © 2024 LogiFun. Dibuat untuk tujuan edukasi.
+                    © 2025 LogiFun. Dibuat untuk tujuan edukasi.
                   </p>
                 </div>
               </CardContent>
