@@ -6,8 +6,8 @@ import { PageLoadingScreen } from "@/components/page-loading-screen"
 import { FeaturePageLayout } from "@/components/feature-page-layout"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { 
-  Info, 
+import {
+  Info,
   Code,
   BookOpen,
   Gamepad2,
@@ -42,7 +42,7 @@ export default function AboutPage() {
   ]
 
   const techStack = [
-    "Next.js 15", "React 19", "TypeScript", "Tailwind CSS", 
+    "Next.js 15", "React 19", "TypeScript", "Tailwind CSS",
     "Supabase", "Framer Motion", "Lucide Icons"
   ]
 
@@ -52,7 +52,7 @@ export default function AboutPage() {
         {showLoading && (
           <PageLoadingScreen
             bgColor="bg-blue-500"
-            icon={<Info className="w-12 h-12" />}
+            icon={<Info className="w-16 h-16" />}
             text="About"
             onComplete={() => setShowLoading(false)}
           />
@@ -62,7 +62,7 @@ export default function AboutPage() {
       <div className={showLoading ? "hidden" : ""}>
         <FeaturePageLayout title="About LogiFun" icon={<Info size={50} />} bgColor="bg-blue-500">
           <div className="space-y-6">
-            
+
             {/* Hero Section */}
             <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
               <CardContent className="pt-6">
@@ -72,8 +72,8 @@ export default function AboutPage() {
                     Platform Pembelajaran Interaktif Gerbang Logika
                   </p>
                   <p className="text-blue-600 max-w-2xl mx-auto">
-                    LogiFun adalah platform pembelajaran yang dirancang untuk membantu siswa 
-                    memahami konsep gerbang logika dan elektronika digital melalui pendekatan 
+                    LogiFun adalah platform pembelajaran yang dirancang untuk membantu siswa
+                    memahami konsep gerbang logika dan elektronika digital melalui pendekatan
                     interaktif dan menyenangkan.
                   </p>
                 </div>
@@ -160,10 +160,10 @@ export default function AboutPage() {
             <Card className="bg-gradient-to-r from-orange-50 to-red-50 border-orange-200">
               <CardContent className="space-y-4">
                 <p className="text-gray-700">
-                  LogiFun dikembangkan sebagai proyek pembelajaran untuk membantu siswa 
+                  LogiFun dikembangkan sebagai proyek pembelajaran untuk membantu siswa
                   dalam memahami konsep gerbang logika dengan cara yang menyenangkan dan interaktif.
                 </p>
-                
+
               </CardContent>
             </Card>
 
