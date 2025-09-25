@@ -7,19 +7,19 @@ export function MusicControl() {
   const { musicState, toggleMusic, toggleMute, setVolume } = useBackgroundMusic()
 
   return (
-    <div className="flex flex-col gap-3 p-4 bg-white/10 rounded-lg">
+    <div className="flex flex-col gap-1.5 p-2.5 bg-white/10 rounded-lg">
       <div className="flex items-center justify-between">
-        <span className="text-sm font-medium text-white">Musik Latar</span>
-        <div className="flex items-center gap-2">
+        <span className="text-xs font-medium text-white">Musik</span>
+        <div className="flex items-center gap-1">
           <button
             onClick={toggleMute}
             className="p-1 hover:bg-white/10 rounded text-white"
             title={musicState.isMuted ? "Nyalakan suara" : "Matikan suara"}
           >
             {musicState.isMuted ? (
-              <VolumeX size={16} />
+              <VolumeX size={12} />
             ) : (
-              <Volume2 size={16} />
+              <Volume2 size={12} />
             )}
           </button>
           <button
@@ -28,17 +28,16 @@ export function MusicControl() {
             title={musicState.isPlaying ? "Pause" : "Play"}
           >
             {musicState.isPlaying ? (
-              <Pause size={16} />
+              <Pause size={12} />
             ) : (
-              <Play size={16} />
+              <Play size={12} />
             )}
           </button>
         </div>
       </div>
 
       {!musicState.isMuted && (
-        <div className="flex items-center gap-2">
-          <Volume2 size={12} className="text-white/70" />
+        <div className="flex items-center gap-1.5">
           <input
             type="range"
             min="0"
@@ -47,11 +46,11 @@ export function MusicControl() {
             value={musicState.volume}
             onChange={(e) => setVolume(parseFloat(e.target.value))}
             className="flex-1 h-1 bg-white/20 rounded-lg appearance-none cursor-pointer
-                            [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:w-3 
+                            [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-2 [&::-webkit-slider-thumb]:w-2 
                             [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white
                             [&::-webkit-slider-thumb]:cursor-pointer"
           />
-          <span className="text-xs text-white/70 min-w-[30px]">
+          <span className="text-xs text-white/70 min-w-[24px] flex-shrink-0">
             {Math.round(musicState.volume * 100)}%
           </span>
         </div>
