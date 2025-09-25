@@ -9,7 +9,7 @@ import { FeatureCard } from "@/components/featured-card"
 import { DashboardButton } from "@/components/dashboard-button"
 import { LogoutButton } from "@/components/logout-button"
 import { BookOpenText, Brain, ClipboardList, Gamepad2 } from "lucide-react"
-import {SimulatorIcon} from "@/components/simulator/simulator-icon";
+import { SimulatorIcon } from "@/components/simulator/simulator-icon"
 
 export default function Dashboard() {
   const { user, loading } = useAuth()
@@ -63,10 +63,10 @@ export default function Dashboard() {
         {/* Add Simulator Card */}
         <div className="mt-4">
           <FeatureCard
-              href="/simulator"
-              bgColor="bg-blue-gradient"
-              icon={<SimulatorIcon />}
-              label="Logic Gate Simulator"
+            href="/simulator"
+            bgColor="bg-blue-gradient"
+            icon={<SimulatorIcon />}
+            label="Logic Gate Simulator"
           />
         </div>
 
