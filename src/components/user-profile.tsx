@@ -1,11 +1,17 @@
 "use client"
 
-import { Settings } from "lucide-react"
+import { Menu } from "lucide-react"
 import Image from "next/image"
 import { useAuth } from "@/providers/auth-provider"
+import { SidebarMenu } from "@/components/sidebar-menu"
+import { useState } from "react"
+import { createPortal } from "react-dom"
+import { usePortal } from "@/hooks/use-portal"
 
 export function UserProfile() {
   const { user } = useAuth()
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const portalTarget = usePortal()
 
   return (
     <div className="flex justify-end items-baseline bg-white rounded-full drop-shadow-xl w-full mx-2">
@@ -31,13 +37,23 @@ export function UserProfile() {
       </div>
       <div className="grow-0 items-center flex ml-auto gap-3.5 p-3.5">
         <div className="flex flex-col flex-1 items-end text-center">
-            <h2 className="font-semibold truncate md:max-w-full max-w-[19ch] mr-auto">{user?.user_metadata?.name || user?.email?.split('@')[0] || "Name"}</h2>
-            <p className="text-gray-500 text-sm text-center w-full">{user?.email || "Example@gmail.com"}</p>
+          <h2 className="font-semibold truncate md:max-w-full max-w-[19ch] mr-auto">{user?.user_metadata?.name || user?.email?.split('@')[0] || "Name"}</h2>
+          <p className="text-gray-500 text-sm text-center w-full">{user?.email || "Example@gmail.com"}</p>
         </div>
-        <button className="text-[#003459]">
-            <Settings size={28} />
+        <button
+          onClick={() => setSidebarOpen(true)}
+          className="text-[#003459]"
+          aria-label="Open menu"
+        >
+          <Menu size={28} />
         </button>
       </div>
+
+      {/* Sidebar Menu - Rendered via Portal */}
+      {portalTarget && createPortal(
+        <SidebarMenu isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />,
+        portalTarget
+      )}
     </div>
   )
 }

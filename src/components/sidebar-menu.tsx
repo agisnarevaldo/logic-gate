@@ -5,6 +5,7 @@ import { X } from "lucide-react"
 import { useRouter, usePathname } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import { useAuth } from "@/providers/auth-provider"
+import { MusicControl } from "./music-control"
 import Image from "next/image"
 
 interface SidebarMenuProps {
@@ -67,7 +68,7 @@ export function SidebarMenu({ isOpen, onClose }: SidebarMenuProps) {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 0.5 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 bg-black z-40"
+                        className="fixed inset-0 bg-black z-[9998]"
                         onClick={onClose}
                     />
 
@@ -77,7 +78,7 @@ export function SidebarMenu({ isOpen, onClose }: SidebarMenuProps) {
                         animate={{ x: 0 }}
                         exit={{ x: "100%" }}
                         transition={{ type: "tween", duration: 0.3 }}
-                        className="fixed top-0 right-0 h-full w-[280px] bg-blue-gradient z-50 flex flex-col text-white rounded-l-xl"
+                        className="fixed top-0 right-0 h-full w-[280px] bg-blue-gradient z-[9999] flex flex-col text-white rounded-l-xl overflow-y-auto"
                     >
                         {/* Close button */}
                         <button onClick={onClose} className="absolute top-4 left-4 text-white">
@@ -102,12 +103,12 @@ export function SidebarMenu({ isOpen, onClose }: SidebarMenuProps) {
                         <div className="w-full h-px bg-white/20 my-2 mx-auto max-w-[90%]" />
 
                         {/* Navigation links */}
-                        <div className="flex-1 flex flex-col items-center gap-2 px-4">
+                        <div className="flex-1 flex flex-col items-center gap-2 px-4 min-h-0">
                             {menuItems.map((item, index) => (
                                 <button
                                     key={`${item.name}-${index}`}
                                     onClick={() => handleNavigation(item.path)}
-                                    className={`w-full py-2 px-4 rounded-lg text-center text-lg font-medium
+                                    className={`w-full py-2 px-4 rounded-lg text-center text-lg font-medium flex-shrink-0
                     ${pathname === item.path ? "bg-white text-[#0077a2]" : "text-white hover:bg-white/10"}`}
                                 >
                                     {item.name}
@@ -118,8 +119,16 @@ export function SidebarMenu({ isOpen, onClose }: SidebarMenuProps) {
                         {/* Divider */}
                         <div className="w-full h-px bg-white/20 my-4 mx-auto max-w-[90%]" />
 
+                        {/* Music Control */}
+                        <div className="px-4 flex-shrink-0">
+                            <MusicControl />
+                        </div>
+
+                        {/* Divider */}
+                        <div className="w-full h-px bg-white/20 my-4 mx-auto max-w-[90%] flex-shrink-0" />
+
                         {/* Logout button */}
-                        <div className="p-4">
+                        <div className="p-4 flex-shrink-0">
                             <button onClick={handleLogout} className="w-full py-3 bg-red-500 rounded-lg text-white font-medium">
                                 Keluar
                             </button>
