@@ -31,7 +31,7 @@ export default function CategoryPage() {
     }
 
     return (
-        <div className="min-h-screen flex flex-col">
+        <div className="min-h-screen flex flex-col bg-gray-900">
             {/* Header */}
             <div className="bg-orange-card p-4 rounded-b-3xl">
                 <div className="flex justify-between items-center mb-8">
@@ -52,16 +52,16 @@ export default function CategoryPage() {
 
             {/* Content */}
             <div className="flex-1 px-4 py-8">
-                <h2 className="text-3xl font-bold mb-4 text-center">{category.title}</h2>
-                <p className="text-center text-gray-600 mb-6">{category.description}</p>
-                <div className="h-px bg-gray-300 w-full mb-6" />
+                <h2 className="text-3xl font-bold mb-4 text-center text-white">{category.title}</h2>
+                <p className="text-center text-gray-300 mb-6">{category.description}</p>
+                <div className="h-px bg-gray-600 w-full mb-6" />
 
                 <div className="space-y-4">
                     {category.modules
                         .sort((a, b) => a.order - b.order)
                         .map((module, index) => (
                             <Link key={module.id} href={`/materi/${category.slug}/${module.slug}`} className="block">
-                                <div className="bg-orange-card text-white p-4 rounded-lg">
+                                <div className="bg-orange-card text-white p-4 rounded-lg hover:bg-orange-600 transition-colors">
                                     <h4 className="text-xl font-bold">Modul {index + 1}</h4>
                                     <p>{module.title}</p>
                                 </div>
@@ -71,7 +71,7 @@ export default function CategoryPage() {
             </div>
 
             {/* Footer */}
-            <div className="text-center py-6 text-gray-500">LogiFun</div>
+            <div className="text-center py-6 text-gray-400">LogiFun</div>
 
             {/* Sidebar Menu */}
             <SidebarMenu isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />

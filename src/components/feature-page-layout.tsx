@@ -13,14 +13,15 @@ interface FeaturePageLayoutProps {
     bgColor: string
     children: React.ReactNode
     backHref?: string
+    isDark?: boolean
 }
 
-export function FeaturePageLayout({ title, icon, bgColor, children, backHref = "/dashboard" }: FeaturePageLayoutProps) {
+export function FeaturePageLayout({ title, icon, bgColor, children, backHref = "/dashboard", isDark = false }: FeaturePageLayoutProps) {
     const router = useRouter()
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
     return (
-        <div className="min-h-screen flex flex-col">
+        <div className={`min-h-screen flex flex-col ${isDark ? 'bg-gray-900' : ''}`}>
             {/* Header */}
             <div className={`${bgColor} p-3 md:p-4 rounded-b-3xl`}>
                 <div className="flex justify-between items-center mb-4 md:mb-8">
@@ -39,14 +40,16 @@ export function FeaturePageLayout({ title, icon, bgColor, children, backHref = "
 
             {/* Title */}
             <div className="text-center my-4 md:my-8">
-                <h2 className="text-2xl md:text-4xl font-semibold text-gray-800">Belajar Gerbang Logika</h2>
+                <h2 className={`text-2xl md:text-4xl font-semibold ${isDark ? 'text-white' : 'text-gray-800'}`}>
+                    Belajar Gerbang Logika
+                </h2>
             </div>
 
             {/* Content */}
             <div className="flex-1 px-2 md:px-4 pb-4 md:pb-8">{children}</div>
 
             {/* Footer */}
-            <div className="text-center py-6 text-gray-500">LogiFun</div>
+            <div className={`text-center py-6 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>LogiFun</div>
 
             {/* Sidebar Menu */}
             <SidebarMenu isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />

@@ -138,7 +138,11 @@
 }
 
 .animated-gradient {
-  background: linear-gradient(to bottom, oklch(69.04% 0.146081 234.8165), oklch(57% 0.26 242));
+  background: linear-gradient(
+    to bottom,
+    oklch(69.04% 0.146081 234.8165),
+    oklch(57% 0.26 242)
+  );
   background-size: 100% 200%;
   animation: gradient-shift 3s ease infinite;
 }
@@ -157,7 +161,11 @@
 
 /* Custom colors for the dashboard */
 .bg-blue-gradient {
-  background: linear-gradient(to bottom, oklch(75.37% 0.1366 220.46), oklch(31.6% 0.0828 246.83));
+  background: linear-gradient(
+    to bottom,
+    oklch(75.37% 0.1366 220.46),
+    oklch(31.6% 0.0828 246.83)
+  );
 }
 
 .bg-yellow-card {
@@ -268,6 +276,93 @@
 
 .markdown-content strong {
   @apply font-bold text-gray-900;
+}
+
+/* Dark theme markdown content */
+.markdown-content-dark {
+  @apply text-gray-200;
+}
+
+.markdown-content-dark h1 {
+  @apply text-3xl font-bold mb-6 mt-2 text-white;
+}
+
+.markdown-content-dark h2 {
+  @apply text-2xl font-bold mb-4 mt-6 text-white;
+}
+
+.markdown-content-dark h3 {
+  @apply text-xl font-bold mb-3 mt-5 text-white;
+}
+
+.markdown-content-dark p {
+  @apply mb-4 text-gray-200;
+}
+
+.markdown-content-dark ul,
+.markdown-content-dark ol {
+  @apply mb-4 ml-6 text-gray-200;
+}
+
+.markdown-content-dark ul {
+  @apply list-disc;
+}
+
+.markdown-content-dark ol {
+  @apply list-decimal;
+}
+
+.markdown-content-dark li {
+  @apply mb-1 text-gray-200;
+}
+
+.markdown-content-dark pre {
+  @apply bg-gray-700 p-4 rounded-md overflow-x-auto mb-4;
+}
+
+.markdown-content-dark code {
+  @apply bg-gray-700 px-1 py-0.5 rounded text-sm text-gray-200;
+}
+
+.markdown-content-dark pre code {
+  @apply bg-transparent p-0 text-gray-200;
+}
+
+.markdown-content-dark blockquote {
+  @apply border-l-4 border-gray-500 pl-4 italic my-4 text-gray-300;
+}
+
+.markdown-content-dark table {
+  display: none; /* Hide tables since images already include truth tables */
+}
+
+.markdown-content-dark th,
+.markdown-content-dark td {
+  @apply border border-gray-600 p-3 text-center;
+}
+
+.markdown-content-dark th {
+  @apply bg-gray-700 font-bold text-gray-200;
+}
+
+.markdown-content-dark td {
+  @apply bg-gray-800 text-gray-300;
+}
+
+.markdown-content-dark a {
+  @apply text-orange-400 hover:text-orange-300 hover:underline;
+}
+
+.markdown-content-dark hr {
+  @apply my-6 border-t border-gray-600;
+}
+
+.markdown-content-dark img {
+  @apply max-w-full h-auto rounded-lg shadow-lg mb-4 mx-auto block;
+}
+
+.markdown-content-dark strong {
+  @apply font-bold text-white;
 }
 
 /* Line clamp utilities */

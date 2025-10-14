@@ -25,15 +25,15 @@ export default function MateriPage() {
             </AnimatePresence>
 
             <div className={showLoading ? "hidden" : ""}>
-                <FeaturePageLayout title="Materi" icon={<BookIcon />} bgColor="bg-orange-card">
+                <FeaturePageLayout title="Materi" icon={<BookIcon />} bgColor="bg-orange-card" isDark={true}>
                     <div className="mb-8">
-                        <h3 className="text-3xl font-bold mb-4 text-center">Pilih Materi</h3>
-                        <div className="h-px bg-gray-300 w-full mb-4" />
+                        <h3 className="text-3xl font-bold mb-4 text-center text-white">Pilih Materi</h3>
+                        <div className="h-px bg-gray-600 w-full mb-4" />
 
                         <div className="space-y-4">
                             {learningMaterials.map((category, index) => (
                                 <Link key={category.id} href={`/materi/${category.slug}`} className="block">
-                                    <div className="bg-orange-card text-white p-4 rounded-lg">
+                                    <div className="bg-orange-card text-white p-4 rounded-lg hover:bg-orange-600 transition-colors">
                                         <h4 className="text-xl font-bold">Materi {index + 1}</h4>
                                         <p>{category.title}</p>
                                         <p className="text-sm text-white mt-1">{category.description}</p>
