@@ -3,6 +3,7 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import { LayoutProvider } from "@/providers/layout-provider";
 import ClientLayout from "./client-layout";
+import { AuthErrorBoundary } from "@/components/auth-error-boundary";
 import { Analytics } from "@vercel/analytics/next"
 
 const poppins = Poppins({
@@ -24,12 +25,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${poppins.className} antialiased`}>
-        <ClientLayout>
-          <LayoutProvider>
-            {children}
-            <Analytics />
-          </LayoutProvider>
-        </ClientLayout>
+        <AuthErrorBoundary>
+          <ClientLayout>
+            <LayoutProvider>
+              {children}
+              <Analytics />
+            </LayoutProvider>
+          </ClientLayout>
+        </AuthErrorBoundary>
       </body>
     </html>
   );

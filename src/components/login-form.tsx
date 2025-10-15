@@ -8,12 +8,26 @@ export function LoginForm() {
   const [error, setError] = useState("")
   const { signInWithGoogle, user, loading } = useAuth()
 
-  console.log('LoginForm: Rendering with state:', { 
-    isLoading, 
-    hasUser: !!user, 
+  console.log('LoginForm: Rendering with state:', {
+    isLoading,
+    hasUser: !!user,
     userId: user?.id,
     authLoading: loading
   })
+
+  // Check for error in URL params
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search)
+    const errorParam = urlParams.get('error')
+    if (errorParam) {
+      console.log('LoginForm: Error from URL params:', errorParam)
+      setError(decodeURIComponent(errorParam))
+      // Clean up URL
+      const url = new URL(window.location.href)
+      url.searchParams.delete('error')
+      window.history.replaceState({}, '', url.toString())
+    }
+  }, [])
 
   // If user is authenticated and we're on login page, they should be redirected
   useEffect(() => {
@@ -22,7 +36,8 @@ export function LoginForm() {
       currentPath: window.location.pathname
     })
     if (user && window.location.pathname === '/login') {
-      console.log('LoginForm: User is logged in on login page, should be redirected...')
+      console.log('LoginForm: User is logged in on login page, redirecting to dashboard...')
+      window.location.replace('/dashboard')
     }
   }, [user])
 
@@ -30,12 +45,12 @@ export function LoginForm() {
     console.log('LoginForm: Google sign in button clicked')
     setIsLoading(true)
     setError("")
-    
+
     try {
       console.log('LoginForm: Calling signInWithGoogle...')
       const { error } = await signInWithGoogle()
       console.log('LoginForm: signInWithGoogle returned:', { hasError: !!error, errorMsg: error?.message })
-      
+
       if (error) {
         console.error('LoginForm: Google sign in error:', error)
         setError("Google sign in failed. Please try again.")

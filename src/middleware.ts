@@ -3,7 +3,7 @@ import { createClient } from './utils/supabase/server'
 
 export async function middleware(request: NextRequest) {
     console.log(`Middleware: Processing ${request.method} ${request.nextUrl.pathname}`)
-    
+
     const response = NextResponse.next()
     const supabase = createClient(request, response)
 
@@ -12,8 +12,14 @@ export async function middleware(request: NextRequest) {
         request.nextUrl.pathname.startsWith("/_next") ||
         request.nextUrl.pathname.startsWith("/api") ||
         request.nextUrl.pathname.startsWith("/images") ||
+        request.nextUrl.pathname.startsWith("/public") ||
         request.nextUrl.pathname === "/favicon.ico" ||
-        request.nextUrl.pathname.startsWith("/auth")
+        request.nextUrl.pathname.startsWith("/auth") ||
+        request.nextUrl.pathname.endsWith(".mp3") ||
+        request.nextUrl.pathname.endsWith(".wav") ||
+        request.nextUrl.pathname.endsWith(".woff2") ||
+        request.nextUrl.pathname.endsWith(".woff") ||
+        request.nextUrl.pathname.endsWith(".ttf")
     ) {
         console.log(`Middleware: Allowing access to ${request.nextUrl.pathname} (excluded path)`)
         return response
@@ -66,6 +72,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
     matcher: [
-        '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+        '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|mp3|wav|woff2|woff|ttf)$).*)',
     ],
 }
