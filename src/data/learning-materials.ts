@@ -1,4 +1,4 @@
-import type {LearningCategory} from "@/types/learning"
+import type { LearningCategory } from "@/types/learning"
 
 export const learningMaterials: LearningCategory[] = [
     {
@@ -6,6 +6,7 @@ export const learningMaterials: LearningCategory[] = [
         title: "Pengantar Gerbang Logika",
         slug: "pengantar",
         description: "Pengenalan dasar tentang gerbang logika dan elektronika digital",
+        image: "/vectors/materi1.svg",
         modules: [
             {
                 id: "intro-1",
@@ -91,7 +92,7 @@ Gerbang logika terdiri dari 2 jenis:
    - XNOR (EX-NOR)
         `
             },
-            
+
             {
                 id: "intro-3",
                 title: "Aljabar Boolean",
@@ -144,6 +145,7 @@ Gerbang logika merupakan rangkaian dengan satu atau lebih masukan, tetapi hanya 
         title: "Gerbang Logika Dasar",
         slug: "gerbang-dasar",
         description: "Mempelajari gerbang logika dasar: AND, OR, dan NOT",
+        image: "/vectors/materi2.svg",
         modules: [
             {
                 id: "basic-1",
@@ -190,7 +192,7 @@ Gerbang AND berfungsi seperti rangkaian seri - semua "saklar" harus tertutup aga
         `
             },
             {
-                id: "basic-2", 
+                id: "basic-2",
                 title: "Gerbang Logika OR",
                 slug: "gerbang-or",
                 order: 2,
@@ -232,7 +234,7 @@ Gerbang OR digunakan dalam:
             },
             {
                 id: "basic-3",
-                title: "Gerbang Logika NOT", 
+                title: "Gerbang Logika NOT",
                 slug: "gerbang-not",
                 order: 3,
                 content: `
@@ -279,8 +281,9 @@ Gerbang NOT digunakan dalam:
     {
         id: "advanced-gates",
         title: "Gerbang Logika Turunan",
-        slug: "gerbang-turunan", 
+        slug: "gerbang-turunan",
         description: "Mempelajari gerbang logika turunan: NAND, NOR, XOR, dan XNOR",
+        image: "/vectors/materi3.svg",
         modules: [
             {
                 id: "advanced-1",
@@ -401,7 +404,7 @@ XOR sangat berguna dalam:
             {
                 id: "advanced-4",
                 title: "Gerbang Logika XNOR",
-                slug: "gerbang-xnor", 
+                slug: "gerbang-xnor",
                 order: 4,
                 content: `
 # Gerbang Logika XNOR

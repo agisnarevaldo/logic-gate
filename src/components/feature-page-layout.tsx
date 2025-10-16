@@ -21,7 +21,7 @@ export function FeaturePageLayout({ title, icon, bgColor, children, backHref = "
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
     return (
-        <div className={`min-h-screen flex flex-col ${isDark ? 'bg-gray-900' : ''}`}>
+        <div className={`min-h-screen flex flex-col ${isDark ? 'bg-gray-700' : ''}`}>
             {/* Header */}
             <div className={`${bgColor} p-3 md:p-4 rounded-b-3xl`}>
                 <div className="flex justify-between items-center mb-4 md:mb-8">

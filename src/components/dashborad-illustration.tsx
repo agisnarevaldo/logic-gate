@@ -2,14 +2,19 @@ import Image from "next/image"
 import { ReactNode } from "react"
 
 interface DashboardIllustrationProps {
-    children: ReactNode
+  children: ReactNode,
+  illustration: string,
+  width?: number,
+  height?: number,
+  classname?: string,
 }
 
-export function DashboardIllustration({children}: DashboardIllustrationProps) {
+// 227 242
+export function DashboardIllustration({ children, illustration, width = 227, height = 242, classname }: DashboardIllustrationProps) {
   return (
-    <div className="relative w-full h-full bg-blue-gradient rounded-2xl shadow-md flex flex-col items-center justify-center overflow-hidden p-2">
-        {children}
-        <Image src="/images/decoration.svg" alt="Learning Illustration" width={227} height={242} priority />
+    <div className="relative w-full h-full bg-blue-gradient rounded-2xl shadow-md flex flex-col gap-2 items-center justify-center overflow-hidden p-2">
+      {children}
+      <Image src={illustration} className={classname} alt="Learning Illustration" width={width} height={height} priority />
     </div>
-  ) 
+  )
 }

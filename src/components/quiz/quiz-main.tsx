@@ -8,10 +8,11 @@ import { PageLoadingScreen } from '@/components/page-loading-screen'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Play, BookOpen } from 'lucide-react'
+import Image from 'next/image'
 
 export const QuizMain = () => {
   const [hasStarted, setHasStarted] = useState(false)
-  
+
   const quiz = useQuiz({
     questionCount: 25,
     settings: {
@@ -35,11 +36,11 @@ export const QuizMain = () => {
 
   if (quiz.isLoading) {
     return (
-      <PageLoadingScreen 
+      <PageLoadingScreen
         bgColor="bg-blue-600"
         icon={<BookOpen size={60} />}
         text="Memuat Kuis"
-        onComplete={() => {}}
+        onComplete={() => { }}
       />
     )
   }
@@ -47,7 +48,7 @@ export const QuizMain = () => {
   // Show quiz result
   if (quiz.result) {
     return (
-      <QuizResult 
+      <QuizResult
         result={quiz.result}
         session={quiz.session!}
         onRestart={handleRestartQuiz}
@@ -62,7 +63,7 @@ export const QuizMain = () => {
   // Show quiz questions
   if (hasStarted && quiz.session && quiz.currentQuestion) {
     return (
-      <QuizContainer 
+      <QuizContainer
         session={quiz.session}
         currentQuestion={quiz.currentQuestion}
         currentAnswer={quiz.currentAnswer}
@@ -91,7 +92,14 @@ export const QuizMain = () => {
           <BookOpen className="h-8 w-8 text-blue-600" />
           <h1 className="text-3xl font-bold text-gray-900">Kuis Gerbang Logika</h1>
         </div>
-        <p className="text-gray-600">
+        <Image
+          src="/vectors/kuis.svg"
+          alt="Kuis Gerbang Logika"
+          width={200}
+          height={100}
+          className="mx-auto rounded-lg"
+        />
+        <p className="text-gray-600 px-8">
           Uji pemahaman Anda tentang gerbang logika dengan 25 soal pilihan ganda
         </p>
       </div>
@@ -107,8 +115,8 @@ export const QuizMain = () => {
               <div className="text-2xl font-bold text-blue-600">25 Soal</div>
               <p className="text-gray-600">Berbagai kategori gerbang logika</p>
             </div>
-            
-            <Button 
+
+            <Button
               onClick={handleStartQuiz}
               className="w-full"
               size="lg"
@@ -143,7 +151,7 @@ export const QuizMain = () => {
         </Card> */}
 
         <Card>
-          <CardHeader className="pb-3">
+          <CardHeader className="">
             <CardTitle className="text-lg">🎯 Tips Mengerjakan</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2 text-sm text-gray-600">

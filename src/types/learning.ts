@@ -11,5 +11,6 @@ export interface LearningCategory {
     title: string
     slug: string
     description: string
+    image: string
     modules: LearningModule[]
 }
