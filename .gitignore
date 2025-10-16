@@ -49,3 +49,5 @@ next-env.d.ts
 .idea/modules.xml
 .idea/vcs.xml
 .idea/inspectionProfiles/Project_Default.xml
+TODO.md
+scripts/run-migration.js
