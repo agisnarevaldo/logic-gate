@@ -38,7 +38,7 @@ export default function Dashboard() {
       <div className="w-full max-w-md flex flex-col gap-2">
 
         {/* Main Illustration */}
-        <DashboardIllustration>
+        <DashboardIllustration illustration="/images/decoration.svg">
           <UserProfile />
         </DashboardIllustration>
 

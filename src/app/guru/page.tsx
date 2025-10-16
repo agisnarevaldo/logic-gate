@@ -44,7 +44,7 @@ export default function TeacherDashboard() {
             <div className="w-full max-w-md flex flex-col gap-2">
 
                 {/* Main Illustration with Teacher Profile */}
-                <DashboardIllustration>
+                <DashboardIllustration illustration="/vectors/teacher.svg" width={300} height={300} classname="mt-4">
                     <UserProfile />
                 </DashboardIllustration>
 
