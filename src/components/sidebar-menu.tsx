@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { LogOut, X } from "lucide-react"
 import { useRouter, usePathname } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
@@ -16,7 +16,8 @@ interface SidebarMenuProps {
 export function SidebarMenu({ isOpen, onClose }: SidebarMenuProps) {
     const router = useRouter()
     const pathname = usePathname()
-    const { signOut } = useAuth()
+    const { signOut, isTeacher } = useAuth()
+    const [isLoggingOut, setIsLoggingOut] = useState(false)
 
     // Close sidebar when clicking outside on mobile
     useEffect(() => {
@@ -37,7 +38,8 @@ export function SidebarMenu({ isOpen, onClose }: SidebarMenuProps) {
         }
     }, [isOpen])
 
-    const menuItems = [
+    // Menu items based on user role
+    const studentMenuItems = [
         { name: "T.belajar", path: "/tujuan-belajar" },
         { name: "Materi", path: "/materi" },
         { name: "Game", path: "/game" },
@@ -48,15 +50,38 @@ export function SidebarMenu({ isOpen, onClose }: SidebarMenuProps) {
         { name: "Penilaian", path: "/penilaian" },
     ]
 
+    const teacherMenuItems = [
+        { name: "Dashboard", path: "/guru" },
+        { name: "Data Siswa", path: "/guru/siswa" },
+        { name: "Laporan", path: "/guru/laporan" },
+        { name: "About", path: "/about" },
+    ]
+
+    const menuItems = isTeacher ? teacherMenuItems : studentMenuItems
+
     const handleNavigation = (path: string) => {
         router.push(path)
         onClose()
     }
 
     const handleLogout = async () => {
-        await signOut()
-        router.push("/login")
-        onClose()
+        if (isLoggingOut) return // Prevent multiple clicks
+
+        setIsLoggingOut(true)
+        console.log('SidebarMenu: Logout clicked')
+
+        try {
+            await signOut()
+            console.log('SidebarMenu: Sign out successful')
+            onClose()
+            // Don't redirect here, let AuthProvider handle it
+        } catch (error) {
+            console.error('SidebarMenu: Error during logout:', error)
+            setIsLoggingOut(false)
+            // Fallback redirect on error
+            router.push("/login")
+            onClose()
+        }
     }
 
     return (
@@ -91,6 +116,9 @@ export function SidebarMenu({ isOpen, onClose }: SidebarMenuProps) {
                                 </button>
 
                                 <h1 className="text-4xl font-bold mb-2">LogiFun</h1>
+                                {isTeacher && (
+                                    <p className="text-sm text-white/80 mb-2">Mode Guru</p>
+                                )}
                                 <div className="rounded-xl w-40 h-full flex items-center justify-center">
                                     <Image
                                         src="/images/decoration.svg"
@@ -126,8 +154,12 @@ export function SidebarMenu({ isOpen, onClose }: SidebarMenuProps) {
 
                             {/* Logout button */}
                             <div className="p-4 flex-shrink-0">
-                                <button onClick={handleLogout} className="w-full py-3 bg-red-500 rounded-lg text-white font-medium">
-                                    Keluar
+                                <button
+                                    onClick={handleLogout}
+                                    disabled={isLoggingOut}
+                                    className="w-full py-3 bg-red-500 rounded-lg text-white font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                                >
+                                    {isLoggingOut ? "Logging out..." : "Keluar"}
                                     <LogOut size={16} className="inline-block ml-2" />
                                 </button>
                             </div>
