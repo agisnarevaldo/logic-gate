@@ -8,6 +8,7 @@ import { BookIcon } from "@/components/icon"
 import { learningMaterials } from "@/data/learning-materials"
 import Link from "next/link"
 import type { LearningCategory } from "@/types/learning"
+import Image from "next/image"
 
 export default function CategoryPage() {
     const router = useRouter()
@@ -53,9 +54,15 @@ export default function CategoryPage() {
             {/* Content */}
             <div className="flex-1 px-4 py-8">
                 <h2 className="text-3xl font-bold mb-4 text-center text-white">{category.title}</h2>
+                <Image
+                    src={category.image}
+                    alt={category.title}
+                    width={200}
+                    height={100}
+                    className="mx-auto"
+                />
                 <p className="text-center text-gray-300 mb-6">{category.description}</p>
                 <div className="h-px bg-gray-600 w-full mb-6" />
-
                 <div className="space-y-4">
                     {category.modules
                         .sort((a, b) => a.order - b.order)

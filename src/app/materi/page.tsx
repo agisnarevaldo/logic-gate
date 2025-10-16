@@ -7,6 +7,7 @@ import { FeaturePageLayout } from "@/components/feature-page-layout"
 import { BookIcon } from "@/components/icon"
 import Link from "next/link"
 import { learningMaterials } from "@/data/learning-materials"
+import Image from "next/image"
 
 export default function MateriPage() {
     const [showLoading, setShowLoading] = useState(true)
@@ -32,11 +33,18 @@ export default function MateriPage() {
 
                         <div className="space-y-4">
                             {learningMaterials.map((category, index) => (
-                                <Link key={category.id} href={`/materi/${category.slug}`} className="block">
-                                    <div className="bg-orange-card text-white p-4 rounded-lg hover:bg-orange-600 transition-colors">
-                                        <h4 className="text-xl font-bold">Materi {index + 1}</h4>
-                                        <p>{category.title}</p>
-                                        <p className="text-sm text-white mt-1">{category.description}</p>
+                                <Link key={category.id} href={`/materi/${category.slug}`} className="bg-orange-card flex gap-1 rounded-lg hover:scale-102 drop-shadow-lg shadow-lg">
+                                    <Image
+                                        src={category.image}
+                                        alt={category.title}
+                                        width={120}
+                                        height={100}
+                                        className="rounded-lg bg-gray-200 border border-gray-200"
+                                    />
+                                    <div className="bg-orange-card text-white p-4 rounded-r-md hover:bg-orange-100 transition-colors">
+                                        <h4 className="text-xl font-bold">{index + 1}. {category.title}</h4>
+                                        {/* <p>{category.title}</p> */}
+                                        <p className="text-sm text-neutral-200 mt-1">{category.description}</p>
                                     </div>
                                 </Link>
                             ))}

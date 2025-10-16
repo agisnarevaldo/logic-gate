@@ -5,15 +5,16 @@ import { AnimatePresence } from "framer-motion"
 import { PageLoadingScreen } from "@/components/page-loading-screen"
 import { FeaturePageLayout } from "@/components/feature-page-layout"
 import { ChecklistIcon } from "@/components/icon"
-import { 
-    Brain, 
-    Eye, 
-    Wrench, 
-    Monitor, 
-    BarChart3, 
+import {
+    Brain,
+    Eye,
+    Wrench,
+    Monitor,
+    BarChart3,
     Smartphone,
     Lightbulb
 } from "lucide-react"
+import Image from "next/image"
 
 export default function TujuanBelajarPage() {
     const [showLoading, setShowLoading] = useState(true)
@@ -74,13 +75,20 @@ export default function TujuanBelajarPage() {
                 <FeaturePageLayout title="Tujuan Pembelajaran" icon={<ChecklistIcon />} bgColor="bg-green-500">
                     <div className="space-y-4">
                         <div className="bg-white rounded-xl p-6 shadow-lg">
-                            <h2 className="text-2xl font-bold text-green-700 mb-4">Capaian Pembelajaran</h2>
-                            <p className="text-gray-700 leading-relaxed">
-                                Setelah menyelesaikan pembelajaran ini, siswa diharapkan dapat memahami, menganalisis, 
+                            <Image
+                                src="/vectors/t-belajar.svg"
+                                alt="Capaian Pembelajaran"
+                                width={200}
+                                height={100}
+                                className="mx-auto"
+                            />
+                            <h2 className="text-2xl font-bold text-green-700 mb-2 text-center">Capaian Pembelajaran</h2>
+                            <p className="text-gray-700 leading-relaxed text-justify">
+                                Setelah menyelesaikan pembelajaran ini, siswa diharapkan dapat memahami, menganalisis,
                                 dan menerapkan konsep gerbang logika dalam perancangan rangkaian digital sederhana.
                             </p>
                         </div>
-                        
+
                         {objectives.map((objective, index) => (
                             <div key={objective.id} className="bg-green-500 rounded-xl p-6 text-white shadow-lg transform hover:scale-[1.02] transition-transform duration-200">
                                 <div className="flex items-start space-x-4">
@@ -99,7 +107,7 @@ export default function TujuanBelajarPage() {
                                 </div>
                             </div>
                         ))}
-                        
+
                         <div className="bg-green-100 rounded-xl p-6 border-l-4 border-green-500">
                             <div className="flex items-center space-x-2 mb-3">
                                 <Lightbulb className="w-6 h-6 text-green-600" />
