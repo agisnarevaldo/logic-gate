@@ -10,8 +10,8 @@ export const learningMaterials: LearningCategory[] = [
         modules: [
             {
                 id: "intro-1",
-                title: "Sistem Bilangan Digital",
-                slug: "sistem-bilangan-digital",
+                title: "Sistem Bilangan",
+                slug: "sistem-bilangan",
                 order: 1,
                 content: `
 # Sistem Bilangan
@@ -23,12 +23,19 @@ export const learningMaterials: LearningCategory[] = [
 ## Jenis Sistem Bilangan
 ![Jenis Sistem Bilangan](/images/number-system.png)
 
-- Sistem bilangan biner (binary)
 - Sistem bilangan desimal (decimal)
+- Sistem bilangan biner (binary)
 - Sistem bilangan oktal (octal)
 - Sistem bilangan heksadesimal (hexadecimal)
-
-## Desimal (Basis 10)
+        `
+            },
+            {
+                id: "intro-2",
+                title: "Desimal (Basis 10)",
+                slug: "desimal-basis-10",
+                order: 2,
+                content: `
+# Desimal (Basis 10)
 - **Desimal (Basis 10)** adalah Sistem bilangan yang paling umum digunakan dalam kehidupan sehari-hari.
 - Sistem bilangan desimal menggunakan basis 10 dan menggunakan 10 macam simbol bilangan yaitu: 0, 1, 2, 3, 4, 5, 6, 7, 8, dan 9.
 - Untuk melihat nilai bilangan desimal dapa digunakan perhitungan seperti berikut, misalkan contoh bilangan desimal adalah 8598. Ini dapa diartikan:
@@ -43,10 +50,65 @@ export const learningMaterials: LearningCategory[] = [
         `
             },
             {
-                id: "intro-2",
+                id: "intro-3",
+                title: "Biner (Basis 2)",
+                slug: "biner-basis-2",
+                order: 3,
+                content: `
+# Biner (Basis 2)
+- Biner (Basis 2) adalah Sistem Bilangan yang terdiri dari 2 simbol yaitu 0 dan 1.
+- Contoh Bilangan Biner 1001, Ini dapat di artikan (Di konversi ke sistem bilangan desimal) menjadi sebagai berikut:
+![1001](/images/1001.png)
+- Position Value dalam sistem Bilangan Biner merupakan perpangkatan dari nilai 2 (basis), seperti pada tabel berikut ini :
+![position-value](/images/pv-biner.png)
+- dengan begitu maka bilangan biner 1001 bisa diartikan sebagai berikut:
+\`\`\`
+1001₂ = (1 x 8) + (0 x 4) + (0 x 2) + (1 x 1)
+\`\`\`
+        `
+            },
+            {
+                id: "intro-4",
+                title: "Oktal (Basis 8)",
+                slug: "oktal-basis-8",
+                order: 4,
+                content: `
+# Oktal (Basis 8)
+- Oktal (Basis 8) adalah Sistem Bilangan yang terdiri dari 8 simbol yaitu 0, 1, 2, 3, 4, 5, 6, dan 7.
+- Contoh Bilangan Oktal 1022, Ini dapat di artikan (Di konversi ke sistem bilangan desimal) menjadi sebagai berikut:
+![1022](/images/1022.png)
+- Position Value dalam sistem Bilangan Oktal merupakan perpangkatan dari nilai 8 (basis), seperti pada tabel berikut ini :
+![position-value](/images/pv-oktal.png)
+- dengan begitu maka bilangan oktal 1022 bisa diartikan sebagai berikut:
+\`\`\`
+1022₈ = (1 x 512) + (0 x 64) + (2 x 8) + (2 x 1)
+\`\`\`
+        `
+            },
+            {
+                id: "intro-5",
+                title: "Hexadesimal (Basis 16)",
+                slug: "hexadesimal-basis-16",
+                order: 5,
+                content: `
+# Hexadesimal (Basis 16)
+- Hexadesimal (Basis 16), Hexa berarti 6 dan Desimal berarti 10 adalah Sistem Bilangan yang terdiri dari 16 simbol yaitu 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, A(10), B(11), C(12), D(13), E(14), F(15).
+- Pada Sistem Bilangan Hexadesimal memadukan 2unsur yaitu angka dan huruf. Huruf A mewakili angka 10, Bmewakili angka 11 dan seterusnya sampai Huruf F mewakili angka 15.
+- Contoh Bilangan Hexadesimal F3DA, Ini dapat di artikan (Di konversi ke sistem bilangan desimal) menjadi sebagai berikut:
+![F3DA](/images/F3DA.png)
+- Position Value dalam sistem Bilangan Hexadesimal merupakan perpangkatan dari nilai 16 (basis), seperti pada tabel berikut ini :
+![position-value](/images/pv-hex.png)
+- dengan begitu maka bilangan hexadesimal F3DA bisa diartikan sebagai berikut:
+\`\`\`
+F3DA₁₆ = (15 x 4096) + (3 x 256) + (12 x 16) + (10 x 1)
+\`\`\`
+        `
+            },
+            {
+                id: "intro-6",
                 title: "Definisi dan Jenis Gerbang Logika",
                 slug: "definisi-dan-jenis",
-                order: 2,
+                order: 6,
                 content: `
 # Gerbang Logika
 
@@ -91,10 +153,10 @@ Gerbang logika terdiri dari 2 jenis:
             },
 
             {
-                id: "intro-3",
+                id: "intro-7",
                 title: "Aljabar Boolean",
                 slug: "aljabar-boolean",
-                order: 3,
+                order: 7,
                 content: `
 # Aljabar Boolean
 
