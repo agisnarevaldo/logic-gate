@@ -69,6 +69,7 @@ export default function AboutPage() {
               <CardHeader>
                 <CardTitle className="text-center text-purple-700">
                   <Image className="mx-auto" src="/uny.png" alt="Logo" width={100} height={100} />
+                  <h2 className="text-blue-900 mt-2">Dibuat Oleh: Uswatun Putri Nurhasanah</h2>
                 </CardTitle>
               </CardHeader>
               <CardContent className="pt-6">
