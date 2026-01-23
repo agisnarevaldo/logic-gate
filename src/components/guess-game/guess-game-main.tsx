@@ -10,12 +10,11 @@ import { GuessGameInstructions } from '@/components/guess-game/guess-game-instru
 import { GuessGameGrid } from '@/components/guess-game/guess-game-grid'
 import { saveGameScore } from '@/lib/assessment-utils'
 import { useAuth } from '@/providers/auth-provider'
-import { 
-  Clock, 
-  Heart, 
-  Target, 
-  CheckCircle, 
-  XCircle, 
+import {
+  Clock,
+  Target,
+  CheckCircle,
+  XCircle,
   Trophy,
   RotateCcw,
   Home
@@ -40,7 +39,7 @@ export function GuessGameMain() {
   useEffect(() => {
     if (gameState === 'completed' && user?.id) {
       const percentage = Math.round((session.score / (session.challenges.length * 100)) * 100)
-      
+
       saveGameScore({
         userId: user.id,
         gameId: 'guess-game',
@@ -65,7 +64,7 @@ export function GuessGameMain() {
         console.error('Failed to save guess game score - unexpected error:', error)
       })
     }
-  }, [gameState, user?.id, session.score, session.challenges.length, session.lives])
+  }, [gameState, user?.id, session.score, session.challenges.length])
 
   // Format time display
   const formatTime = (seconds: number) => {
@@ -79,43 +78,10 @@ export function GuessGameMain() {
     return <GuessGameInstructions onStartGame={startGame} />
   }
 
-  // Game over screen
-  if (isGameOver || gameState === 'gameOver') {
-    return (
-      <div className="container mx-auto">
-        <Card className="w-full max-w-max mx-auto">
-          <CardHeader className="text-center">
-            <XCircle className="h-16 w-16 text-red-500 mx-auto mb-4" />
-            <CardTitle className="text-xl text-red-600">Game Over</CardTitle>
-          </CardHeader>
-          <CardContent className="text-center space-y-4">
-            <div className="space-y-2">
-              <div className="text-3xl font-bold">{session.score}</div>
-              <div className="text-gray-600">Skor Akhir</div>
-            </div>
-            <div className="text-sm text-gray-600">
-              Nyawa habis! Jangan menyerah, coba lagi untuk hasil yang lebih baik.
-            </div>
-            <div className="flex flex-col gap-2">
-              <Button onClick={restartGame} className="w-full">
-                <RotateCcw className="h-4 w-4 mr-2" />
-                Main Lagi
-              </Button>
-              <Button variant="outline" onClick={() => window.location.href = '/game'} className="w-full">
-                <Home className="h-4 w-4 mr-2" />
-                Kembali ke Menu
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    )
-  }
-
   // Game completed screen
   if (gameState === 'completed') {
     const percentage = Math.round((session.score / (session.challenges.length * 100)) * 100)
-    
+
     return (
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         <Card className="w-full max-w-md mx-auto">
@@ -129,7 +95,7 @@ export function GuessGameMain() {
               <div className="text-gray-600">Skor Total</div>
               <div className="text-lg font-semibold">{percentage}%</div>
             </div>
-            
+
             <div className="space-y-2 text-sm text-gray-600">
               {percentage >= 90 && (
                 <p className="text-green-600 font-medium">Luar biasa! Kamu sangat memahami aplikasi gerbang logika!</p>
@@ -177,7 +143,7 @@ export function GuessGameMain() {
     const correctCount = session.correctSelections.length
     const incorrectCount = session.incorrectSelections.length
     const isSuccess = correctCount >= Math.ceil(currentChallenge.correctCount * 0.7)
-    
+
     return (
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         <Card className="w-full max-w-md mx-auto">
@@ -193,7 +159,7 @@ export function GuessGameMain() {
           </CardHeader>
           <CardContent className="text-center space-y-4">
             {/* Score breakdown */}
-            <div className="grid grid-cols-3 gap-3 text-center">
+            <div className="grid grid-cols-2 gap-3 text-center">
               <div className="bg-green-50 p-2 rounded-lg">
                 <div className="text-green-800 font-semibold text-sm">Benar</div>
                 <div className="text-xl font-bold text-green-600">{correctCount}</div>
@@ -201,10 +167,6 @@ export function GuessGameMain() {
               <div className="bg-red-50 p-2 rounded-lg">
                 <div className="text-red-800 font-semibold text-sm">Salah</div>
                 <div className="text-xl font-bold text-red-600">{incorrectCount}</div>
-              </div>
-              <div className="bg-blue-50 p-2 rounded-lg">
-                <div className="text-blue-800 font-semibold text-sm">Nyawa</div>
-                <div className="text-xl font-bold text-blue-600">{session.lives}</div>
               </div>
             </div>
 
@@ -218,8 +180,8 @@ export function GuessGameMain() {
             </div>
 
             <div className="text-sm text-gray-500">
-              {session.challengeIndex < session.challenges.length - 1 
-                ? 'Melanjutkan ke level berikutnya...' 
+              {session.challengeIndex < session.challenges.length - 1
+                ? 'Melanjutkan ke level berikutnya...'
                 : 'Menampilkan hasil akhir...'
               }
             </div>
@@ -237,48 +199,41 @@ export function GuessGameMain() {
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
           <div>
             <h1 className="text-2xl font-bold">{currentChallenge.title}</h1>
-            <p className="text-gray-600 text-sm">{currentChallenge.description}</p>
+            <p className="text-xl">{currentChallenge.description}</p>
           </div>
-          
+
           <div className="flex items-center gap-4">
             <Badge variant="outline">
               Level {session.challengeIndex + 1}/{session.challenges.length}
             </Badge>
-            <Badge 
+            <Badge
               variant={
                 currentChallenge.difficulty === 'easy' ? 'default' :
-                currentChallenge.difficulty === 'medium' ? 'secondary' : 'destructive'
+                  currentChallenge.difficulty === 'medium' ? 'secondary' : 'destructive'
               }
             >
               {currentChallenge.difficulty === 'easy' ? 'Mudah' :
-               currentChallenge.difficulty === 'medium' ? 'Sedang' : 'Sulit'}
+                currentChallenge.difficulty === 'medium' ? 'Sedang' : 'Sulit'}
             </Badge>
           </div>
         </div>
 
         {/* Game stats */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-4">
+        <div className="grid grid-cols-3 gap-4 mb-4">
           <div className="bg-blue-50 p-3 rounded-lg text-center">
             <Clock className="h-5 w-5 mx-auto mb-1 text-blue-600" />
             <div className="text-sm text-blue-800 font-semibold">
               {formatTime(session.timeRemaining)}
             </div>
           </div>
-          
-          <div className="bg-red-50 p-3 rounded-lg text-center">
-            <Heart className="h-5 w-5 mx-auto mb-1 text-red-600" />
-            <div className="text-sm text-red-800 font-semibold">
-              {session.lives}/{session.maxLives}
-            </div>
-          </div>
-          
+
           <div className="bg-green-50 p-3 rounded-lg text-center">
             <Target className="h-5 w-5 mx-auto mb-1 text-green-600" />
             <div className="text-sm text-green-800 font-semibold">
               {currentChallenge.correctCount} jawaban
             </div>
           </div>
-          
+
           <div className="bg-purple-50 p-3 rounded-lg text-center">
             <Trophy className="h-5 w-5 mx-auto mb-1 text-purple-600" />
             <div className="text-sm text-purple-800 font-semibold">
@@ -310,7 +265,7 @@ export function GuessGameMain() {
 
       {/* Submit button */}
       <div className="text-center">
-        <Button 
+        <Button
           onClick={checkAnswer}
           disabled={!canSubmit}
           size="lg"
@@ -318,7 +273,7 @@ export function GuessGameMain() {
         >
           Periksa Jawaban
         </Button>
-        
+
         {!canSubmit && (
           <p className="text-sm text-orange-600 mt-2">
             Pilih minimal 1 gambar untuk melanjutkan

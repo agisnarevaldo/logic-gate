@@ -40,7 +40,7 @@ export function SidebarMenu({ isOpen, onClose }: SidebarMenuProps) {
 
     // Menu items based on user role
     const studentMenuItems = [
-        { name: "T.belajar", path: "/tujuan-belajar" },
+        { name: "Tujuan Belajar", path: "/tujuan-belajar" },
         { name: "Materi", path: "/materi" },
         { name: "Game", path: "/game" },
         { name: "Kuis", path: "/kuis" },

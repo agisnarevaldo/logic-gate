@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/utils/supabase/server'
+import { createServerClient, type CookieOptions } from '@supabase/ssr'
 
 export async function GET(request: NextRequest) {
   console.log('Callback: Auth callback route called')
@@ -30,8 +30,30 @@ export async function GET(request: NextRequest) {
     console.log('Callback: Processing authorization code...')
 
     try {
-      const response = NextResponse.redirect(`${origin}${next}`)
-      const supabase = createClient(request, response)
+      // Create the redirect response FIRST
+      const redirectUrl = new URL(next, origin)
+      const response = NextResponse.redirect(redirectUrl)
+
+      // Track cookies that will be set
+      const cookiesToSetOnResponse: { name: string; value: string; options: CookieOptions }[] = []
+
+      // Create Supabase client that collects cookies
+      const supabase = createServerClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        {
+          cookies: {
+            getAll() {
+              return request.cookies.getAll()
+            },
+            setAll(cookiesToSet: { name: string; value: string; options: CookieOptions }[]) {
+              // Collect cookies for later
+              cookiesToSetOnResponse.push(...cookiesToSet)
+              console.log(`Callback: setAll called with ${cookiesToSet.length} cookies`)
+            },
+          },
+        }
+      )
 
       /* eslint-disable @typescript-eslint/no-explicit-any */
       const { data, error: exchangeError } = await (supabase.auth as any).exchangeCodeForSession(code)
@@ -42,26 +64,45 @@ export async function GET(request: NextRequest) {
         hasUser: !!data?.user,
         userId: data?.user?.id,
         userEmail: data?.user?.email,
-        isNewUser: data?.user?.app_metadata?.provider === 'google' && !data?.user?.last_sign_in_at
+        cookiesCollected: cookiesToSetOnResponse.length
       })
 
       if (exchangeError) {
         console.error('Callback: Error exchanging code for session:', exchangeError)
-
-        // Check if it's a database-related error
         let errorMessage = exchangeError.message || 'Could not authenticate user'
         if (errorMessage.includes('user_profiles') && errorMessage.includes('does not exist')) {
           errorMessage = 'Database not properly configured. Please contact administrator.'
-          console.error('Callback: Database schema error - user_profiles table missing')
         }
-
         return NextResponse.redirect(`${origin}/login?error=${encodeURIComponent(errorMessage)}`)
       }
 
       if (data?.user) {
         console.log('Callback: Session created successfully for user:', data.user.id)
 
-        // Set additional headers for better session handling
+        // Force a session read which should trigger cookie setting
+        console.log('Callback: Force reading session to trigger cookie writes...')
+        await (supabase.auth as any).getSession()
+
+        console.log('Callback: After getSession, cookies collected:', cookiesToSetOnResponse.length)
+
+        // NOW set all collected cookies on the response
+        cookiesToSetOnResponse.forEach(({ name, value, options }) => {
+          // For development (localhost), modify cookie options
+          const cookieOptions: CookieOptions = { ...options }
+          if (process.env.NODE_ENV === 'development') {
+            delete cookieOptions.secure
+            cookieOptions.sameSite = 'lax'
+          }
+
+          console.log(`Callback: Setting cookie: ${name}`)
+          response.cookies.set(name, value, cookieOptions)
+        })
+
+        // Log all cookies being sent
+        const allCookies = response.cookies.getAll()
+        console.log('Callback: Final cookies on response:', allCookies.map(c => c.name))
+
+        // Set cache headers
         response.headers.set('Cache-Control', 'no-cache, no-store, max-age=0, must-revalidate')
         response.headers.set('Pragma', 'no-cache')
         response.headers.set('Expires', '0')

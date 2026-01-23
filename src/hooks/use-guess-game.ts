@@ -12,8 +12,8 @@ export const useGuessGame = () => {
     correctSelections: [],
     incorrectSelections: [],
     score: 0,
-    lives: 3,
-    maxLives: 3,
+    lives: Infinity,
+    maxLives: Infinity,
     isCompleted: false,
     timeStarted: Date.now(),
     timeRemaining: guessGameChallenges[0].timeLimit,
@@ -27,7 +27,7 @@ export const useGuessGame = () => {
   // Internal function for auto-advancing
   const nextChallengeInternal = useCallback(() => {
     const nextIndex = session.challengeIndex + 1
-    
+
     if (nextIndex >= session.challenges.length) {
       // Game completed
       setSession(prev => ({ ...prev, isCompleted: true }))
@@ -36,7 +36,7 @@ export const useGuessGame = () => {
       // Next challenge
       const nextChallengeData = session.challenges[nextIndex]
       const newImages = generateChallengeImages(nextChallengeData)
-      
+
       setSession(prev => ({
         ...prev,
         challengeIndex: nextIndex,
@@ -61,10 +61,10 @@ export const useGuessGame = () => {
         .filter(img => img.isCorrect)
         .map(img => img.id)
 
-      const correctSelections = prev.selectedImages.filter(id => 
+      const correctSelections = prev.selectedImages.filter(id =>
         correctImages.includes(id)
       )
-      const incorrectSelections = prev.selectedImages.filter(id => 
+      const incorrectSelections = prev.selectedImages.filter(id =>
         !correctImages.includes(id)
       )
 
@@ -87,21 +87,14 @@ export const useGuessGame = () => {
 
       // Auto advance after showing result for 1.5 seconds
       setTimeout(() => {
-        const newLives = isSuccess ? prev.lives : Math.max(0, prev.lives - 1)
-        
-        if (newLives === 0) {
-          // Game Over - no more lives
-          setGameState('gameOver')
+        const nextIndex = prev.challengeIndex + 1
+
+        if (nextIndex >= prev.challenges.length) {
+          // Game completed
+          setGameState('completed')
         } else {
-          const nextIndex = prev.challengeIndex + 1
-          
-          if (nextIndex >= prev.challenges.length) {
-            // Game completed
-            setGameState('completed')
-          } else {
-            // Next challenge - auto advance regardless of success/failure
-            nextChallengeInternal()
-          }
+          // Next challenge - auto advance regardless of success/failure
+          nextChallengeInternal()
         }
       }, 1500)
 
@@ -109,8 +102,7 @@ export const useGuessGame = () => {
         ...prev,
         correctSelections,
         incorrectSelections,
-        score: prev.score + points,
-        lives: isSuccess ? prev.lives : Math.max(0, prev.lives - 1)
+        score: prev.score + points
       }
     })
   }, [gameState, currentChallenge, nextChallengeInternal])
@@ -190,8 +182,8 @@ export const useGuessGame = () => {
       correctSelections: [],
       incorrectSelections: [],
       score: 0,
-      lives: 3,
-      maxLives: 3,
+      lives: Infinity,
+      maxLives: Infinity,
       isCompleted: false,
       timeStarted: Date.now(),
       timeRemaining: firstChallenge.timeLimit,
@@ -202,7 +194,7 @@ export const useGuessGame = () => {
 
   // Check if can submit answer
   const canSubmit = session.selectedImages.length > 0
-  const isGameOver = session.lives === 0
+  const isGameOver = false // No lives limitation
   const progress = ((session.challengeIndex + 1) / session.challenges.length) * 100
 
   return {

@@ -5,15 +5,7 @@ import type React from "react"
 import { useState, useEffect, useRef } from "react"
 import { motion } from "framer-motion"
 import { shuffle } from "@/utils/array-utils"
-import {
-  AndGateSymbol,
-  OrGateSymbol,
-  NotGateSymbol,
-  NandGateSymbol,
-  NorGateSymbol,
-  XorGateSymbol,
-  XnorGateSymbol,
-} from "./logic-gate-symbols"
+import Image from "next/image"
 
 interface QuizItem {
   id: string
@@ -22,13 +14,13 @@ interface QuizItem {
 }
 
 const quizItems: QuizItem[] = [
-  { id: "and", name: "AND", symbol: <AndGateSymbol className="w-full h-full" /> },
-  { id: "or", name: "OR", symbol: <OrGateSymbol className="w-full h-full" /> },
-  { id: "not", name: "NOT", symbol: <NotGateSymbol className="w-full h-full" /> },
-  { id: "nand", name: "NAND", symbol: <NandGateSymbol className="w-full h-full" /> },
-  { id: "nor", name: "NOR", symbol: <NorGateSymbol className="w-full h-full" /> },
-  { id: "xor", name: "XOR", symbol: <XorGateSymbol className="w-full h-full" /> },
-  { id: "xnor", name: "XNOR", symbol: <XnorGateSymbol className="w-full h-full" /> },
+  { id: "and", name: "AND", symbol: <Image src="/images/symbol/and.png" alt="AND Gate" width={48} height={48} className="w-full h-full object-contain" /> },
+  { id: "or", name: "OR", symbol: <Image src="/images/symbol/or.png" alt="OR Gate" width={48} height={48} className="w-full h-full object-contain" /> },
+  { id: "not", name: "NOT", symbol: <Image src="/images/symbol/not.png" alt="NOT Gate" width={48} height={48} className="w-full h-full object-contain" /> },
+  { id: "nand", name: "NAND", symbol: <Image src="/images/symbol/nand.png" alt="NAND Gate" width={48} height={48} className="w-full h-full object-contain" /> },
+  { id: "nor", name: "NOR", symbol: <Image src="/images/symbol/nor.png" alt="NOR Gate" width={48} height={48} className="w-full h-full object-contain" /> },
+  { id: "xor", name: "XOR", symbol: <Image src="/images/symbol/xor.png" alt="XOR Gate" width={48} height={48} className="w-full h-full object-contain" /> },
+  { id: "xnor", name: "XNOR", symbol: <Image src="/images/symbol/xnor.png" alt="XNOR Gate" width={48} height={48} className="w-full h-full object-contain" /> },
 ]
 
 interface Connection {
@@ -116,7 +108,7 @@ export function MatchingQuiz() {
     // Get positions for drawing the connection line
     const nameElement = document.getElementById(`name-${nameId}`)
     const symbolElement = document.getElementById(`symbol-${symbolId}`)
-    
+
     if (!nameElement || !symbolElement || !containerRef.current) {
       setSelectedName(null)
       setSelectedSymbol(null)
@@ -160,14 +152,14 @@ export function MatchingQuiz() {
   }
 
   const isConnected = (id: string, type: 'name' | 'symbol') => {
-    return connections.some((conn) => 
+    return connections.some((conn) =>
       type === 'name' ? conn.nameId === id : conn.symbolId === id
     )
   }
 
   const getConnectionResult = (id: string, type: 'name' | 'symbol') => {
     if (!submitted) return null
-    const connection = connections.find((conn) => 
+    const connection = connections.find((conn) =>
       type === 'name' ? conn.nameId === id : conn.symbolId === id
     )
     if (!connection) return null
@@ -180,21 +172,21 @@ export function MatchingQuiz() {
     <div className="w-full max-w-6xl mx-auto px-1">
       <div className="mb-2 text-center">
         <h2 className="text-lg font-bold mb-1">Cocokkan Gerbang Logika</h2>
-        
+
         {submitted && (
           <div className="mb-4">
             <div className="text-xl font-bold text-blue-600 mb-2">
               Skor: {score}/{quizItems.length}
             </div>
             <div className="text-sm text-gray-600">
-              {score === quizItems.length ? "Sempurna! 🎉" : 
-               score >= quizItems.length * 0.7 ? "Bagus! 👍" : "Perlu belajar lagi 📚"}
+              {score === quizItems.length ? "Sempurna! 🎉" :
+                score >= quizItems.length * 0.7 ? "Bagus! 👍" : "Perlu belajar lagi 📚"}
             </div>
           </div>
         )}
       </div>
 
-      <div 
+      <div
         ref={containerRef}
         className="relative flex justify-between items-start min-h-[320px] p-4"
       >
@@ -204,9 +196,8 @@ export function MatchingQuiz() {
             {connections.map((conn) => (
               <motion.path
                 key={`${conn.nameId}-${conn.symbolId}`}
-                d={`M ${conn.namePos.x} ${conn.namePos.y} C ${conn.namePos.x + 80} ${conn.namePos.y}, ${
-                  conn.symbolPos.x - 80
-                } ${conn.symbolPos.y}, ${conn.symbolPos.x} ${conn.symbolPos.y}`}
+                d={`M ${conn.namePos.x} ${conn.namePos.y} C ${conn.namePos.x + 80} ${conn.namePos.y}, ${conn.symbolPos.x - 80
+                  } ${conn.symbolPos.y}, ${conn.symbolPos.x} ${conn.symbolPos.y}`}
                 initial={{ pathLength: 0 }}
                 animate={{ pathLength: 1 }}
                 transition={{ duration: 0.5 }}
@@ -238,17 +229,16 @@ export function MatchingQuiz() {
                 id={`name-${item.id}`}
                 onClick={() => handleNameClick(item.id)}
                 disabled={submitted}
-                className={`px-1 py-2 rounded-lg text-center font-medium transition-all text-sm ${
-                  submitted && connected
+                className={`px-1 py-2 rounded-lg text-center font-medium transition-all text-sm ${submitted && connected
                     ? isCorrect
                       ? "bg-green-100 border-2 border-green-500 text-green-800"
                       : "bg-red-100 border-2 border-red-500 text-red-800"
                     : connected
-                    ? "bg-blue-100 border-2 border-blue-500 text-blue-800"
-                    : isSelected
-                    ? "bg-yellow-100 border-2 border-yellow-500 text-yellow-800"
-                    : "bg-white border-2 border-gray-300 hover:border-blue-300 text-gray-700"
-                } ${submitted ? "cursor-default" : "cursor-pointer"}`}
+                      ? "bg-blue-100 border-2 border-blue-500 text-blue-800"
+                      : isSelected
+                        ? "bg-yellow-100 border-2 border-yellow-500 text-yellow-800"
+                        : "bg-white border-2 border-gray-300 hover:border-blue-300 text-gray-700"
+                  } ${submitted ? "cursor-default" : "cursor-pointer"}`}
               >
                 {item.name}
               </button>
@@ -270,17 +260,16 @@ export function MatchingQuiz() {
                 id={`symbol-${item.id}`}
                 onClick={() => handleSymbolClick(item.id)}
                 disabled={submitted}
-                className={`p-1 rounded-lg flex items-center justify-center transition-all h-12 ${
-                  submitted && connected
+                className={`p-1 rounded-lg flex items-center justify-center transition-all h-12 ${submitted && connected
                     ? isCorrect
                       ? "bg-green-100 border-2 border-green-500"
                       : "bg-red-100 border-2 border-red-500"
                     : connected
-                    ? "bg-blue-100 border-2 border-blue-500"
-                    : isSelected
-                    ? "bg-yellow-100 border-2 border-yellow-500"
-                    : "bg-white border-2 border-gray-300 hover:border-blue-300"
-                } ${submitted ? "cursor-default" : "cursor-pointer"}`}
+                      ? "bg-blue-100 border-2 border-blue-500"
+                      : isSelected
+                        ? "bg-yellow-100 border-2 border-yellow-500"
+                        : "bg-white border-2 border-gray-300 hover:border-blue-300"
+                  } ${submitted ? "cursor-default" : "cursor-pointer"}`}
               >
                 <div className="w-8 h-8">{item.symbol}</div>
               </button>
@@ -298,11 +287,10 @@ export function MatchingQuiz() {
             <button
               onClick={handleSubmit}
               disabled={!canSubmit}
-              className={`px-4 py-2 rounded-lg font-medium transition-all text-sm ${
-                canSubmit
+              className={`px-4 py-2 rounded-lg font-medium transition-all text-sm ${canSubmit
                   ? "bg-blue-600 text-white hover:bg-blue-700"
                   : "bg-gray-300 text-gray-500 cursor-not-allowed"
-              }`}
+                }`}
             >
               Submit Jawaban
             </button>

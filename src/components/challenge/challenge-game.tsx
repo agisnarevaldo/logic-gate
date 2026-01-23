@@ -111,7 +111,7 @@ export const ChallengeGame: React.FC = () => {
     return (
       <div className="container mx-auto px-4 py-4 max-w-4xl">
         <div className="mb-4">
-          <Button 
+          <Button
             onClick={backToInstructions}
             variant="outline"
             size="sm"
@@ -147,7 +147,7 @@ export const ChallengeGame: React.FC = () => {
     <div className="container mx-auto px-4 py-4 max-w-6xl">
       {/* Header - Mobile Optimized */}
       <div className="flex justify-between items-start sm:items-center gap-3 mb-4">
-        <Button 
+        <Button
           onClick={backToInstructions}
           variant="outline"
           size="sm"
@@ -156,7 +156,7 @@ export const ChallengeGame: React.FC = () => {
           <ArrowLeft className="h-3 w-3 md:h-4 md:w-4 mr-1 md:mr-2" />
           Kembali
         </Button>
-        
+
         <div className="flex flex-wrap items-center gap-2">
           <Badge variant="outline" className="text-xs">
             Tantangan {challengeIndex + 1}/{totalChallenges}
@@ -182,6 +182,7 @@ export const ChallengeGame: React.FC = () => {
                 userAnswers={userAnswers}
                 selectedMissingId={selectedMissingId}
                 onMissingComponentClick={setSelectedMissingId}
+                showHint={!selectedMissingId && !hasUserAnswer}
               />
             </CardContent>
           </Card>
@@ -209,20 +210,20 @@ export const ChallengeGame: React.FC = () => {
                 </div>
                 <div className="flex justify-between text-xs md:text-sm">
                   <span>Tingkat kesulitan:</span>
-                  <Badge 
+                  <Badge
                     variant={
                       currentChallenge.difficulty === 'easy' ? 'default' :
-                      currentChallenge.difficulty === 'medium' ? 'secondary' : 'destructive'
+                        currentChallenge.difficulty === 'medium' ? 'secondary' : 'destructive'
                     }
                     className="text-xs"
                   >
                     {currentChallenge.difficulty === 'easy' ? 'Mudah' :
-                     currentChallenge.difficulty === 'medium' ? 'Sedang' : 'Sulit'}
+                      currentChallenge.difficulty === 'medium' ? 'Sedang' : 'Sulit'}
                   </Badge>
                 </div>
               </div>
 
-              <Button 
+              <Button
                 onClick={handleCheckAnswer}
                 disabled={!canCheckAnswer}
                 className="w-full text-sm"
@@ -233,8 +234,8 @@ export const ChallengeGame: React.FC = () => {
 
               {!canCheckAnswer && (
                 <p className="text-xs text-orange-600 text-center">
-                  {!hasUserAnswer 
-                    ? "Pilih gerbang yang hilang (?) terlebih dahulu" 
+                  {!hasUserAnswer
+                    ? "Pilih gerbang yang hilang (?) terlebih dahulu"
                     : "Lengkapi semua gerbang yang hilang terlebih dahulu"
                   }
                 </p>

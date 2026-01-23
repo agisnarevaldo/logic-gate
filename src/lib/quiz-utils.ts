@@ -8,7 +8,7 @@ export class QuizManager {
   constructor(settings: QuizSettings = {}) {
     this.questions = quizData.questions as QuizQuestion[]
     this.settings = {
-      randomizeQuestions: false,
+      randomizeQuestions: true,
       randomizeOptions: false,
       timeLimit: null,
       showCorrectAnswer: true,
@@ -35,7 +35,7 @@ export class QuizManager {
    * Get random questions
    */
   getRandomQuestions(count: number, category?: string): QuizQuestion[] {
-    let availableQuestions = category 
+    let availableQuestions = category
       ? this.getQuestionsByCategory(category)
       : this.questions
 
@@ -98,7 +98,7 @@ export class QuizManager {
     else grade = 'F'
 
     // Calculate time taken
-    const timeTaken = session.endTime && session.startTime 
+    const timeTaken = session.endTime && session.startTime
       ? Math.round((session.endTime.getTime() - session.startTime.getTime()) / 1000)
       : 0
 
@@ -110,7 +110,7 @@ export class QuizManager {
         categoryBreakdown[category] = { correct: 0, total: 0 }
       }
       categoryBreakdown[category].total++
-      
+
       const userAnswer = answers[question.id]
       if (userAnswer === question.correctAnswer) {
         categoryBreakdown[category].correct++
@@ -172,7 +172,7 @@ export const quizManager = new QuizManager()
 export const getCategoryName = (category: string): string => {
   const categoryNames: Record<string, string> = {
     'basic-gates': 'Gerbang Dasar',
-    'truth-table': 'Tabel Kebenaran', 
+    'truth-table': 'Tabel Kebenaran',
     'boolean-algebra': 'Aljabar Boolean',
     'combinational': 'Rangkaian Kombinasi',
     'applications': 'Aplikasi'
@@ -183,7 +183,7 @@ export const getCategoryName = (category: string): string => {
 export const getDifficultyColor = (difficulty: string): string => {
   const colors: Record<string, string> = {
     'easy': 'text-green-600 bg-green-100',
-    'medium': 'text-yellow-600 bg-yellow-100', 
+    'medium': 'text-yellow-600 bg-yellow-100',
     'hard': 'text-red-600 bg-red-100'
   }
   return colors[difficulty] || 'text-gray-600 bg-gray-100'

@@ -12,8 +12,9 @@ import {
   BookOpen,
   Gamepad2,
   Brain,
-  Settings
+  Settings,
 } from "lucide-react"
+import Image from "next/image"
 
 export default function AboutPage() {
   const [showLoading, setShowLoading] = useState(true)
@@ -65,6 +66,11 @@ export default function AboutPage() {
 
             {/* Hero Section */}
             <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
+              <CardHeader>
+                <CardTitle className="text-center text-purple-700">
+                  <Image className="mx-auto" src="/uny.png" alt="Logo" width={100} height={100} />
+                </CardTitle>
+              </CardHeader>
               <CardContent className="pt-6">
                 <div className="text-center space-y-4">
                   <h2 className="text-3xl font-bold text-blue-900">LogiFun</h2>

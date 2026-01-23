@@ -14,35 +14,32 @@ export const learningMaterials: LearningCategory[] = [
                 slug: "sistem-bilangan-digital",
                 order: 1,
                 content: `
-# Sistem Bilangan Digital
+# Sistem Bilangan
 
-Dalam elektronika digital, kita bekerja dengan berbagai sistem bilangan. Berikut adalah sistem bilangan yang paling umum digunakan:
+## Pengertian
+- **Sistem bilangan** atau Number System adalah suatu cara untuk mewakili besaran dari suatu item fisik
+- Sistem bilangan menggunakan suatu bilangan dasar atau basis (base / radix) yang tertentu
 
-## Sistem Bilangan Biner (Basis 2)
+## Jenis Sistem Bilangan
+![Jenis Sistem Bilangan](/images/number-system.png)
 
-Sistem bilangan biner hanya menggunakan dua digit: **0** dan **1**. Ini adalah sistem bilangan yang paling dasar dalam elektronika digital.
+- Sistem bilangan biner (binary)
+- Sistem bilangan desimal (decimal)
+- Sistem bilangan oktal (octal)
+- Sistem bilangan heksadesimal (hexadecimal)
 
-**Contoh konversi:**
-- 1010₂ = 1×2³ + 0×2² + 1×2¹ + 0×2⁰ = 8 + 0 + 2 + 0 = 10₁₀
-
-## Sistem Bilangan Desimal (Basis 10)
-
-Sistem bilangan desimal menggunakan sepuluh digit: **0 hingga 9**. Ini adalah sistem bilangan yang kita gunakan sehari-hari.
-
-## Sistem Bilangan Heksadesimal (Basis 16)
-
-Sistem bilangan heksadesimal menggunakan enam belas digit: **0-9** dan **A-F** (di mana A=10, B=11, ..., F=15).
-
-**Contoh konversi:**
-- 1A₁₆ = 1×16¹ + 10×16⁰ = 16 + 10 = 26₁₀
-
-## Konversi Antar Sistem Bilangan
-
-Konversi antar sistem bilangan adalah keterampilan penting dalam elektronika digital:
-
-- **Biner ke Desimal**: Kalikan setiap digit dengan 2 pangkat posisinya dan jumlahkan hasilnya
-- **Desimal ke Biner**: Bagi angka desimal dengan 2 secara berulang dan catat sisanya
-- **Biner ke Heksadesimal**: Kelompokkan digit biner menjadi kelompok 4 digit dan konversi setiap kelompok
+## Desimal (Basis 10)
+- **Desimal (Basis 10)** adalah Sistem bilangan yang paling umum digunakan dalam kehidupan sehari-hari.
+- Sistem bilangan desimal menggunakan basis 10 dan menggunakan 10 macam simbol bilangan yaitu: 0, 1, 2, 3, 4, 5, 6, 7, 8, dan 9.
+- Untuk melihat nilai bilangan desimal dapa digunakan perhitungan seperti berikut, misalkan contoh bilangan desimal adalah 8598. Ini dapa diartikan:
+![8958](/images/8598.png)
+![digit](/images/digit.png)
+- dengan begitu maka bilangan desimal 8598 bisa diartikan sebagai berikut:
+\`\`\`
+8598₁₀ = (8 x 1000) + (5 x 100) + (9 x 10) + (8 x 1)
+\`\`\`
+- Sistem bilangan desimal juga bisa berupa pecahan desimal (decimal fraction), misalhnya : 183,75 yang dapat diartikan:
+![183,75](/images/183_75.png)
         `
             },
             {

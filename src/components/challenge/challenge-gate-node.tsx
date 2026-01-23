@@ -1,14 +1,14 @@
 'use client'
 
 import React from 'react'
-import { 
-  AndGateSymbol, 
-  OrGateSymbol, 
-  NotGateSymbol, 
-  NandGateSymbol, 
-  NorGateSymbol, 
-  XorGateSymbol, 
-  XnorGateSymbol 
+import {
+  AndGateSymbol,
+  OrGateSymbol,
+  NotGateSymbol,
+  NandGateSymbol,
+  NorGateSymbol,
+  XorGateSymbol,
+  XnorGateSymbol
 } from "@/components/quiz/logic-gate-symbols"
 import { ChallengeComponent as ChallengeComponentType } from '@/types/challenge'
 import { ToggleLeft, ToggleRight, HelpCircle } from 'lucide-react'
@@ -17,16 +17,18 @@ interface ChallengeGateNodeProps {
   component: ChallengeComponentType
   isActive?: boolean
   onClick?: () => void
+  showHint?: boolean
 }
 
 export const ChallengeGateNode: React.FC<ChallengeGateNodeProps> = ({
   component,
   isActive = false,
-  onClick
+  onClick,
+  showHint = false
 }) => {
   const renderGateSymbol = () => {
     const symbolProps = { className: "w-full h-full" }
-    
+
     switch (component.type) {
       case "AND":
         return <AndGateSymbol {...symbolProps} />
@@ -60,9 +62,8 @@ export const ChallengeGateNode: React.FC<ChallengeGateNodeProps> = ({
         return (
           <div className="flex items-center justify-center h-full">
             <div
-              className={`w-6 h-6 rounded-full ${
-                outputValue ? 'bg-green-500' : 'bg-gray-300'
-              }`}
+              className={`w-6 h-6 rounded-full ${outputValue ? 'bg-green-500' : 'bg-gray-300'
+                }`}
             />
           </div>
         )
@@ -85,16 +86,15 @@ export const ChallengeGateNode: React.FC<ChallengeGateNodeProps> = ({
       <>
         {/* Input ports */}
         {component.inputs.map((input, index) => {
-          const portY = component.type === 'NOT' 
-            ? component.height / 2 
+          const portY = component.type === 'NOT'
+            ? component.height / 2
             : (component.height / (component.inputs.length + 1)) * (index + 1)
-          
+
           return (
             <div
               key={input.id}
-              className={`absolute rounded-full border-2 ${
-                input.value ? 'bg-green-500 border-green-700' : 'bg-gray-300 border-gray-500'
-              }`}
+              className={`absolute rounded-full border-2 ${input.value ? 'bg-green-500 border-green-700' : 'bg-gray-300 border-gray-500'
+                }`}
               style={{
                 left: -portOffset,
                 top: portY - portOffset,
@@ -111,9 +111,8 @@ export const ChallengeGateNode: React.FC<ChallengeGateNodeProps> = ({
           return (
             <div
               key={output.id}
-              className={`absolute rounded-full border-2 ${
-                output.value ? 'bg-green-500 border-green-700' : 'bg-gray-300 border-gray-500'
-              }`}
+              className={`absolute rounded-full border-2 ${output.value ? 'bg-green-500 border-green-700' : 'bg-gray-300 border-gray-500'
+                }`}
               style={{
                 right: -portOffset,
                 top: portY - portOffset,
@@ -128,16 +127,20 @@ export const ChallengeGateNode: React.FC<ChallengeGateNodeProps> = ({
   }
 
   const isClickable = component.type === 'MISSING'
-  
+
+  const shouldShowHint = showHint && component.type === 'MISSING'
+
   return (
     <div
-      className={`absolute bg-white border-2 rounded-lg shadow-md ${
-        component.type === 'MISSING' 
-          ? `border-dashed border-gray-400 cursor-pointer transition-all ${
-              isActive ? 'bg-blue-100 ring-2 ring-blue-500' : 'hover:bg-gray-50'
-            }`
-          : 'border-gray-300'
-      } ${isClickable ? 'cursor-pointer' : 'cursor-default'}`}
+      className={`absolute bg-white border-2 rounded-lg shadow-md ${component.type === 'MISSING'
+        ? `border-dashed cursor-pointer transition-all ${shouldShowHint
+          ? 'border-blue-500 bg-blue-50 ring-2 ring-blue-400 ring-offset-2 animate-pulse'
+          : isActive
+            ? 'bg-blue-100 ring-2 ring-blue-500 border-blue-400'
+            : 'border-gray-400 hover:bg-gray-50'
+        }`
+        : 'border-gray-300'
+        } ${isClickable ? 'cursor-pointer' : 'cursor-default'}`}
       style={{
         width: `${component.width}px`,
         height: `${component.height}px`,
@@ -153,6 +156,13 @@ export const ChallengeGateNode: React.FC<ChallengeGateNodeProps> = ({
 
       {/* Render connection ports */}
       {renderPorts()}
+
+      {/* Hint label for MISSING component */}
+      {shouldShowHint && (
+        <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-blue-500 text-white text-xs px-2 py-0.5 rounded-full font-medium shadow-lg whitespace-nowrap z-10">
+          👆 Klik di sini!
+        </div>
+      )}
     </div>
   )
 }

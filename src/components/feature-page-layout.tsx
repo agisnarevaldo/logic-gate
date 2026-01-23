@@ -23,7 +23,7 @@ export function FeaturePageLayout({ title, icon, bgColor, children, backHref = "
     return (
         <div className={`min-h-screen flex flex-col ${isDark ? 'bg-gray-700' : ''}`}>
             {/* Header */}
-            <div className={`${bgColor} p-3 md:p-4 rounded-b-3xl`}>
+            <div className={`${bgColor} p-3 md:p-4 rounded-b-3xl sticky top-0 left-0 right-0 z-50 shadow-lg`}>
                 <div className="flex justify-between items-center mb-4 md:mb-8">
                     <button onClick={() => router.push(backHref)} className="text-white p-2">
                         <ChevronLeft size={24} className="md:w-7 md:h-7" />
