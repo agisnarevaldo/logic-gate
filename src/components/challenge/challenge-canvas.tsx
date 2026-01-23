@@ -39,7 +39,7 @@ export const ChallengeCanvas: React.FC<ChallengeCanvasProps> = ({
       return clonedComponent
     })
 
-    // Calculate logic gate outpGuts
+    // Calculate logic gate outputs
     const calculateGateOutput = (gateType: string, inputs: boolean[]): boolean => {
       switch (gateType) {
         case 'AND':

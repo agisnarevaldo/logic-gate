@@ -82,10 +82,16 @@ export const ChallengeGateNode: React.FC<ChallengeGateNodeProps> = ({
     const portSize = 6
     const portOffset = 3
 
+    // For NOT gate, only show 1 input port (the first one with a connection)
+    const inputPorts = component.type === 'NOT'
+      ? component.inputs.slice(0, 1)  // Only take first input for NOT gate
+      : component.inputs
+
     return (
       <>
         {/* Input ports */}
-        {component.inputs.map((input, index) => {
+        {inputPorts.map((input, index) => {
+          // For NOT gate, always center the single input
           const portY = component.type === 'NOT'
             ? component.height / 2
             : (component.height / (component.inputs.length + 1)) * (index + 1)

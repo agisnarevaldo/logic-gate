@@ -174,7 +174,7 @@ export const ChallengeGame: React.FC = () => {
           <Card>
             <CardHeader className="px-3 md:px-6">
               <CardTitle className="text-base md:text-lg">{currentChallenge.title}</CardTitle>
-              <p className="text-xs md:text-sm text-gray-600">{currentChallenge.description}</p>
+              <p className="text-gray-600">{currentChallenge.description}</p>
             </CardHeader>
             <CardContent className="px-3 md:px-6">
               <ChallengeCanvas
